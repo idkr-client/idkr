@@ -1,0 +1,56 @@
+body {
+	border: 6px solid rgba(0, 0, 0, 0.8);
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: 0;
+	padding: 2px;
+}
+
+@font-face {
+	font-family: 'FFF Foward';
+	src: url('../fonts/FFF-Foward.ttf');
+}
+
+* {
+	font-family: 'FFF Foward';
+	font-size: 22px;
+	user-select: none;
+	color: #353535;
+	outline: none;
+}
+
+#message {
+	text-align: center;
+}
+
+#textInput {
+	width: 92%;
+	display: block;
+	border: none;
+	background: #eee;
+	padding: 6px;
+	margin: auto;
+	border-radius: 12px;
+}
+
+#buttons {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+}
+
+input[type=button] {
+	color: white;
+	text-align: center;
+	background-color: rgba(0, 0, 0, .8);
+	width: 150px;
+	padding: 5px;
+	border-radius: 6px
+}
+
+#ok {
+	color: #2196F3
+}

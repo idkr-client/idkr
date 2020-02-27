@@ -1,0 +1,39 @@
+{
+  "name": "idkr",
+  "version": "0.1.0",
+  "description": "idk, just a Krunker client",
+  "main": "app/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "startd": "electron . --debug",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "release": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mixaz017/idkr.git"
+  },
+  "keywords": [
+    "Krunker"
+  ],
+  "author": "Mixaz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mixaz017/idkr/issues"
+  },
+  "homepage": "https://github.com/Mixaz017/idkr#readme",
+  "devDependencies": {
+    "electron": "^8.0.1"
+  },
+  "dependencies": {
+    "electron-localshortcut": "^3.2.1",
+    "electron-log": "^4.0.7",
+    "electron-store": "^5.1.1",
+    "electron-updater": "^4.2.2",
+    "v8-compile-cache": "^2.1.0",
+    "yargs": "^15.1.0"
+  }
+}
