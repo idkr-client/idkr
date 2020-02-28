@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>prompt</title>
 	<link rel="stylesheet" type="text/css" href="css/prompt.css">
 </head>
+
 <body>
-	<p id="message"></p>
-	<input id="textInput" type="text">
-	<div id="buttons">
-		<input id="ok" type="button" value="OK">
-		<input id="cancel" type="button" value="Cancel">
+	<div id='promptBody'>
+		<p id="message"></p>
+		<input id="promptInput" placeholder="Input"><br>
+
+		<div class="returnButton" onclick="sendValue(promptInput.value)">OK</div>
+		<div class="returnButton" onclick="sendValue(null)">Cancel</div>
 	</div>
 </body>
+
 </html>

@@ -15,11 +15,11 @@ body {
 
 @font-face {
 	font-family: 'FFF Foward';
-	src: url('../fonts/FFF-Foward.ttf');
+	src: url('../fonts/FFF-Forward.ttf');
 }
 
 * {
-	font-family: 'FFF Foward';
+	font-family: 'FFF Forward';
 	font-size: 18px;
 	user-select: none;
 	color: white;

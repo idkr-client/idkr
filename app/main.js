@@ -1,5 +1,5 @@
 require('v8-compile-cache')
-const { app, BrowserWindow, shell } = require("electron")
+const { app, BrowserWindow, shell, ipcMain } = require("electron")
 const Store = require('electron-store')
 const config = new Store()
 const path = require('path')
@@ -13,6 +13,17 @@ const DEBUG = Boolean(argv.debug || config.get('debug'))
 const AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
 
 if (config.get('disableFrameRateLimit', true)) app.commandLine.appendSwitch('disable-frame-rate-limit')
+
+ipcMain.on('prompt', (event, message, defaultValue) => {
+	let promptWin = initPromptWindow(message, defaultValue)
+	let returnValue = null
+
+	ipcMain.on('prompt-return', (event, value) => returnValue = value)
+
+	promptWin.on('closed', () => {
+		event.returnValue = returnValue
+	})
+})
 
 function setupWindow(win) {
 	let contents = win.webContents
@@ -117,6 +128,31 @@ function initSplashWindow() {
 
 	setupWindow(win)
 	win.loadFile("app/splash.html")
+	return win
+}
+
+function initPromptWindow (message, defaultValue) {
+	let win = new BrowserWindow({
+		width: 480,
+		height: 240,
+		center: true,
+		show: false,
+		frame: false,
+		resizable: false,
+		transparent: true,
+		webPreferences: {
+			preload: path.join(__dirname, 'prompt.js')
+		}
+	})
+	let contents = win.webContents
+
+	setupWindow(win)
+	win.once('ready-to-show', () => {
+		contents.send('prompt-data', message, defaultValue)
+	})
+
+	win.loadFile('app/prompt.html')
+
 	return win
 }
 

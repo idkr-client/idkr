@@ -1,56 +1,53 @@
-body {
-	border: 6px solid rgba(0, 0, 0, 0.8);
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	margin: 0;
-	padding: 2px;
-}
-
 @font-face {
-	font-family: 'FFF Foward';
-	src: url('../fonts/FFF-Foward.ttf');
+	font-family: 'FFF Forward';
+	src: url("../fonts/FFF-Forward.ttf");
 }
 
 * {
-	font-family: 'FFF Foward';
-	font-size: 22px;
-	user-select: none;
-	color: #353535;
 	outline: none;
+	font-family: 'FFF Forward';
+	color: #353535;
+	user-select: none;
+}
+
+body {
+	overflow: hidden;
+	margin: 0px;
+}
+
+#promptBody {
+	text-align: center;
+	padding: 5px;
+	left: 0;
+	right: 0;
+	border-radius: 6px;
+	border: 7px solid #a6a6a6;
+	background-color: #fff;
 }
 
 #message {
-	text-align: center;
+	word-wrap: break-word;
 }
 
-#textInput {
-	width: 92%;
-	display: block;
+input {
+	background-color: #eee;
 	border: none;
-	background: #eee;
-	padding: 6px;
-	margin: auto;
-	border-radius: 12px;
-}
-
-#buttons {
-	position: absolute;
-	right: 10px;
-	bottom: 10px;
-}
-
-input[type=button] {
-	color: white;
-	text-align: center;
-	background-color: rgba(0, 0, 0, .8);
-	width: 150px;
+	font-size: 16px;
 	padding: 5px;
-	border-radius: 6px
+	width: 90%;
 }
 
-#ok {
-	color: #2196F3
+.returnButton {
+	color: #fff;
+	margin: 5px;
+	background-color: #2196F3;
+	padding: 6px;
+	font-size: 12px;
+	display: inline-block;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+.returnButton:active {
+	background-color: #666;
 }
