@@ -1,13 +1,14 @@
 require('v8-compile-cache')
-const { app, BrowserWindow, shell, ipcMain } = require("electron")
-const Store = require('electron-store')
-const config = new Store()
 const path = require('path')
 const { URL } = require('url')
-const argv = require('yargs').argv
-const log = require('electron-log')
+const { BrowserWindow, app, ipcMain, shell } = require("electron")
 const shortcuts = require('electron-localshortcut')
+const log = require('electron-log')
+const Store = require('electron-store')
+const { argv } = require('yargs')
+
 Object.assign(console, log.functions)
+const config = new Store()
 
 const DEBUG = Boolean(argv.debug || config.get('debug'))
 const AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
@@ -46,6 +47,7 @@ function setupWindow(win) {
 		win.setFullScreen(!full)
 		if (locationType(contents.getURL()) == 'game') config.set('fullScreen', !full)
 	})
+	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()'))
 }
 
 function initWindow(url) {
