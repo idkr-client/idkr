@@ -36,6 +36,12 @@ function setupWindow(win) {
 		win.show()
 	})
 
+	// event.preventDefault() didn't work, win.destroy() as workaround
+	contents.on('will-prevent-unload', event => {
+		contents.executeJavaScript('confirm("Leave site?")')
+			.then(leave => { if (leave) win.destroy() })
+	})
+
 	// "Global" shortcuts
 	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools())
 	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Left' : 'Alt+Left', () => { if (contents.canGoBack()) contents.goBack() })
@@ -124,7 +130,7 @@ function initSplashWindow() {
 
 		function launchGame() {
 			initWindow('https://krunker.io')
-			setTimeout(() => win.destroy(), 2000)
+			setTimeout(() => win.close(), 2000)
 		}
 	})
 
@@ -133,7 +139,7 @@ function initSplashWindow() {
 	return win
 }
 
-function initPromptWindow (message, defaultValue) {
+function initPromptWindow(message, defaultValue) {
 	let win = new BrowserWindow({
 		width: 480,
 		height: 240,
