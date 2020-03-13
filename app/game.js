@@ -40,13 +40,13 @@ function searchMatches(entry) {
 function genCSettingsHTML(options) {
 	switch (options.type) {
 		case 'checkbox': return `<label class='switch'><input type='checkbox' onclick='clientUtil.setCSetting("${options.id}", this.checked)'${options.val ? ' checked' : ''}><span class='slider'></span></label>`
-		case 'slider': return `<input type='number' class='sliderVal' id='idkr_slid_input_${options.id}' min='${options.min}' max='${options.max}' value='${options.val}' onkeypress='clientUtil.delaySetCSetting("${options.id}", this)' style='border-width:0px'/><div class='slidecontainer'><input type='range' id='idkr_slid_${options.id}' min='${options.min}' max='${options.max}' step='${options.step}' value='${options.val}' class='sliderM' oninput='clientUtil.setCSetting("${options.id}", this.value)'></div>`
+		case 'slider': return `<input type='number' class='sliderVal' id='c_slid_input_${options.id}' min='${options.min}' max='${options.max}' value='${options.val}' onkeypress='clientUtil.delaySetCSetting("${options.id}", this)' style='border-width:0px'/><div class='slidecontainer'><input type='range' id='c_slid_${options.id}' min='${options.min}' max='${options.max}' step='${options.step}' value='${options.val}' class='sliderM' oninput='clientUtil.setCSetting("${options.id}", this.value)'></div>`
 		case 'select':
 			let selectHTML = `<select onchange='clientUtil.setCSetting("${options.id}", this.value)' class='inputGrey2'>`
 			for (let [optionKey, optionName] of Object.entries(options.options))
 				selectHTML += '<option value=\'' + optionKey + '\' ' + (optionKey == options.val ? 'selected' : '') + '>' + optionName + '</option>'
 			return selectHTML += '</select>'
-		default: return `<input type='${options.type}' name='${options.id}' id='idkr_slid_${options.id}' ${options.type == 'color' ? 'style="float:right;margin-top:5px;"' : `class='inputGrey2' ${options.placeholder ? `placeholder='${options.placeholder}'` : ''}`} value='${options.val}' oninput='clientUtil.setCSetting("${options.id}", this.value)'/>`
+		default: return `<input type='${options.type}' name='${options.id}' id='c_slid_${options.id}' ${options.type == 'color' ? 'style="float:right;margin-top:5px;"' : `class='inputGrey2' ${options.placeholder ? `placeholder='${options.placeholder}'` : ''}`} value='${options.val}' oninput='clientUtil.setCSetting("${options.id}", this.value)'/>`
 	}
 }
 
@@ -82,9 +82,9 @@ window.clientUtil = {
 		config.set(name, value)
 		entry.val = value
 		if (entry.set) entry.set(value)
-		let element = document.getElementById('idkr_slid_' + entry.id)
+		let element = document.getElementById('c_slid_' + entry.id)
 		if (element) element.value = value
-		element = document.getElementById('idkr_slid_input_' + entry.id)
+		element = document.getElementById('c_slid_input_' + entry.id)
 		if (element) element.value = value
 	},
 	delayIDs: {},
