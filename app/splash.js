@@ -1,5 +1,7 @@
 const { remote, ipcRenderer } = require('electron')
 
+const win = remote.getCurrentWindow()
+
 document.addEventListener('DOMContentLoaded', () => {
 	version.innerText = `${remote.app.name}@${remote.app.getVersion()}`
 })
@@ -13,6 +15,7 @@ ipcRenderer.on('au-update-available', (event, info) => {
 ipcRenderer.on('au-download-progress', (event, info) => {
 	message.innerText = `Downloaded ${Math.floor(info.percent)}%`
 	details.innerText = Math.floor(info.bytesPerSecond / 1000) + 'kB/s'
+	win.setProgressBar(info.percent / 100)
 })
 ipcRenderer.on('au-update-downloaded', (event, info) => {
 	details.innerText = 'Installing...'

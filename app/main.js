@@ -1,7 +1,7 @@
 require('v8-compile-cache')
 const path = require('path')
 const { URL } = require('url')
-const { BrowserWindow, app, ipcMain, shell } = require("electron")
+const { BrowserWindow, clipboard, app, ipcMain, shell } = require("electron")
 const shortcuts = require('electron-localshortcut')
 const log = require('electron-log')
 const Store = require('electron-store')
@@ -13,7 +13,17 @@ const config = new Store()
 const DEBUG = Boolean(argv.debug || config.get('debug'))
 const AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
 
+// app.commandLine.appendSwitch('disable-gpu-vsync')
+// app.commandLine.appendSwitch('ignore-gpu-blacklist')
+
+// app.commandLine.appendSwitch('enable-zero-copy')
+// app.commandLine.appendSwitch('enable-webgl2-compute-context')
+// app.commandLine.appendSwitch('renderer-process-limit', 100)
+// app.commandLine.appendSwitch('max-active-webgl-contexts', 100)
+// app.commandLine.appendSwitch('use-angle', 'd3d9')
 if (config.get('disableFrameRateLimit', true)) app.commandLine.appendSwitch('disable-frame-rate-limit')
+let colorProfile = config.get('colorProfile', 'default')
+if (colorProfile != 'default') app.commandLine.appendSwitch('force-color-profile', colorProfile)
 
 ipcMain.on('prompt', (event, message, defaultValue) => {
 	let promptWin = initPromptWindow(message, defaultValue)
@@ -36,16 +46,31 @@ function setupWindow(win) {
 		win.show()
 	})
 
-	// event.preventDefault() didn't work, win.destroy() as workaround
-	contents.on('will-prevent-unload', event => {
-		contents.executeJavaScript('confirm("Leave site?")')
-			.then(leave => { if (leave) win.destroy() })
+	contents.on("new-window", (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
+	contents.on("will-navigate", (event, url) => {
+		if (locationType(url) == 'external') {
+			event.preventDefault()
+			shell.openExternal(url)
+		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') navigateNewWindow(event, url)
 	})
+	// event.preventDefault() didn't work after confirm() or dialog.showMessageBox(), so ignores beforeunload as a workaround for now
+	contents.on('will-prevent-unload', event => event.preventDefault())
 
 	// "Global" shortcuts
 	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools())
-	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Left' : 'Alt+Left', () => { if (contents.canGoBack()) contents.goBack() })
-	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Right' : 'Alt+Right', () => { if (contents.canGoForward()) contents.goForward() })
+	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack())
+	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward())
+	shortcuts.register(win, 'F1', () => {
+		contents.session.clearCache().then(err => {
+			if (err) {
+				console.error(err)
+				alert('Failed to clear cache')
+			} else {
+				app.relaunch()
+				app.quit()
+			}
+		})
+	})
 	shortcuts.register(win, 'F5', () => contents.reload())
 	shortcuts.register(win, 'Shift+F5', () => contents.reloadIgnoringCache())
 	shortcuts.register(win, 'F11', () => {
@@ -54,37 +79,39 @@ function setupWindow(win) {
 		if (locationType(contents.getURL()) == 'game') config.set('fullScreen', !full)
 	})
 	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()'))
+	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()))
+	shortcuts.register(win, 'CommandOrControl+Shift+Alt+R', () => {
+		app.relaunch()
+		app.quit()
+	})
+
+	function navigateNewWindow(event, url, webContents) {
+		event.preventDefault()
+		if (locationType(url) == 'external') shell.openExternal(url)
+		else if (locationType(url) != 'unknown') event.newGuest = initWindow(url, webContents)
+	}
+
+	return win
 }
 
-function initWindow(url) {
+function initWindow(url, webContents) {
 	let isGame = locationType(url) == 'game'
 	let win = new BrowserWindow({
 		width: isGame ? 1600 : 1280,
 		height: isGame ? 900 : 720,
 		show: false,
+		webContents: webContents,
 		webPreferences: {
-			preload: path.join(__dirname, 'global.js')
+			preload: path.join(__dirname, 'global.js'),
+			webSecurity: false
 		}
 	})
 	let contents = win.webContents
 	setupWindow(win)
-	contents.on("new-window", navigateNewWindow)
-	contents.on("will-navigate", (event, url) => {
-		if (locationType(url) == 'external') {
-			event.preventDefault()
-			shell.openExternal(url)
-		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') navigateNewWindow(event, url)
-	})
 
-	win.loadURL(url)
+	if (!webContents) win.loadURL(url)
 
 	return win
-
-	function navigateNewWindow(event, url) {
-		event.preventDefault()
-		if (locationType(url) == 'external') shell.openExternal(url)
-		else if (locationType(url) != 'unknown') event.newGuest = initWindow(url)
-	}
 }
 
 function initSplashWindow() {
@@ -129,7 +156,7 @@ function initSplashWindow() {
 		autoUpdater.checkForUpdates()
 
 		function launchGame() {
-			initWindow('https://krunker.io')
+			initWindow('https://krunker.io/')
 			setTimeout(() => win.close(), 2000)
 		}
 	})
@@ -189,6 +216,6 @@ function locationType(url = '') {
 }
 
 app.once("ready", () => {
-	if (AUTO_UPDATE == 'skip') initWindow('https://krunker.io')
+	if (AUTO_UPDATE == 'skip') initWindow('https://krunker.io/')
 	else initSplashWindow()
 })
