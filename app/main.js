@@ -36,7 +36,7 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 	})
 })
 
-function setupWindow(win) {
+function setupWindow(win, isWeb) {
 	let contents = win.webContents
 
 	if (DEBUG) contents.toggleDevTools()
@@ -46,17 +46,6 @@ function setupWindow(win) {
 		win.show()
 	})
 
-	contents.on("new-window", (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
-	contents.on("will-navigate", (event, url) => {
-		if (locationType(url) == 'external') {
-			event.preventDefault()
-			shell.openExternal(url)
-		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') navigateNewWindow(event, url)
-	})
-	// event.preventDefault() didn't work after confirm() or dialog.showMessageBox(), so ignores beforeunload as a workaround for now
-	contents.on('will-prevent-unload', event => event.preventDefault())
-
-	// "Global" shortcuts
 	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools())
 	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack())
 	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward())
@@ -71,6 +60,26 @@ function setupWindow(win) {
 			}
 		})
 	})
+	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()'))
+
+	if (!isWeb) return win
+
+	contents.on('dom-ready', () => {
+		let windowType = locationType(contents.getURL())
+		if (windowType == 'game') shortcuts.register(win, 'F6', () => contents.executeJavaScript('location.href = "https://krunker.io"'))
+	})
+
+	contents.on("new-window", (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
+	contents.on("will-navigate", (event, url) => {
+		if (locationType(url) == 'external') {
+			event.preventDefault()
+			shell.openExternal(url)
+		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') navigateNewWindow(event, url)
+	})
+
+	// event.preventDefault() didn't work after confirm() or dialog.showMessageBox(), so ignoring beforeunload as a workaround for now
+	contents.on('will-prevent-unload', event => event.preventDefault())
+
 	shortcuts.register(win, 'F5', () => contents.reload())
 	shortcuts.register(win, 'Shift+F5', () => contents.reloadIgnoringCache())
 	shortcuts.register(win, 'F11', () => {
@@ -78,7 +87,6 @@ function setupWindow(win) {
 		win.setFullScreen(!full)
 		if (locationType(contents.getURL()) == 'game') config.set('fullScreen', !full)
 	})
-	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()'))
 	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()))
 	shortcuts.register(win, 'CommandOrControl+N', () => initWindow('https://krunker.io/'))
 	shortcuts.register(win, 'CommandOrControl+Shift+N', () => initWindow(contents.getURL()))
@@ -109,7 +117,7 @@ function initWindow(url, webContents) {
 		}
 	})
 	let contents = win.webContents
-	setupWindow(win)
+	setupWindow(win, true)
 
 	if (!webContents) win.loadURL(url)
 
