@@ -80,6 +80,8 @@ function setupWindow(win) {
 	})
 	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()'))
 	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()))
+	shortcuts.register(win, 'CommandOrControl+N', () => initWindow('https://krunker.io/'))
+	shortcuts.register(win, 'CommandOrControl+Shift+N', () => initWindow(contents.getURL()))
 	shortcuts.register(win, 'CommandOrControl+Shift+Alt+R', () => {
 		app.relaunch()
 		app.quit()
