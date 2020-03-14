@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					categories.push(entry.cat)
 					tempHTML += `<div class='setHed'>${entry.cat}</div>`
 				}
-				tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? `id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`
+				tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`
 			})
 			return tempHTML
 		}
@@ -33,16 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	document.head.appendChild(gameCSS)
 })
 
-// Temp
 function genCSettingsHTML(options) {
 	switch (options.type) {
 		case 'checkbox': return `<label class='switch'><input type='checkbox' onclick='clientUtil.setCSetting("${options.id}", this.checked)'${options.val ? ' checked' : ''}><span class='slider'></span></label>`
 		case 'slider': return `<input type='number' class='sliderVal' id='c_slid_input_${options.id}' min='${options.min}' max='${options.max}' value='${options.val}' onkeypress='clientUtil.delaySetCSetting("${options.id}", this)' style='border-width:0px'/><div class='slidecontainer'><input type='range' id='c_slid_${options.id}' min='${options.min}' max='${options.max}' step='${options.step}' value='${options.val}' class='sliderM' oninput='clientUtil.setCSetting("${options.id}", this.value)'></div>`
-		case 'select':
-			let selectHTML = `<select onchange='clientUtil.setCSetting("${options.id}", this.value)' class='inputGrey2'>`
-			for (let [optionKey, optionName] of Object.entries(options.options))
-				selectHTML += '<option value=\'' + optionKey + '\' ' + (optionKey == options.val ? 'selected' : '') + '>' + optionName + '</option>'
-			return selectHTML += '</select>'
+		case 'select': return `<select onchange='clientUtil.setCSetting("${options.id}", this.value)' class='inputGrey2'>${Object.entries(options.options).map(entry => `<option value='${entry[0]}'${entry[0] == options.val ? ' selected' : ''}>${entry[1]}</option>`).join('')}</select>`
 		default: return `<input type='${options.type}' name='${options.id}' id='c_slid_${options.id}' ${options.type == 'color' ? 'style="float:right;margin-top:5px;"' : `class='inputGrey2' ${options.placeholder ? `placeholder='${options.placeholder}'` : ''}`} value='${options.val}' oninput='clientUtil.setCSetting("${options.id}", this.value)'/>`
 	}
 }
