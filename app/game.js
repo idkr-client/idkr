@@ -6,18 +6,20 @@ const config = new Store()
 let settingsWindow = null
 
 document.addEventListener('DOMContentLoaded', () => {
-	// Temp
 	let windowsObserver = new MutationObserver(() => {
 		windowsObserver.disconnect()
 		settingsWindow = windows[0]
 		settingsWindow.getCSettings = function () {
 			let tempHTML = '',
 				categories = []
-			for (let [key, entry] of Object.entries(clientUtil.settings)) {
-				settingsWindow.settingSearch && (!searchMatches(entry) || entry.hide) || (!categories.includes(entry.cat) && (categories.push(entry.cat),
-					tempHTML += `<div class='setHed'>${entry.cat}</div>`),
-					tempHTML += '<div class=\'settName\' title=\'' + (entry.info || '') + '\'' + (entry.hide ? 'id=\'' + key + '_div\' style=\'display:' + (entry.hide ? 'none' : 'block') + '\'' : '') + '>' + entry.name + ' ' + entry.html() + '</div>')
-			}
+			Object.values(clientUtil.settings).forEach(entry => {
+				if (settingsWindow.settingSearch && !clientUtil.searchMatches(entry) || entry.hide) return
+				if (!categories.includes(entry.cat)) {
+					categories.push(entry.cat)
+					tempHTML += `<div class='setHed'>${entry.cat}</div>`
+				}
+				tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? `id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`
+			})
 			return tempHTML
 		}
 	})
@@ -30,11 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	})
 	document.head.appendChild(gameCSS)
 })
-
-function searchMatches(entry) {
-	let query = settingsWindow.settingSearch.toLowerCase() || ''
-	return (entry.name.toLowerCase() || '').includes(query) || (entry.cat.toLowerCase() || '').includes(query)
-}
 
 // Temp
 function genCSettingsHTML(options) {
@@ -107,6 +104,10 @@ window.clientUtil = {
 			setCSetting(name, target.value)
 			delete this.delayIDs[name]
 		}, delay)
+	},
+	searchMatches: entry => {
+		let query = settingsWindow.settingSearch.toLowerCase() || ''
+		return (entry.name.toLowerCase() || '').includes(query) || (entry.cat.toLowerCase() || '').includes(query)
 	},
 	initSettings: function () {
 		Object.values(this.settings).forEach(entry => {
