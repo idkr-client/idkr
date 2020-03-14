@@ -1,5 +1,5 @@
-const { ipcRenderer } = require("electron")
-const log = require('electron-log')
+const { ipcRenderer } = require("electron"),
+	log = require('electron-log')
 
 Object.assign(console, log.functions)
 

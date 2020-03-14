@@ -1,5 +1,5 @@
-const path = require('path')
-const Store = require('electron-store')
+const path = require('path'),
+	Store = require('electron-store')
 
 const config = new Store()
 
@@ -53,7 +53,7 @@ function genCSettingsHTML(options) {
 window.clientUtil = {
 	settings: {
 		disableFrameRateLimit: {
-			name: "Disable Frame Rate Limit",
+			name: 'Disable Frame Rate Limit',
 			id: 'disableFrameRateLimit',
 			cat: 'Performance',
 			type: 'checkbox',
@@ -61,7 +61,7 @@ window.clientUtil = {
 			html: function () { return genCSettingsHTML(this) }
 		},
 		colorProfile: {
-			name: "Color Profile",
+			name: 'Color Profile',
 			id: 'colorProfile',
 			cat: 'Chromium',
 			type: 'select',
@@ -74,6 +74,19 @@ window.clientUtil = {
 			val: 'default',
 			html: function () { return genCSettingsHTML(this) },
 			info: 'Force color profile.'
+		},
+		autoUpdate: {
+			name: 'Auto Update Behavior',
+			id: 'autoUpdate',
+			cat: 'Maintenance',
+			type: 'select',
+			options: {
+				download: 'Download',
+				check: 'Check only',
+				skip: 'Skip'
+			},
+			val: 'download',
+			html: function () { return genCSettingsHTML(this) }
 		}
 	},
 	setCSetting: function (name, value) {
@@ -103,7 +116,6 @@ window.clientUtil = {
 			if (entry.min || entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max))
 			if (entry.set) entry.set(entry.val, true)
 		})
-		console.log(this)
 	}
 }
 

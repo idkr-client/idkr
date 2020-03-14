@@ -1,17 +1,17 @@
 require('v8-compile-cache')
-const path = require('path')
-const { URL } = require('url')
-const { BrowserWindow, clipboard, app, ipcMain, shell } = require("electron")
-const shortcuts = require('electron-localshortcut')
-const log = require('electron-log')
-const Store = require('electron-store')
-const { argv } = require('yargs')
+const path = require('path'),
+	{ URL } = require('url'),
+	{ BrowserWindow, clipboard, app, ipcMain, shell } = require("electron"),
+	shortcuts = require('electron-localshortcut'),
+	log = require('electron-log'),
+	Store = require('electron-store'),
+	{ argv } = require('yargs')
 
 Object.assign(console, log.functions)
 const config = new Store()
 
-const DEBUG = Boolean(argv.debug || config.get('debug'))
-const AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
+const DEBUG = Boolean(argv.debug || config.get('debug')),
+	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
 
 // app.commandLine.appendSwitch('disable-gpu-vsync')
 // app.commandLine.appendSwitch('ignore-gpu-blacklist')
@@ -26,8 +26,8 @@ let colorProfile = config.get('colorProfile', 'default')
 if (colorProfile != 'default') app.commandLine.appendSwitch('force-color-profile', colorProfile)
 
 ipcMain.on('prompt', (event, message, defaultValue) => {
-	let promptWin = initPromptWindow(message, defaultValue)
-	let returnValue = null
+	let promptWin = initPromptWindow(message, defaultValue),
+		returnValue = null
 
 	ipcMain.on('prompt-return', (event, value) => returnValue = value)
 
@@ -95,8 +95,8 @@ function setupWindow(win) {
 }
 
 function initWindow(url, webContents) {
-	let isGame = locationType(url) == 'game'
-	let win = new BrowserWindow({
+	let isGame = locationType(url) == 'game',
+		win = new BrowserWindow({
 		width: isGame ? 1600 : 1280,
 		height: isGame ? 900 : 720,
 		show: false,
