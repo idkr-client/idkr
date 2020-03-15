@@ -31,16 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		href: path.join(__dirname, 'css/game.css')
 	})
 	document.head.appendChild(gameCSS)
-})
 
-function genCSettingsHTML(options) {
-	switch (options.type) {
-		case 'checkbox': return `<label class='switch'><input type='checkbox' onclick='clientUtil.setCSetting("${options.id}", this.checked)'${options.val ? ' checked' : ''}><span class='slider'></span></label>`
-		case 'slider': return `<input type='number' class='sliderVal' id='c_slid_input_${options.id}' min='${options.min}' max='${options.max}' value='${options.val}' onkeypress='clientUtil.delaySetCSetting("${options.id}", this)' style='border-width:0px'/><div class='slidecontainer'><input type='range' id='c_slid_${options.id}' min='${options.min}' max='${options.max}' step='${options.step}' value='${options.val}' class='sliderM' oninput='clientUtil.setCSetting("${options.id}", this.value)'></div>`
-		case 'select': return `<select onchange='clientUtil.setCSetting("${options.id}", this.value)' class='inputGrey2'>${Object.entries(options.options).map(entry => `<option value='${entry[0]}'${entry[0] == options.val ? ' selected' : ''}>${entry[1]}</option>`).join('')}</select>`
-		default: return `<input type='${options.type}' name='${options.id}' id='c_slid_${options.id}' ${options.type == 'color' ? 'style="float:right;margin-top:5px;"' : `class='inputGrey2' ${options.placeholder ? `placeholder='${options.placeholder}'` : ''}`} value='${options.val}' oninput='clientUtil.setCSetting("${options.id}", this.value)'/>`
-	}
-}
+	clientUtil.initSettings()
+})
 
 window.clientUtil = {
 	settings: {
@@ -50,7 +43,7 @@ window.clientUtil = {
 			cat: 'Performance',
 			type: 'checkbox',
 			val: true,
-			html: function () { return genCSettingsHTML(this) }
+			html: function () { return clientUtil.genCSettingsHTML(this) }
 		},
 		colorProfile: {
 			name: 'Color Profile',
@@ -64,7 +57,7 @@ window.clientUtil = {
 				'color-spin-gamma24': 'Color spin with gamma 2.4'
 			},
 			val: 'default',
-			html: function () { return genCSettingsHTML(this) },
+			html: function () { return clientUtil.genCSettingsHTML(this) },
 			info: 'Force color profile.'
 		},
 		autoUpdate: {
@@ -78,7 +71,7 @@ window.clientUtil = {
 				skip: 'Skip'
 			},
 			val: 'download',
-			html: function () { return genCSettingsHTML(this) }
+			html: function () { return clientUtil.genCSettingsHTML(this) }
 		},
 		enableUserscripts: {
 			name: 'Enable Userscripts',
@@ -86,7 +79,7 @@ window.clientUtil = {
 			cat: 'Maintenance',
 			type: 'checkbox',
 			val: false,
-			html: function () { return genCSettingsHTML(this) }
+			html: function () { return clientUtil.genCSettingsHTML(this) }
 		}
 	},
 	setCSetting: function (name, value) {
@@ -112,6 +105,14 @@ window.clientUtil = {
 		let query = settingsWindow.settingSearch.toLowerCase() || ''
 		return (entry.name.toLowerCase() || '').includes(query) || (entry.cat.toLowerCase() || '').includes(query)
 	},
+	genCSettingsHTML: options => {
+		switch (options.type) {
+			case 'checkbox': return `<label class='switch'><input type='checkbox' onclick='clientUtil.setCSetting("${options.id}", this.checked)'${options.val ? ' checked' : ''}><span class='slider'></span></label>`
+			case 'slider': return `<input type='number' class='sliderVal' id='c_slid_input_${options.id}' min='${options.min}' max='${options.max}' value='${options.val}' onkeypress='clientUtil.delaySetCSetting("${options.id}", this)' style='border-width:0px'/><div class='slidecontainer'><input type='range' id='c_slid_${options.id}' min='${options.min}' max='${options.max}' step='${options.step}' value='${options.val}' class='sliderM' oninput='clientUtil.setCSetting("${options.id}", this.value)'></div>`
+			case 'select': return `<select onchange='clientUtil.setCSetting("${options.id}", this.value)' class='inputGrey2'>${Object.entries(options.options).map(entry => `<option value='${entry[0]}'${entry[0] == options.val ? ' selected' : ''}>${entry[1]}</option>`).join('')}</select>`
+			default: return `<input type='${options.type}' name='${options.id}' id='c_slid_${options.id}' ${options.type == 'color' ? 'style="float:right;margin-top:5px;"' : `class='inputGrey2' ${options.placeholder ? `placeholder='${options.placeholder}'` : ''}`} value='${options.val}' oninput='clientUtil.setCSetting("${options.id}", this.value)'/>`
+		}
+	},
 	initSettings: function () {
 		Object.values(this.settings).forEach(entry => {
 			if (entry.dontInit) return
@@ -122,5 +123,3 @@ window.clientUtil = {
 		})
 	}
 }
-
-clientUtil.initSettings()

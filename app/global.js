@@ -23,8 +23,10 @@ if (config.get('enableUserscripts', false)) {
 	fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
 		try {
 			let script = require(path.join(scriptsPath, filename))
-			if (script.locations.findIndex(location => ['all', windowType].includes(location)) > -1) script.run()
-			console.log(`Loaded userscript: ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
+			if (script.locations.findIndex(location => ['all', windowType].includes(location)) > -1) {
+				script.run(config)
+				console.log(`Loaded userscript: ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
+			}
 		} catch (err) { console.error('Failed to load userscript:', err) }
 	})
 }

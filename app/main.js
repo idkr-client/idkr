@@ -1,5 +1,6 @@
-require('v8-compile-cache')
-const path = require('path'),
+// require('v8-compile-cache')
+const fs = require('fs'),
+	path = require('path'),
 	{ URL } = require('url'),
 	{ BrowserWindow, clipboard, app, ipcMain, shell } = require("electron"),
 	shortcuts = require('electron-localshortcut'),
@@ -35,6 +36,20 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 		event.returnValue = returnValue
 	})
 })
+
+validateDocuments({
+	scripts: null,
+	swap: null
+})
+
+function validateDocuments(structure, prefix = '') {
+	let documentDir = path.join(app.getPath('documents'), 'idkr')
+	for (let [key, value] of Object.entries(structure)) {
+		let dir = path.join(documentDir, prefix, key)
+		if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+		if (value != null) validateDocuments(value, prefix + key)
+	}
+}
 
 function setupWindow(win, isWeb) {
 	let contents = win.webContents
