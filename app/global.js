@@ -1,14 +1,32 @@
-const { ipcRenderer } = require("electron"),
-	log = require('electron-log')
+const { ipcRenderer, remote } = require("electron"),
+	log = require('electron-log'),
+	fs = require('fs'),
+	path = require('path'),
+	Store = require('electron-store')
+
+let config = new Store()
 
 Object.assign(console, log.functions)
 
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync('prompt', message, defaultValue)
 
-switch (locationType(location.href)) {
+let windowType = locationType(location.href)
+
+switch (windowType) {
 	case 'game':
 		require('./game.js')
 		break
+}
+
+if (config.get('enableUserscripts', false)) {
+	let scriptsPath = path.join(remote.app.getPath('documents'), 'idkr/scripts')
+	fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
+		try {
+			let script = require(path.join(scriptsPath, filename))
+			if (script.locations.findIndex(location => ['all', windowType].includes(location)) > -1) script.run()
+			console.log(`Loaded userscript: ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
+		} catch (err) { console.error('Failed to load userscript:', err) }
+	})
 }
 
 function locationType(url = '') {

@@ -66,7 +66,7 @@ function setupWindow(win, isWeb) {
 
 	contents.on('dom-ready', () => {
 		let windowType = locationType(contents.getURL())
-		if (windowType == 'game') shortcuts.register(win, 'F6', () => contents.executeJavaScript('location.href = "https://krunker.io"'))
+		if (windowType == 'game') shortcuts.register(win, 'F6', () => contents.executeJavaScript('location.href = "https://krunker.io/"'))
 	})
 
 	contents.on("new-window", (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
@@ -145,22 +145,25 @@ function initSplashWindow() {
 
 		autoUpdater.on('error', err => {
 			console.error(err)
-			contents.send('au-error', err)
+			contents.send('message', 'Error: ' + err.name)
 			launchGame()
 		})
-		autoUpdater.on('checking-for-update', () => contents.send('au-checking-for-update'))
+		autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'))
 		autoUpdater.on('update-available', info => {
 			console.log(info)
-			contents.send('au-update-available', info)
+			contents.send('message', `Update v${info.version} available`, `${info.releaseDate} / ${info.files.join(', ')}`)
 			if (AUTO_UPDATE != 'download') launchGame()
 		})
 		autoUpdater.on('update-not-available', info => {
 			console.log(info)
-			contents.send('au-update-not-available', info)
+			contents.send('message', 'No update available')
 			launchGame()
 		})
-		autoUpdater.on('download-progress', info => contents.send('au-download-progress', info))
-		autoUpdater.on('update-downloaded', info => contents.send('au-update-downloaded', info))
+		autoUpdater.on('download-progress', info => {
+			contents.send('message', `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + 'kB/s')
+			win.setProgressBar(info.percent / 100)
+		})
+		autoUpdater.on('update-downloaded', info => contents.send('message', null, 'Installing...'))
 
 		autoUpdater.autoDownload = AUTO_UPDATE == 'download'
 		autoUpdater.checkForUpdates()

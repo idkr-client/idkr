@@ -79,6 +79,14 @@ window.clientUtil = {
 			},
 			val: 'download',
 			html: function () { return genCSettingsHTML(this) }
+		},
+		enableUserscripts: {
+			name: 'Enable Userscripts',
+			id: 'enableUserscripts',
+			cat: 'Maintenance',
+			type: 'checkbox',
+			val: false,
+			html: function () { return genCSettingsHTML(this) }
 		}
 	},
 	setCSetting: function (name, value) {
