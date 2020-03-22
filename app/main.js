@@ -21,9 +21,10 @@ const DEBUG = Boolean(argv.debug || config.get('debug')),
 // app.commandLine.appendSwitch('enable-webgl2-compute-context')
 // app.commandLine.appendSwitch('renderer-process-limit', 100)
 // app.commandLine.appendSwitch('max-active-webgl-contexts', 100)
-// app.commandLine.appendSwitch('use-angle', 'd3d9')
 if (config.get('disableFrameRateLimit', true)) app.commandLine.appendSwitch('disable-frame-rate-limit')
-let colorProfile = config.get('colorProfile', 'default')
+let angleBackend = config.get('angleBackend', 'default'),
+	colorProfile = config.get('colorProfile', 'default')
+if (angleBackend != 'default') app.commandLine.appendSwitch('use-angle', angleBackend)
 if (colorProfile != 'default') app.commandLine.appendSwitch('force-color-profile', colorProfile)
 
 ipcMain.on('prompt', (event, message, defaultValue) => {

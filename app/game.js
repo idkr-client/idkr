@@ -45,6 +45,21 @@ window.clientUtil = {
 			val: true,
 			html: function () { return clientUtil.genCSettingsHTML(this) }
 		},
+		angleBackend: {
+			name: 'ANGLE Graphics Backend',
+			id: 'angleBackend',
+			cat: 'Chromium',
+			type: 'select',
+			options: {
+				default: 'Default',
+				gl: 'OpenGL',
+				d3d11: 'D3D11',
+				d3d9: 'D3D9',
+				d3d11on12: 'D3D11on12'
+			},
+			val: 'default',
+			html: function () { return clientUtil.genCSettingsHTML(this) }
+		},
 		colorProfile: {
 			name: 'Color Profile',
 			id: 'colorProfile',
