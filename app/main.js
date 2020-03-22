@@ -16,11 +16,8 @@ const DEBUG = Boolean(argv.debug || config.get('debug')),
 
 // app.commandLine.appendSwitch('disable-gpu-vsync')
 // app.commandLine.appendSwitch('ignore-gpu-blacklist')
-
 // app.commandLine.appendSwitch('enable-zero-copy')
 // app.commandLine.appendSwitch('enable-webgl2-compute-context')
-// app.commandLine.appendSwitch('renderer-process-limit', 100)
-// app.commandLine.appendSwitch('max-active-webgl-contexts', 100)
 if (config.get('disableFrameRateLimit', true)) app.commandLine.appendSwitch('disable-frame-rate-limit')
 let angleBackend = config.get('angleBackend', 'default'),
 	colorProfile = config.get('colorProfile', 'default')
