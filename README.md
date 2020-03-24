@@ -2,9 +2,10 @@
 idk, just a Krunker client
 
 ## Features
+W: Windows, M: Mac, L: Linux  
 ### Settings
 - Disable Frame Rate Limit -s
-- ANGLE Grapchics Backend -s
+- ANGLE Grapchics Backend -s (W)
 	- Performance of the client can be affected by this option
 	- If you experiencing problems like crashes, try using different backend
 	- Probably only effective on Windows
@@ -22,7 +23,6 @@ ___
 "-l": applies after reloading or creating a new page  
 \<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows)
 ### Keyboard Shortcuts
-W: Windows, M: Mac, L: Linux  
 Most of "Control" key can be replaced by "Command" key.  
 | Shortcut | Action |
 | --- | --- |
