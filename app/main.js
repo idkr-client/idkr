@@ -1,7 +1,7 @@
 // require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
-	{ URL } = require('url'),
+	url = require('url'),
 	{ BrowserWindow, clipboard, app, ipcMain, shell } = require("electron"),
 	shortcuts = require('electron-localshortcut'),
 	log = require('electron-log'),
@@ -39,6 +39,33 @@ validateDocuments({
 	scripts: null,
 	swap: null
 })
+
+const swapDir = path.join(app.getPath('documents'), 'idkr/swap'),
+	swapFiles = []
+
+function recursiveSwap(win, prefix = '', domain = '') {
+	fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
+		if (domain) {
+			if (dirent.isDirectory()) recursiveSwap(win, `${prefix}/${dirent.name}`, domain)
+			else swapFiles.push({ domain: domain, path: `${prefix}/${dirent.name}`.replace(domain, '') })
+		} else recursiveSwap(win, prefix + dirent.name, dirent.name)
+	})
+	let urls = []
+	swapFiles.forEach(file => {
+		urls.push(`*://${file.domain + file.path}`)
+		urls.push(`*://${file.domain + file.path}?*`)
+	})
+	win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
+		let redirectTarget = path.join(swapDir, new URL(details.url).hostname, new url.URL(details.url).pathname)
+		callback({
+			redirectURL: url.format({
+				protocol: 'file:',
+				pathname: redirectTarget
+			})
+		})
+		console.log('Redirected:',details.url, redirectTarget)
+	})
+}
 
 function validateDocuments(structure, prefix = '') {
 	let documentDir = path.join(app.getPath('documents'), 'idkr')
@@ -108,6 +135,8 @@ function setupWindow(win, isWeb) {
 		app.quit()
 	})
 
+	if (config.get('enableResourceSwapper', false)) recursiveSwap(win)
+
 	function navigateNewWindow(event, url, webContents) {
 		event.preventDefault()
 		if (locationType(url) == 'external') shell.openExternal(url)
@@ -120,15 +149,15 @@ function setupWindow(win, isWeb) {
 function initWindow(url, webContents) {
 	let isGame = locationType(url) == 'game',
 		win = new BrowserWindow({
-		width: isGame ? 1600 : 1280,
-		height: isGame ? 900 : 720,
-		show: false,
-		webContents: webContents,
-		webPreferences: {
-			preload: path.join(__dirname, 'global.js'),
-			webSecurity: false
-		}
-	})
+			width: isGame ? 1600 : 1280,
+			height: isGame ? 900 : 720,
+			show: false,
+			webContents: webContents,
+			webPreferences: {
+				preload: path.join(__dirname, 'global.js'),
+				webSecurity: false
+			}
+		})
 	let contents = win.webContents
 	setupWindow(win, true)
 

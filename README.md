@@ -11,16 +11,20 @@ idk, just a Krunker client
 - Color Profile -s
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended but other options are here just because you can
+- Enable Resource Swapper -s
+	- Put swap files in `<documents>/idkr/swap`
 - Enable Userscripts -l
-	- Only use trusted scripts, they are danger than web extensions (seriously)
+	- Put userscripts in `<documents>/idkr/scripts`
+	- Only use truly trusted scripts, they are danger than web extensions. Seriously.
 ___
 "-s": applies after restarting  
 "-l": applies after reloading or creating a new page  
+\<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows)
 ### Keyboard Shortcuts
 W: Windows, M: Mac, L: Linux  
 Most of "Control" key can be replaced by "Command" key.  
 | Shortcut | Action |
-|------------------------------------------------------|------------------------------------|
+| --- | --- |
 | F1 | Clear cache and restart |
 | Escape | Exit pointer lock |
 | F5 | Reload |
@@ -37,5 +41,4 @@ Most of "Control" key can be replaced by "Command" key.
 
 ## Current State
 I'm very lazy to develop this thing XD  
-Bug reports are welcomed via Discord DM ( Mixaz#2446 ) or GitHub issues.  
-Make sure to tell your platform, details, and how to reproduce.
+Bug reports are welcomed via Discord DM ( Mixaz#2446 ) or GitHub issues. Make sure to tell your platform, details, and how to reproduce.

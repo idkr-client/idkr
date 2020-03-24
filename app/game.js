@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		settingsWindow = windows[0]
 		settingsWindow.getCSettings = function () {
 			let tempHTML = '',
-				categories = []
+				lastCategory = null
 			Object.values(clientUtil.settings).forEach(entry => {
 				if (settingsWindow.settingSearch && !clientUtil.searchMatches(entry) || entry.hide) return
-				if (!categories.includes(entry.cat)) {
-					categories.push(entry.cat)
+				if (lastCategory != entry.cat ) {
+					lastCategory = entry.cat
 					tempHTML += `<div class='setHed'>${entry.cat}</div>`
 				}
 				tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`
@@ -86,6 +86,14 @@ window.clientUtil = {
 				skip: 'Skip'
 			},
 			val: 'download',
+			html: function () { return clientUtil.genCSettingsHTML(this) }
+		},
+		enableResourceSwapper: {
+			name: 'Enable Resource Swapper',
+			id: 'enableResourceSwapper',
+			cat: 'Maintenance',
+			type: 'checkbox',
+			val: false,
 			html: function () { return clientUtil.genCSettingsHTML(this) }
 		},
 		enableUserscripts: {
