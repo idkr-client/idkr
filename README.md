@@ -16,6 +16,7 @@ idk, just a Krunker client
 - Enable Userscripts -l
 	- Put userscripts in `<documents>/idkr/scripts`
 	- Only use truly trusted scripts, they are danger than web extensions. Seriously.
+	- My [example script](https://gist.github.com/Mixaz017/5956c4c6ac9db7858f7b720aea260c71) 
 ___
 "-s": applies after restarting  
 "-l": applies after reloading or creating a new page  
