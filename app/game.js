@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				lastCategory = null
 			Object.values(clientUtil.settings).forEach(entry => {
 				if (settingsWindow.settingSearch && !clientUtil.searchMatches(entry) || entry.hide) return
-				if (lastCategory != entry.cat ) {
+				if (lastCategory != entry.cat) {
 					lastCategory = entry.cat
 					tempHTML += `<div class='setHed'>${entry.cat}</div>`
 				}
@@ -49,6 +49,7 @@ window.clientUtil = {
 			name: 'ANGLE Graphics Backend',
 			id: 'angleBackend',
 			cat: 'Chromium',
+			platform: ['win32'],
 			type: 'select',
 			options: {
 				default: 'Default',
@@ -137,12 +138,13 @@ window.clientUtil = {
 		}
 	},
 	initSettings: function () {
-		Object.values(this.settings).forEach(entry => {
+		for (let [key, entry] of Object.entries(this.settings)) {
+			if (entry.platform && !entry.platform.includes(process.platform)) return delete this.settings[key]
 			if (entry.dontInit) return
 			let savedVal = config.get(entry.id)
 			if (savedVal != null) entry.val = savedVal
 			if (entry.min || entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max))
 			if (entry.set) entry.set(entry.val, true)
-		})
+		}
 	}
 }

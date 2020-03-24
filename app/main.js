@@ -56,14 +56,12 @@ function recursiveSwap(win, prefix = '', domain = '') {
 		urls.push(`*://${file.domain + file.path}?*`)
 	})
 	win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
-		let redirectTarget = path.join(swapDir, new URL(details.url).hostname, new url.URL(details.url).pathname)
 		callback({
 			redirectURL: url.format({
 				protocol: 'file:',
-				pathname: redirectTarget
+				pathname: path.join(swapDir, new URL(details.url).hostname, new url.URL(details.url).pathname)
 			})
 		})
-		console.log('Redirected:',details.url, redirectTarget)
 	})
 }
 

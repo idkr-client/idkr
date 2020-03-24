@@ -7,7 +7,7 @@ idk, just a Krunker client
 - ANGLE Grapchics Backend -s
 	- Performance of the client can be affected by this option
 	- If you experiencing problems like crashes, try using different backend
-	- May not work outside of Windows, I will investigate this later
+	- Probably only effective on Windows
 - Color Profile -s
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended but other options are here just because you can
