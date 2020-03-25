@@ -1,8 +1,14 @@
 # idkr
 idk, just a Krunker client
 
+## Platform Note
+- Windows: Supported; main platform
+- macOS: Not tested; may not work
+- Linux: Minimal support
+
 ## Features
-W: Windows, M: Mac, L: Linux  
+W: Windows, M: macOS, L: Linux  
+
 ### Settings
 - Disable Frame Rate Limit -s
 - ANGLE Grapchics Backend -s (W)
