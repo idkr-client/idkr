@@ -14,6 +14,7 @@ const config = new Store()
 const DEBUG = Boolean(argv.debug || config.get('debug')),
 	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
 
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
 // app.commandLine.appendSwitch('disable-gpu-vsync')
 // app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // app.commandLine.appendSwitch('enable-zero-copy')
