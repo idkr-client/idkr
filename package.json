@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/Mixaz017/idkr#readme",
   "devDependencies": {
-    "electron": "^8.1.1"
+    "electron": "^8.2.0"
   },
   "dependencies": {
     "electron-localshortcut": "^3.2.1",
@@ -34,6 +34,6 @@
     "electron-store": "^5.1.1",
     "electron-updater": "^4.2.5",
     "v8-compile-cache": "^2.1.0",
-    "yargs": "^15.3.0"
+    "yargs": "^15.3.1"
   }
 }
