@@ -273,3 +273,6 @@ app.once("ready", () => {
 	if (AUTO_UPDATE == 'skip') initWindow('https://krunker.io/')
 	else initSplashWindow()
 })
+app.on('window-all-closed', () => {
+	app.quit()
+})
