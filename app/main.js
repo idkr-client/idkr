@@ -153,7 +153,7 @@ function initWindow(url, webContents) {
 			show: false,
 			webContents: webContents,
 			webPreferences: {
-				preload: path.join(__dirname, 'global.js'),
+				preload: path.join(__dirname, 'preload/global.js'),
 				webSecurity: false
 			}
 		})
@@ -175,7 +175,7 @@ function initSplashWindow() {
 		frame: false,
 		transparent: true,
 		webPreferences: {
-			preload: path.join(__dirname, 'splash.js')
+			preload: path.join(__dirname, 'preload/splash.js')
 		}
 	})
 	let contents = win.webContents
@@ -216,7 +216,7 @@ function initSplashWindow() {
 	})
 
 	setupWindow(win)
-	win.loadFile("app/splash.html")
+	win.loadFile("app/html/splash.html")
 	return win
 }
 
@@ -230,7 +230,7 @@ function initPromptWindow(message, defaultValue) {
 		resizable: false,
 		transparent: true,
 		webPreferences: {
-			preload: path.join(__dirname, 'prompt.js')
+			preload: path.join(__dirname, 'preload/prompt.js')
 		}
 	})
 	let contents = win.webContents
@@ -240,7 +240,7 @@ function initPromptWindow(message, defaultValue) {
 		contents.send('prompt-data', message, defaultValue)
 	})
 
-	win.loadFile('app/prompt.html')
+	win.loadFile('app/html/prompt.html')
 
 	return win
 }
