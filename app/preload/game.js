@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	let gameCSS = Object.assign(document.createElement('link'), {
 		rel: 'stylesheet',
 		type: 'text/css',
-		href: path.join(__dirname, 'css/game.css')
+		href: path.join(__dirname, '../css/game.css')
 	})
 	document.head.appendChild(gameCSS)
 
