@@ -85,10 +85,11 @@ function setupWindow(win, isWeb) {
 		win.show();
 	});
 
-	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools());
-	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack());
-	shortcuts.register(win, process.platform == 'darwin' ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward());
-	shortcuts.register(win, 'F1', () => {
+	let isMac = process.platform == 'darwin'
+	shortcuts.register(win, isMac ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools());
+	shortcuts.register(win, isMac ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack());
+	shortcuts.register(win, isMac ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward());
+	shortcuts.register(win, 'CommandOrControl+Shift+Delete', () => {
 		contents.session.clearCache().then(err => {
 			if (err) {
 				console.error(err);
@@ -99,6 +100,7 @@ function setupWindow(win, isWeb) {
 			}
 		});
 	});
+	shortcuts.register(win, 'CommandOrControl+Alt+F', () => initSettingsWindow())
 	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()'));
 
 	if (!isWeb) return win;
@@ -241,6 +243,27 @@ function initPromptWindow(message, defaultValue) {
 	});
 
 	win.loadFile('app/html/prompt.html');
+
+	return win;
+}
+
+function initSettingsWindow() {
+	let win = new BrowserWindow({
+		width: 600,
+		height: 600,
+		center: true,
+		show: false,
+		frame: false,
+		transparent: true,
+		webPreferences: {
+			preload: path.join(__dirname, 'preload/settings.js')
+		}
+	});
+	let contents = win.webContents;
+
+	setupWindow(win);
+
+	win.loadFile('app/html/settings.html');
 
 	return win;
 }

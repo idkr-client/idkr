@@ -1,0 +1,54 @@
+@font-face {
+	font-family: 'FFF Forward';
+	src: url("../fonts/FFF-Forward.ttf");
+}
+
+* {
+	outline: none;
+	font-family: 'FFF Forward';
+	font-size: 22px;
+	color: #353535;
+	user-select: none;
+}
+
+body {
+	overflow: hidden;
+	margin: 0px;
+}
+
+#settingsBody {
+	text-align: center;
+	padding: 5px;
+	left: 0;
+	right: 0;
+	border-radius: 6px;
+	border: 7px solid #a6a6a6;
+	background-color: #fff;
+}
+
+#idkrVersion {
+	font-size: 8px;
+}
+
+input {
+	background-color: #eee;
+	border: none;
+	font-size: 16px;
+	padding: 5px;
+	width: 90%;
+}
+
+button {
+	color: #fff;
+	margin: 5px;
+	background-color: #2196F3;
+	padding: 6px;
+	font-size: 12px;
+	display: inline-block;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+button:active {
+	background-color: #666;
+}

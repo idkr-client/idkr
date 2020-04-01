@@ -32,7 +32,8 @@ ___
 Most of "Control" key can be replaced by "Command" key.  
 | Shortcut | Action |
 | --- | --- |
-| F1 | Clear cache and restart |
+| Control + Shift + Delete | Clear cache and restart |
+| Control + Alt + F | Open settings window |
 | Escape | Exit pointer lock |
 | F5 | Reload |
 | Shift + F5 | Reload ignoring cache |

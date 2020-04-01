@@ -1,39 +1,15 @@
-const path = require('path'),
+const { remote } = require('electron'),
 	Store = require('electron-store');
-
-const config = new Store();
-
-let settingsWindow = null;
+const config = new Store()
 
 document.addEventListener('DOMContentLoaded', () => {
-	let windowsObserver = new MutationObserver(() => {
-		windowsObserver.disconnect();
-		settingsWindow = windows[0];
-		settingsWindow.getCSettings = function () {
-			let tempHTML = '',
-				lastCategory = null;
-			Object.values(clientUtil.settings).forEach(entry => {
-				if (settingsWindow.settingSearch && !clientUtil.searchMatches(entry) || entry.hide) return;
-				if (lastCategory != entry.cat) {
-					lastCategory = entry.cat;
-					tempHTML += `<div class='setHed'>${entry.cat}</div>`;
-				}
-				tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`;
-			});
-			return tempHTML;
-		};
-	});
-	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
-
-	let gameCSS = Object.assign(document.createElement('link'), {
-		rel: 'stylesheet',
-		type: 'text/css',
-		href: path.join(__dirname, '../css/game.css')
-	});
-	document.head.appendChild(gameCSS);
-
+	idkrVersion.innerText = 'idkr v' + remote.app.getVersion();
 	clientUtil.initSettings();
+	clientUtil.refresh();
 });
+
+// Fix bounds not correctly set until 2nd call
+window.addEventListener('load', () => remote.getCurrentWindow().setBounds({ height: settingsBody.getBoundingClientRect().height }));
 
 window.clientUtil = {
 	settings: require('../exports/settings'),
@@ -42,7 +18,6 @@ window.clientUtil = {
 		if (entry.min || entry.max) value = Math.max(entry.min, Math.min(value, entry.max));
 		config.set(name, value);
 		entry.val = value;
-		if (entry.set) entry.set(value);
 		let element = document.getElementById('c_slid_' + entry.id);
 		if (element) element.value = value;
 		element = document.getElementById('c_slid_input_' + entry.id);
@@ -56,8 +31,22 @@ window.clientUtil = {
 			delete this.delayIDs[name];
 		}, delay);
 	},
+	refresh: function () {
+		let tempHTML = '',
+			lastCategory = null;
+		Object.values(clientUtil.settings).forEach(entry => {
+			if (settingsSearch.value && !clientUtil.searchMatches(entry) || entry.hide) return;
+			if (lastCategory != entry.cat) {
+				lastCategory = entry.cat;
+				tempHTML += `<div class='setHed'>${entry.cat}</div>`;
+			}
+			tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`;
+		});
+		settingsHolder.innerHTML = tempHTML;
+		remote.getCurrentWindow().setBounds({ height: settingsBody.getBoundingClientRect().height });
+	},
 	searchMatches: entry => {
-		let query = settingsWindow.settingSearch.toLowerCase() || '';
+		let query = settingsSearch.value.toLowerCase() || '';
 		return (entry.name.toLowerCase() || '').includes(query) || (entry.cat.toLowerCase() || '').includes(query);
 	},
 	genCSettingsHTML: options => {
@@ -75,7 +64,6 @@ window.clientUtil = {
 			let savedVal = config.get(entry.id);
 			if (savedVal != null) entry.val = savedVal;
 			if (entry.min || entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max));
-			if (entry.set) entry.set(entry.val, true);
 		}
 	}
 };
