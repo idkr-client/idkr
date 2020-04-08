@@ -1,7 +1,7 @@
 const { remote, ipcRenderer } = require('electron');
 
 document.addEventListener('DOMContentLoaded', () => {
-	version.innerText = `${remote.app.name}@${remote.app.getVersion()}`;
+	version.innerText = `${remote.app.name || remote.app.getName()}@${remote.app.getVersion()}`;
 });
 
 ipcRenderer.on('message', (event, messageText = '', detailsText = '') => {

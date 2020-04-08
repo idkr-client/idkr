@@ -49,4 +49,5 @@ Most of "Control" key can be replaced by "Command" key.
 
 ## Current State
 I'm very lazy to develop this thing XD  
-Bug reports are welcomed via Discord DM ( Mixaz#2446 ) or GitHub issues. Make sure to tell your platform, details, and how to reproduce.
+Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/issues), or our [Discord Server](https://discord.gg/wEZbFFX).  
+Make sure to tell your platform, details, and how to reproduce.
