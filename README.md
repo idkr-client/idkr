@@ -22,8 +22,9 @@ W: Windows, M: macOS, L: Linux
 	- Put swap files in `<documents>/idkr/swap`
 - Enable Userscripts -l
 	- Put userscripts in `<documents>/idkr/scripts`
-	- Only use truly trusted scripts, they are danger than web extensions. Seriously.
-	- My [example script](https://gist.github.com/Mixaz017/5956c4c6ac9db7858f7b720aea260c71) 
+	- Only use truly trusted scripts, they are danger than web extensions. It can cause serious damage if used wrong.
+	- [Example script](https://gist.github.com/Mixaz017/5956c4c6ac9db7858f7b720aea260c71)
+	- Still work in progress!
 ___
 "-s": applies after restarting  
 "-l": applies after reloading or creating a new page  
