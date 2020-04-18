@@ -182,44 +182,54 @@ function initSplashWindow() {
 	});
 	let contents = win.webContents;
 
-	contents.on("dom-ready", () => {
-		const { autoUpdater } = require('electron-updater');
-		autoUpdater.logger = log;
+	Promise.allSettled([autoUpdate()]).then(() => launchGame())
 
-		autoUpdater.on('error', err => {
-			console.error(err);
-			contents.send('message', 'Error: ' + err.name);
-			launchGame();
-		});
-		autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'));
-		autoUpdater.on('update-available', info => {
-			console.log(info);
-			contents.send('message', `Update v${info.version} available`, `${info.releaseDate} / ${info.files.join(', ')}`);
-			if (AUTO_UPDATE != 'download') launchGame();
-		});
-		autoUpdater.on('update-not-available', info => {
-			console.log(info);
-			contents.send('message', 'No update available');
-			launchGame();
-		});
-		autoUpdater.on('download-progress', info => {
-			contents.send('message', `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + 'kB/s');
-			win.setProgressBar(info.percent / 100);
-		});
-		autoUpdater.on('update-downloaded', info => contents.send('message', null, 'Installing...'));
-
-		autoUpdater.autoDownload = AUTO_UPDATE == 'download';
-		autoUpdater.checkForUpdates();
-
-		function launchGame() {
-			initWindow('https://krunker.io/');
-			setTimeout(() => win.close(), 2000);
-		}
-	});
+	async function autoUpdate() {
+		return new Promise((resolve, reject) => {
+			if (AUTO_UPDATE == 'skip') resolve();
+			else {
+				contents.on("dom-ready", () => {
+					contents.send('message', 'Initializing the auto updater...');
+					const { autoUpdater } = require('electron-updater');
+					autoUpdater.logger = log;
+		
+					autoUpdater.on('error', err => {
+						console.error(err);
+						contents.send('message', 'Error: ' + err.name);
+						reject(`Error occured: ${err.name}`)
+					});
+					autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'));
+					autoUpdater.on('update-available', info => {
+						console.log(info);
+						contents.send('message', `Update v${info.version} available`, `${info.releaseDate} / ${info.files.join(', ')}`);
+						if (AUTO_UPDATE != 'download') resolve();
+					});
+					autoUpdater.on('update-not-available', info => {
+						console.log(info);
+						contents.send('message', 'No update available');
+						resolve();
+					});
+					autoUpdater.on('download-progress', info => {
+						contents.send('message', `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + 'kB/s');
+						win.setProgressBar(info.percent / 100);
+					});
+					autoUpdater.on('update-downloaded', info => contents.send('message', null, 'Installing...'));
+		
+					autoUpdater.autoDownload = AUTO_UPDATE == 'download';
+					autoUpdater.checkForUpdates();
+				});
+			};
+		})
+	}
 
 	setupWindow(win);
 	win.loadFile("app/html/splash.html");
 	return win;
+
+	function launchGame() {
+		initWindow('https://krunker.io/');
+		setTimeout(() => win.close(), 2000);
+	}
 }
 
 function initPromptWindow(message, defaultValue) {
@@ -292,10 +302,7 @@ function locationType(url = '') {
 	}
 }
 
-app.once("ready", () => {
-	if (AUTO_UPDATE == 'skip') initWindow('https://krunker.io/');
-	else initSplashWindow();
-});
+app.once("ready", () => { initSplashWindow(); });
 app.on('window-all-closed', () => {
 	app.quit();
 });
