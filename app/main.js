@@ -182,7 +182,7 @@ function initSplashWindow() {
 	});
 	let contents = win.webContents;
 
-	Promise.allSettled([autoUpdate()]).then(() => launchGame())
+	autoUpdate().finally(() => launchGame())
 
 	async function autoUpdate() {
 		return new Promise((resolve, reject) => {
