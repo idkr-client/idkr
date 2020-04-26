@@ -1,11 +1,18 @@
-module.exports = {
+const fs = require('fs'),
+	path = require('path'),
+	{ remote } = require('electron'),
+	Store = require('electron-store')
+
+const config = new Store()
+
+let settings = {
 	disableFrameRateLimit: {
 		name: 'Disable Frame Rate Limit',
 		id: 'disableFrameRateLimit',
 		cat: 'Performance',
 		type: 'checkbox',
 		val: true,
-		html: function () { return clientUtil.genCSettingsHTML(this); }
+		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	angleBackend: {
 		name: 'ANGLE Graphics Backend',
@@ -21,7 +28,7 @@ module.exports = {
 			d3d11on12: 'D3D11on12'
 		},
 		val: 'default',
-		html: function () { return clientUtil.genCSettingsHTML(this); }
+		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	colorProfile: {
 		name: 'Color Profile',
@@ -35,7 +42,7 @@ module.exports = {
 			'color-spin-gamma24': 'Color spin with gamma 2.4'
 		},
 		val: 'default',
-		html: function () { return clientUtil.genCSettingsHTML(this); },
+		html: function () { return clientUtil.genCSettingsHTML(this) },
 		info: 'Force color profile.'
 	},
 	autoUpdate: {
@@ -49,7 +56,7 @@ module.exports = {
 			skip: 'Skip'
 		},
 		val: 'download',
-		html: function () { return clientUtil.genCSettingsHTML(this); }
+		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	enableResourceSwapper: {
 		name: 'Enable Resource Swapper',
@@ -57,7 +64,7 @@ module.exports = {
 		cat: 'Maintenance',
 		type: 'checkbox',
 		val: false,
-		html: function () { return clientUtil.genCSettingsHTML(this); }
+		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	enableUserscripts: {
 		name: 'Enable Userscripts',
@@ -65,6 +72,19 @@ module.exports = {
 		cat: 'Maintenance',
 		type: 'checkbox',
 		val: false,
-		html: function () { return clientUtil.genCSettingsHTML(this); }
+		html: function () { return clientUtil.genCSettingsHTML(this) }
 	}
-};
+}
+
+if (config.get('enableUserscripts', false)) {
+	let scriptsPath = path.join(remote.app.getPath('documents'), 'idkr/scripts')
+	fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
+		try {
+			let script = require(path.join(scriptsPath, filename))
+			Object.assign(settings, script.settings)
+			console.log(`Loaded userscript (settings): ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
+		} catch (err) { console.error('Failed to load userscript (settings):', err) }
+	})
+}
+
+module.exports = settings
