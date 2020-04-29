@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 window.clientUtil = {
-	settings: require('../exports/settings'),
+	settings: Object.assign(require('../exports/settings'), window.scriptSettings),
 	setCSetting: function (name, value) {
 		let entry = Object.values(this.settings).find(entry => entry.id == name)
 		if (entry.min || entry.max) value = Math.max(entry.min, Math.min(value, entry.max))

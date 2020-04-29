@@ -1,6 +1,21 @@
-const { remote } = require('electron'),
+const fs = require('fs'),
+	path = require('path'),
+	{ remote } = require('electron'),
 	Store = require('electron-store')
+
 const config = new Store()
+
+let scriptSettings = {}
+if (config.get('enableUserscripts', false)) {
+	let scriptsPath = path.join(remote.app.getPath('documents'), 'idkr/scripts')
+	fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
+		try {
+			let script = require(path.join(scriptsPath, filename))
+			if (script.hasOwnProperty('settings')) Object.assign(scriptSettings, script.settings)
+			console.log(`Loaded userscript: ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
+		} catch (err) { console.error('Failed to load userscript:', err) }
+	})
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 	idkrVersion.innerText = 'idkr v' + remote.app.getVersion()
@@ -12,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('load', () => remote.getCurrentWindow().setBounds({ height: settingsBody.getBoundingClientRect().height }))
 
 window.clientUtil = {
-	settings: require('../exports/settings'),
+	settings: Object.assign(require('../exports/settings'), scriptSettings),
 	setCSetting: function (name, value) {
 		let entry = Object.values(this.settings).find(entry => entry.id == name)
 		if (entry.min || entry.max) value = Math.max(entry.min, Math.min(value, entry.max))

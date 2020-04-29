@@ -1,11 +1,4 @@
-const fs = require('fs'),
-	path = require('path'),
-	{ remote } = require('electron'),
-	Store = require('electron-store')
-
-const config = new Store()
-
-let settings = {
+module.exports = {
 	disableFrameRateLimit: {
 		name: 'Disable Frame Rate Limit',
 		id: 'disableFrameRateLimit',
@@ -75,16 +68,3 @@ let settings = {
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	}
 }
-
-if (config.get('enableUserscripts', false)) {
-	let scriptsPath = path.join(remote.app.getPath('documents'), 'idkr/scripts')
-	fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
-		try {
-			let script = require(path.join(scriptsPath, filename))
-			Object.assign(settings, script.settings)
-			console.log(`Loaded userscript (settings): ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
-		} catch (err) { console.error('Failed to load userscript (settings):', err) }
-	})
-}
-
-module.exports = settings

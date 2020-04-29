@@ -12,23 +12,25 @@ window.prompt = (message, defaultValue) => ipcRenderer.sendSync('prompt', messag
 
 let windowType = locationType(location.href)
 
-switch (windowType) {
-	case 'game':
-		require('./game.js')
-		break
-}
-
+window.scriptSettings = {}
 if (config.get('enableUserscripts', false)) {
 	let scriptsPath = path.join(remote.app.getPath('documents'), 'idkr/scripts')
 	fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
 		try {
 			let script = require(path.join(scriptsPath, filename))
+			if (script.hasOwnProperty('settings')) Object.assign(window.scriptSettings, script.settings)
 			if (script.locations.findIndex(location => ['all', windowType].includes(location)) > -1) {
 				script.run(config)
 				console.log(`Loaded userscript: ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
 			}
 		} catch (err) { console.error('Failed to load userscript:', err) }
 	})
+}
+
+switch (windowType) {
+	case 'game':
+		require('./game.js')
+		break
 }
 
 function locationType(url = '') {
