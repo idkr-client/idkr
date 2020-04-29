@@ -213,7 +213,10 @@ function initSplashWindow() {
 						contents.send('message', `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + 'kB/s')
 						win.setProgressBar(info.percent / 100)
 					})
-					autoUpdater.on('update-downloaded', info => contents.send('message', null, 'Installing...'))
+					autoUpdater.on('update-downloaded', info => {
+						contents.send('message', null, 'Installing...')
+						autoUpdater.quitAndInstall(true, true)
+					})
 
 					autoUpdater.autoDownload = AUTO_UPDATE == 'download'
 					autoUpdater.checkForUpdates()
