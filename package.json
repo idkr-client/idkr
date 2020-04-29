@@ -1,6 +1,6 @@
 {
   "name": "idkr",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "idk, just a Krunker client",
   "main": "app/main.js",
   "scripts": {
@@ -26,13 +26,13 @@
   },
   "homepage": "https://github.com/Mixaz017/idkr#readme",
   "devDependencies": {
-    "electron": "^6.1.9"
+    "electron": "^6.1.10"
   },
   "dependencies": {
     "electron-localshortcut": "^3.2.1",
     "electron-log": "^4.1.1",
     "electron-store": "^5.1.1",
-    "electron-updater": "^4.3.0",
+    "electron-updater": "^4.3.1",
     "v8-compile-cache": "^2.1.0",
     "yargs": "^15.3.1"
   }
