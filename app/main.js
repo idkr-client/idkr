@@ -105,6 +105,8 @@ function setupWindow(win, isWeb) {
 
 	if (!isWeb) return win
 
+	// Codes only runs on web windows
+
 	contents.on('dom-ready', () => {
 		let windowType = locationType(contents.getURL())
 		if (windowType == 'game') shortcuts.register(win, 'F6', () => contents.executeJavaScript('location.href = "https://krunker.io/"'))
