@@ -233,7 +233,7 @@ function initSplashWindow() {
 
 	function launchGame() {
 		initWindow('https://krunker.io/')
-		setTimeout(() => win.close(), 2000)
+		setTimeout(() => win.destroy(), 2000)
 	}
 }
 
