@@ -25,13 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	})
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true })
 
-	let gameCSS = Object.assign(document.createElement('link'), {
-		rel: 'stylesheet',
-		type: 'text/css',
-		href: path.join(__dirname, '../css/game.css')
-	})
-	document.head.appendChild(gameCSS)
-
 	clientUtil.initSettings()
 })
 
