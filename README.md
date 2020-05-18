@@ -26,13 +26,13 @@ W: Windows, M: macOS, L: Linux
 	- Put userscripts in `<documents>/idkr/scripts`
 	- Only use truly trusted scripts, they are danger than web extensions. It can cause serious damage if used wrong.
 	- [Example script](https://gist.github.com/Mixaz017/5956c4c6ac9db7858f7b720aea260c71)
-	- Still work in progress!
+	- This is an experimental feature!
 ___
 "-s": applies after restarting  
 "-l": applies after reloading or creating a new page  
 \<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows)
 ### Keyboard Shortcuts
-Most of "Control" key can be replaced by "Command" key.  
+Most of "Control" key can be replaced by "Command" key in macOS.  
 | Shortcut | Action |
 | --- | --- |
 | Control + Shift + Delete | Clear cache and restart |
