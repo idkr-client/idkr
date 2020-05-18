@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					lastCategory = entry.cat
 					tempHTML += `<div class='setHed'>${entry.cat}</div>`
 				}
-				tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`
+				tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name}${entry.needsRestart ? ' <span style="color: #eb5656">*</span>' : ''} ${entry.html()}</div>`
 			})
 			return tempHTML
 		}

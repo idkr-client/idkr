@@ -5,6 +5,7 @@ module.exports = {
 		cat: 'Performance',
 		type: 'checkbox',
 		val: true,
+		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	angleBackend: {
@@ -21,6 +22,7 @@ module.exports = {
 			d3d11on12: 'D3D11on12'
 		},
 		val: 'default',
+		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	colorProfile: {
@@ -35,6 +37,7 @@ module.exports = {
 			'color-spin-gamma24': 'Color spin with gamma 2.4'
 		},
 		val: 'default',
+		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) },
 		info: 'Force color profile.'
 	},
@@ -57,6 +60,7 @@ module.exports = {
 		cat: 'Maintenance',
 		type: 'checkbox',
 		val: false,
+		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	enableUserscripts: {
