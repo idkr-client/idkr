@@ -1,5 +1,4 @@
-const path = require('path'),
-	Store = require('electron-store')
+const Store = require('electron-store')
 
 const config = new Store()
 
