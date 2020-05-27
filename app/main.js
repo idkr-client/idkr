@@ -59,7 +59,7 @@ function recursiveSwap(win, prefix = '', domain = '') {
 	win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
 		callback({
 			redirectURL: url.format({
-				protocol: 'file:',
+				protocol: 'file',
 				pathname: path.join(swapDir, new URL(details.url).hostname, new url.URL(details.url).pathname)
 			})
 		})
