@@ -1,8 +1,8 @@
-const { ipcRenderer, remote } = require("electron"),
-	log = require('electron-log'),
-	fs = require('fs'),
+const fs = require('fs'),
 	path = require('path'),
-	Store = require('electron-store')
+	{ ipcRenderer, remote } = require("electron"),
+	Store = require('electron-store'),
+	log = require('electron-log')
 
 const config = new Store()
 

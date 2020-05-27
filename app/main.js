@@ -3,9 +3,9 @@ const fs = require('fs'),
 	path = require('path'),
 	url = require('url'),
 	{ BrowserWindow, clipboard, app, ipcMain, shell } = require("electron"),
-	shortcuts = require('electron-localshortcut'),
-	log = require('electron-log'),
 	Store = require('electron-store'),
+	log = require('electron-log'),
+	shortcuts = require('electron-localshortcut'),
 	{ argv } = require('yargs')
 
 Object.assign(console, log.functions)
