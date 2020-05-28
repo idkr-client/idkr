@@ -1,5 +1,9 @@
 # idkr
-idk, just a Krunker client
+idk, just a Krunker client  
+This client aims for:
+- Stable behavior and performance
+- Advanced customizability (settings and userscripts)
+- Constructive to the community (open source and MIT license)
 
 ## Platform Note
 - Windows: Supported; main platform
