@@ -22,24 +22,23 @@ W: Windows, M: macOS, L: Linux
 - Settings search works for client related settings (unlike official client)
 
 ### Settings
-- Disable Frame Rate Limit -s
-- ANGLE Grapchics Backend -s (W)
+- Disable Frame Rate Limit *
+- ANGLE Grapchics Backend * (W)
 	- Performance of the client can be affected by this option
 	- If you experiencing problems like crashes, try using different backend
 	- Probably only effective on Windows
-- Color Profile -s
+- Color Profile *
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended but other options are here just because you can
-- Enable Resource Swapper -s
+- Enable Resource Swapper *
 	- Put swap files in `<documents>/idkr/swap`
-- Enable Userscripts -l
+- Enable Userscripts *
 	- Put userscripts in `<documents>/idkr/scripts`
 	- Only use truly trusted scripts, they are danger than web extensions. It can cause serious damage if used wrong.
 	- [Example script](https://gist.github.com/Mixaz017/5956c4c6ac9db7858f7b720aea260c71)
 	- This is an experimental feature!
 ___
-"-s": applies after restarting  
-"-l": applies after reloading or creating a new page  
+*: applies after restarting  
 \<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows)
 ### Keyboard Shortcuts
 Most of "Control" key can be replaced by "Command" key in macOS.  
