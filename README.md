@@ -5,10 +5,12 @@ This client aims for:
 - Advanced customizability (settings and userscripts)
 - Constructive to the community (open source and MIT license)
 
-## Platform Note
-- Windows: Supported; main platform
-- macOS: Not tested; may not work
-- Linux: Minimal support
+## Supported Platforms
+- Windows: Supported, main platform
+- Linux: Supported
+- macOS: Not supported, may or may not work
+
+Testings are greatly appreciated! Post test results and your thoughts in #client-feedback channel in the Discord.
 
 ## Features
 W: Windows, M: macOS, L: Linux  
