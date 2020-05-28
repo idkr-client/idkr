@@ -12,6 +12,10 @@ This client aims for:
 
 Testings are greatly appreciated! Post test results and your thoughts in #client-feedback channel in the Discord.
 
+### Links
+- [Discord server](https://discord.gg/wEZbFFX)
+- [Latest prebuilt release](https://github.com/Mixaz017/idkr/releases/latest)
+
 ## Features
 W: Windows, M: macOS, L: Linux  
 
@@ -59,6 +63,6 @@ Most of "Control" key can be replaced by "Command" key in macOS.
 ## Current State
 This client is not polished yet, please expect some unintended or wacky behaviors.  
 Looking for contributer!  
-Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/issues), or our [Discord Server](https://discord.gg/wEZbFFX).  
+Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/issues), or our [Discord server](https://discord.gg/wEZbFFX).  
 Make sure to tell your platform, details, and how to reproduce.
 I'm very lazy to develop this thing XD  
