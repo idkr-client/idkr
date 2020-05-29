@@ -48,11 +48,11 @@ window.clientUtil = {
 	},
 	refresh: function () {
 		let tempHTML = '',
-			lastCategory = null
+			previousCategory = null
 		Object.values(clientUtil.settings).forEach(entry => {
 			if (settingsSearch.value && !clientUtil.searchMatches(entry) || entry.hide) return
-			if (lastCategory != entry.cat) {
-				lastCategory = entry.cat
+			if (previousCategory != entry.cat) {
+				previousCategory = entry.cat
 				tempHTML += `<div class='setHed'>${entry.cat}</div>`
 			}
 			tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name} ${entry.html()}</div>`
