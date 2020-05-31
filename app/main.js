@@ -109,7 +109,7 @@ function setupWindow(win, isWeb) {
 
 	contents.on('dom-ready', () => {
 		let windowType = locationType(contents.getURL())
-		if (windowType == 'game') shortcuts.register(win, 'F6', () => contents.executeJavaScript('location.href = "https://krunker.io/"'))
+		if (windowType == 'game') shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/'))
 	})
 
 	contents.on("new-window", (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
