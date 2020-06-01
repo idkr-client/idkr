@@ -150,10 +150,9 @@ function setupWindow(win, isWeb) {
 }
 
 function initWindow(url, webContents) {
-	let isGame = locationType(url) == 'game',
 		win = new BrowserWindow({
-			width: isGame ? 1600 : 1280,
-			height: isGame ? 900 : 720,
+			width: 1600,
+			height: 900,
 			show: false,
 			webContents: webContents,
 			webPreferences: {
