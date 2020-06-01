@@ -78,7 +78,7 @@ function validateDocuments(structure, prefix = '') {
 function setupWindow(win, isWeb) {
 	let contents = win.webContents
 
-	if (DEBUG) contents.toggleDevTools()
+	if (DEBUG) contents.openDevTools()
 	win.removeMenu()
 	win.once('ready-to-show', () => {
 		if (locationType(contents.getURL()) == 'game') win.setFullScreen(config.get('fullScreen', false))
