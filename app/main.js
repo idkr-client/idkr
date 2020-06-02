@@ -202,7 +202,7 @@ function initSplashWindow() {
 					autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'))
 					autoUpdater.on('update-available', info => {
 						console.log(info)
-						contents.send('message', `Update v${info.version} available`, `${info.releaseDate} / ${info.files.join(', ')}`)
+						contents.send('message', `Update v${info.version} available`, info.releaseDate)
 						if (AUTO_UPDATE != 'download') resolve()
 					})
 					autoUpdater.on('update-not-available', info => {
