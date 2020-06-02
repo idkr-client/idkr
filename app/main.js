@@ -14,6 +14,8 @@ const config = new Store()
 const DEBUG = Boolean(argv.debug || config.get('debug')),
 	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
 
+if (!app.requestSingleInstanceLock()) app.quit()
+
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
 // app.commandLine.appendSwitch('disable-gpu-vsync')
 // app.commandLine.appendSwitch('ignore-gpu-blacklist')
@@ -306,7 +308,5 @@ function locationType(url = '') {
 	}
 }
 
-app.once("ready", () => { initSplashWindow() })
-app.on('window-all-closed', () => {
-	app.quit()
-})
+app.once('ready', () => initSplashWindow())
+app.on('window-all-closed', () => app.quit())
