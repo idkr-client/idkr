@@ -1,5 +1,4 @@
 appId: com.hyamix.idkr
-productName: idkr
 win:
   artifactName: ${productName}-v${version}-portable-${os}-${arch}.${ext}
   target:
