@@ -1,4 +1,4 @@
-// require('v8-compile-cache')
+require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
 	url = require('url'),

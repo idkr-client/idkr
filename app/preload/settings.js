@@ -1,3 +1,4 @@
+require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
 	{ remote } = require('electron'),
