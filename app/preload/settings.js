@@ -19,7 +19,7 @@ if (config.get('enableUserscripts', false)) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-	idkrVersion.innerText = `${remote.app.name} v' + ${remote.app.getVersion()}`
+	idkrVersion.innerText = `${remote.app.name} v${remote.app.getVersion()}`
 	clientUtil.initSettings()
 	clientUtil.refresh()
 })
