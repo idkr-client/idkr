@@ -12,7 +12,7 @@ module.exports = {
 		name: 'ANGLE Graphics Backend',
 		id: 'angleBackend',
 		cat: 'Chromium',
-		platform: ['win32'],
+		platforms: ['win32'],
 		type: 'select',
 		options: {
 			default: 'Default',
