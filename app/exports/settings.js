@@ -41,6 +41,15 @@ module.exports = {
 		html: function () { return clientUtil.genCSettingsHTML(this) },
 		info: 'Force color profile.'
 	},
+	enablePointerLockOptions: {
+		name: 'Pointer Raw Input',
+		id: 'enablePointerLockOptions',
+		cat: 'Chromium',
+		type: 'checkbox',
+		val: false,
+		needsRestart: true,
+		html: function () { return clientUtil.genCSettingsHTML(this) }
+	},
 	autoUpdate: {
 		name: 'Auto Update Behavior',
 		id: 'autoUpdate',
