@@ -63,12 +63,17 @@ module.exports = {
 		val: 'download',
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
-	enableResourceSwapper: {
-		name: 'Enable Resource Swapper',
-		id: 'enableResourceSwapper',
+	resourceSwapperMode: {
+		name: 'Resource Swapper Mode',
+		id: 'resourceSwapperMode',
 		cat: 'Maintenance',
-		type: 'checkbox',
-		val: false,
+		type: 'select',
+		options: {
+			normal: 'Normal',
+			advanced: 'Advanced',
+			disabled: 'Disabled'
+		},
+		val: 'normal',
 		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},

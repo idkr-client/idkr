@@ -1,7 +1,6 @@
 require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
-	url = require('url'),
 	{ BrowserWindow, clipboard, app, ipcMain, shell } = require("electron"),
 	Store = require('electron-store'),
 	log = require('electron-log'),
@@ -46,26 +45,45 @@ validateDocuments({
 const swapDir = path.join(app.getPath('documents'), 'idkr/swap'),
 	swapFiles = []
 
-function recursiveSwap(win, prefix = '', domain = '') {
-	fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-		if (domain) {
-			if (dirent.isDirectory()) recursiveSwap(win, `${prefix}/${dirent.name}`, domain)
-			else swapFiles.push({ domain: domain, path: `${prefix}/${dirent.name}`.replace(domain, '') })
-		} else recursiveSwap(win, prefix + dirent.name, dirent.name)
-	})
-	let urls = []
-	swapFiles.forEach(file => {
-		urls.push(`*://${file.domain + file.path}`)
-		urls.push(`*://${file.domain + file.path}?*`)
-	})
-	win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
-		callback({
-			redirectURL: url.format({
-				protocol: 'file',
-				pathname: path.join(swapDir, new URL(details.url).hostname, new url.URL(details.url).pathname)
-			})
-		})
-	})
+function recursiveSwap(win) {
+	switch (config.get('resourceSwapperMode', 'normal')) {
+		case 'normal':
+			console.log('Resource Swapper Normal Mode')
+			function recursiveSwapNormal(win, prefix = '') {
+				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
+					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
+					else swapFiles.push({ path: `${prefix}/${dirent.name}` })
+				})
+				let urls = []
+				swapFiles.forEach(file => {
+					let isAsset = /\/(models|textures)($|\/)/.test(file.path)
+					urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${file.path}`)
+					urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${file.path}?*`)
+				})
+				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).pathname) }) })
+			}
+			recursiveSwapNormal(win)
+			break
+
+		case 'advanced':
+			console.log('Resource Swapper Advanced Mode')
+			function recursiveSwapHostname(win, prefix = '', hostname = '') {
+				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
+					if (hostname) {
+						if (dirent.isDirectory()) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
+						else swapFiles.push({ domain: hostname, path: `${prefix}/${dirent.name}`.replace(hostname, '') })
+					} else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
+				})
+				let urls = []
+				swapFiles.forEach(file => {
+					urls.push(`*://${file.domain + file.path}`)
+					urls.push(`*://${file.domain + file.path}?*`)
+				})
+				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).hostname, new URL(details.url).pathname) }) })
+			}
+			recursiveSwapHostname(win)
+			break
+	}
 }
 
 function validateDocuments(structure, prefix = '') {
@@ -140,7 +158,7 @@ function setupWindow(win, isWeb) {
 		app.quit()
 	})
 
-	if (config.get('enableResourceSwapper', false)) recursiveSwap(win)
+	recursiveSwap(win)
 
 	function navigateNewWindow(event, url, webContents) {
 		event.preventDefault()
