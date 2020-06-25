@@ -51,10 +51,9 @@ function recursiveSwap(win) {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
 					else {
-						let filepath = `${prefix}/${dirent.name}`,
-							isAsset = /\/(models|textures)($|\/)/.test(filepath)
-						urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${filepath}`)
-						urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${filepath}?*`)
+						let pathname = `${prefix}/${dirent.name}`,
+							url = `*://${/^\/(models|textures)($|\/)/.test(pathname) ? 'assets.' : ''}krunker.io${pathname}`
+						urls.push(url, url + '?*')
 					}
 				})
 			}
@@ -67,10 +66,7 @@ function recursiveSwap(win) {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 					if (hostname) {
 						if (dirent.isDirectory()) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
-						else {
-							urls.push(`*://${prefix}/${dirent.name}`)
-							urls.push(`*://${prefix}/${dirent.name}?*`)
-						}
+						else urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`)
 					} else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
 				})
 			}
