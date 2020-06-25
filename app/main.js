@@ -42,26 +42,24 @@ validateDocuments({
 	swap: null
 })
 
-const swapDir = path.join(app.getPath('documents'), 'idkr/swap'),
-	swapFiles = []
-
 function recursiveSwap(win) {
+	const swapDir = path.join(app.getPath('documents'), 'idkr/swap'),
+		urls = []
 	switch (config.get('resourceSwapperMode', 'normal')) {
 		case 'normal':
 			function recursiveSwapNormal(win, prefix = '') {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
-					else swapFiles.push({ path: `${prefix}/${dirent.name}` })
+					else {
+						let filepath = `${prefix}/${dirent.name}`,
+							isAsset = /\/(models|textures)($|\/)/.test(filepath)
+						urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${filepath}`)
+						urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${filepath}?*`)
+					}
 				})
-				let urls = []
-				swapFiles.forEach(file => {
-					let isAsset = /\/(models|textures)($|\/)/.test(file.path)
-					urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${file.path}`)
-					urls.push(`*://${isAsset ? 'assets.' : ''}krunker.io${file.path}?*`)
-				})
-				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).pathname) }) })
 			}
 			recursiveSwapNormal(win)
+			win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).pathname) }) })
 			break
 
 		case 'advanced':
@@ -69,17 +67,16 @@ function recursiveSwap(win) {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 					if (hostname) {
 						if (dirent.isDirectory()) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
-						else swapFiles.push({ domain: hostname, path: `${prefix}/${dirent.name}`.replace(hostname, '') })
+						else {
+
+							urls.push(`*://${prefix}/${dirent.name}`)
+							urls.push(`*://${prefix}/${dirent.name}?*`)
+						}
 					} else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
 				})
-				let urls = []
-				swapFiles.forEach(file => {
-					urls.push(`*://${file.domain + file.path}`)
-					urls.push(`*://${file.domain + file.path}?*`)
-				})
-				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).hostname, new URL(details.url).pathname) }) })
 			}
 			recursiveSwapHostname(win)
+			win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).hostname, new URL(details.url).pathname) }) })
 			break
 	}
 }
