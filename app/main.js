@@ -68,7 +68,6 @@ function recursiveSwap(win) {
 					if (hostname) {
 						if (dirent.isDirectory()) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
 						else {
-
 							urls.push(`*://${prefix}/${dirent.name}`)
 							urls.push(`*://${prefix}/${dirent.name}?*`)
 						}
