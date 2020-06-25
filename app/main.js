@@ -48,7 +48,6 @@ const swapDir = path.join(app.getPath('documents'), 'idkr/swap'),
 function recursiveSwap(win) {
 	switch (config.get('resourceSwapperMode', 'normal')) {
 		case 'normal':
-			console.log('Resource Swapper Normal Mode')
 			function recursiveSwapNormal(win, prefix = '') {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
@@ -66,7 +65,6 @@ function recursiveSwap(win) {
 			break
 
 		case 'advanced':
-			console.log('Resource Swapper Advanced Mode')
 			function recursiveSwapHostname(win, prefix = '', hostname = '') {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 					if (hostname) {
