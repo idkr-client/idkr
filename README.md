@@ -28,10 +28,11 @@ W: Windows, M: macOS, L: Linux
 	- If you experiencing problems like crashes, try using different backend
 	- Probably only effective on Windows
 - Color Profile *
+- Pointer Raw Input *
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended but other options are here just because you can
-- Enable Resource Swapper *
-	- Put swap files in `<documents>/idkr/swap`
+- Resource Swapper Mode *
+	- Place swap files in `<documents>/idkr/swap`
 - Enable Userscripts *
 	- Put userscripts in `<documents>/idkr/scripts`
 	- Only use truly trusted scripts, they are danger than web extensions. It can cause serious damage if used wrong.
