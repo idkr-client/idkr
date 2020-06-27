@@ -10,7 +10,7 @@ This client aims for:
 - Linux: Supported
 - macOS: Not supported, may or may not work
 
-Testings are greatly appreciated! Post test results and your thoughts in #client-feedback channel in the Discord.
+Testings are greatly appreciated! Post test results and your thoughts in #feedback channel in the Discord.
 
 ### Links
 - [Discord server](https://discord.gg/wEZbFFX)
