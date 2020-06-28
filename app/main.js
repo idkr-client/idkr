@@ -83,7 +83,7 @@ function validateDocuments(structure, prefix = '') {
 	let documentDir = path.join(app.getPath('documents'), 'idkr')
 	for (let [key, value] of Object.entries(structure)) {
 		let dir = path.join(documentDir, prefix, key)
-		if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+		try { if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }) } catch (err) { console.error(err) }
 		if (value != null) validateDocuments(value, prefix + key)
 	}
 }
