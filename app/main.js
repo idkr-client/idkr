@@ -71,7 +71,10 @@ function recursiveSwap(win) {
 				})
 			}
 			recursiveSwapHostname(win)
-			win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).hostname, new URL(details.url).pathname) }) })
+			win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
+				let url = new URL(details.url)
+				callback({ redirectURL: 'file:///' + path.join(swapDir, url.hostname, url.pathname) })
+			})
 			break
 	}
 }
