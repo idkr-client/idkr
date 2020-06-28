@@ -7,7 +7,11 @@ ipcRenderer.on('prompt-data', (event, ipcMessage = '', ipcDefault = '') => {
 	promptInput.focus()
 })
 
-window.sendValue = function sendValue(value) {
+window.sendValue = value => {
 	ipcRenderer.send('prompt-return', value)
 	window.close()
+}
+
+window.importFile = () => {
+	fileSelect.files[0].text().then(text => promptInput.value = text)
 }

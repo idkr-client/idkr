@@ -37,7 +37,11 @@
 			word-wrap: break-word;
 		}
 
-		input {
+		#fileSelect {
+			display: none;
+		}
+
+		#promptInput {
 			background-color: #eee;
 			border: none;
 			font-size: 16px;
@@ -67,8 +71,13 @@
 		<p id="message"></p>
 		<input id="promptInput" placeholder="Input"><br>
 
-		<div class="returnButton" onclick="sendValue(promptInput.value)">OK</div>
-		<div class="returnButton" onclick="sendValue(null)">Cancel</div>
+		<div id="buttons">
+			<label for="fileSelect" class="returnButton">Load File</label>
+			<input type="file" id="fileSelect" onchange="importFile()">
+			<div class="returnButton" onclick="sendValue(promptInput.value)">OK</div>
+			<div class="returnButton" onclick="sendValue(null)">Cancel</div>
+		</div>
+
 	</div>
 </body>
 
