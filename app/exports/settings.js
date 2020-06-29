@@ -8,6 +8,16 @@ module.exports = {
 		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
+	acceleratedCanvas: {
+		name: 'Accelerated Canvas',
+		id: 'acceleratedCanvas',
+		cat: 'Chromium',
+		type: 'checkbox',
+		val: true,
+		needsRestart: true,
+		html: function () { return clientUtil.genCSettingsHTML(this) },
+		info: 'Enables the use of the GPU to perform 2d canvas rendering instead of using software rendering.'
+	},
 	angleBackend: {
 		name: 'ANGLE Graphics Backend',
 		id: 'angleBackend',
@@ -39,7 +49,7 @@ module.exports = {
 		val: 'default',
 		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) },
-		info: 'Force color profile.'
+		info: 'Forces color profile.'
 	},
 	enablePointerLockOptions: {
 		name: 'Pointer Raw Input',
