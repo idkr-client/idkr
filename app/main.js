@@ -299,7 +299,7 @@ function initSettingsWindow() {
 function locationType(url = '') {
 	if (!isValidURL(url)) return 'unknown'
 	const target = new URL(url)
-	if (/^(www\.)?krunker\.io$/.test(target.hostname)) {
+	if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
 		if (/^\/docs\/.+\.txt$/.test(target.pathname)) return 'docs'
 		switch (target.pathname) {
 			case '/': return 'game'
