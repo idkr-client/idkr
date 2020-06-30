@@ -53,8 +53,9 @@ function recursiveSwap(win) {
 					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
 					else {
 						let pathname = `${prefix}/${dirent.name}`,
-							url = `*://${/^\/(models|textures)($|\/)/.test(pathname) ? 'assets.' : ''}krunker.io${pathname}`
-						urls.push(url, url + '?*')
+							isAsset = /^\/(models|textures)($|\/)/.test(pathname)
+						if (isAsset) urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`)
+						else urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`)
 					}
 				})
 			}
