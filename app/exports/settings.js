@@ -93,6 +93,7 @@ module.exports = {
 		cat: 'Maintenance',
 		type: 'checkbox',
 		val: false,
+		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	}
 }
