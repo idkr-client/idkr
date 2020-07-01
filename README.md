@@ -63,8 +63,6 @@ Most of "Control" key can be replaced by "Command" key in macOS.
 | Control + Alt + R | Restart |
 
 ## Current State
-This client is not polished yet, please expect some unintended or wacky behaviors.  
-Looking for contributor!  
+Looking for contributors!  
 Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/issues), or our [Discord server](https://discord.gg/wEZbFFX).  
 Please include details about the bug and your platform in the bug report.
-I'm very lazy to develop this thing XD  
