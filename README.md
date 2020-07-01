@@ -20,6 +20,8 @@ Testings are greatly appreciated! Post test results and your thoughts in #feedba
 W: Windows, M: macOS, L: Linux  
 
 - Settings search works for client related settings (unlike official client)
+- Prompt window (used when importing settings) has a "Load File" button
+	- This button lets you select a file and loads its content directly without opening the file in external editor and copy pasting
 
 ### Settings
 - Disable Frame Rate Limit *
