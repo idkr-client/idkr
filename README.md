@@ -60,7 +60,7 @@ Most of "Control" key can be replaced by "Command" key in macOS.
 | Control + L | Copy current URL |
 | Control + N | Open a game window |
 | Control + Shift + N | Duplicate current window |
-| Control + Shift + Alt + R | Restart |
+| Control + Alt + R | Restart |
 
 ## Current State
 This client is not polished yet, please expect some unintended or wacky behaviors.  
