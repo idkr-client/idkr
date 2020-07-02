@@ -141,7 +141,7 @@ function setupWindow(win, isWeb) {
 	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()))
 	shortcuts.register(win, 'CommandOrControl+N', () => initWindow('https://krunker.io/'))
 	shortcuts.register(win, 'CommandOrControl+Shift+N', () => initWindow(contents.getURL()))
-	shortcuts.register(win, 'CommandOrControl+Shift+Alt+R', () => {
+	shortcuts.register(win, 'CommandOrControl+Alt+R', () => {
 		app.relaunch()
 		app.quit()
 	})

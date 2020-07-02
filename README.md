@@ -20,6 +20,8 @@ Testings are greatly appreciated! Post test results and your thoughts in #feedba
 W: Windows, M: macOS, L: Linux  
 
 - Settings search works for client related settings (unlike official client)
+- Prompt window (used when importing settings) has a "Load File" button
+	- This button lets you select a file and loads its content directly without opening the file in external editor and copy pasting
 
 ### Settings
 - Disable Frame Rate Limit *
@@ -60,11 +62,9 @@ Most of "Control" key can be replaced by "Command" key in macOS.
 | Control + L | Copy current URL |
 | Control + N | Open a game window |
 | Control + Shift + N | Duplicate current window |
-| Control + Shift + Alt + R | Restart |
+| Control + Alt + R | Restart |
 
 ## Current State
-This client is not polished yet, please expect some unintended or wacky behaviors.  
-Looking for contributor!  
+Looking for contributors!  
 Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/issues), or our [Discord server](https://discord.gg/wEZbFFX).  
 Please include details about the bug and your platform in the bug report.
-I'm very lazy to develop this thing XD  
