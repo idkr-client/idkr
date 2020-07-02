@@ -38,14 +38,12 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 	})
 })
 
-validateDocuments({
-	scripts: null,
-	swap: null
-})
+const swapDir = config.get('resourceSwapperPath', path.join(app.getPath('documents'), 'idkr/swap'))
+
+ensureDirs(swapDir, config.get('userscriptsPath', path.join(app.getPath('documents'), 'idkr/scripts')))
 
 function recursiveSwap(win) {
-	const swapDir = path.join(app.getPath('documents'), 'idkr/swap'),
-		urls = []
+	const urls = []
 	switch (config.get('resourceSwapperMode', 'normal')) {
 		case 'normal':
 			function recursiveSwapNormal(win, prefix = '') {
@@ -81,13 +79,8 @@ function recursiveSwap(win) {
 	}
 }
 
-function validateDocuments(structure, prefix = '') {
-	let documentDir = path.join(app.getPath('documents'), 'idkr')
-	for (let [key, value] of Object.entries(structure)) {
-		let dir = path.join(documentDir, prefix, key)
-		try { if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }) } catch (err) { console.error(err) }
-		if (value != null) validateDocuments(value, prefix + key)
-	}
+function ensureDirs(...paths) {
+	paths.forEach(path => { try { if (!fs.existsSync(path)) fs.mkdirSync(path, { recursive: true }) } catch (err) { console.error(err) } })
 }
 
 function setupWindow(win, isWeb) {

@@ -50,11 +50,11 @@ window.clientUtil = {
 					this.run = initiator.run || null
 				}
 
-				isLocationMatching() { return this.locations.some(location => ['all', windowType].includes(location))}
-				isPlatformMatching() { return this.platforms.some(platform => ['all', process.platform].includes(platform))}
+				isLocationMatching() { return this.locations.some(location => ['all', windowType].includes(location)) }
+				isPlatformMatching() { return this.platforms.some(platform => ['all', process.platform].includes(platform)) }
 			}
 
-			let scriptsPath = path.join(remote.app.getPath('documents'), 'idkr/scripts')
+			let scriptsPath = config.get('userscriptsPath', path.join(remote.app.getPath('documents'), 'idkr/scripts'))
 			fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
 				try {
 					let script = new Userscript(require(path.join(scriptsPath, filename)))

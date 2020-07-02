@@ -87,6 +87,15 @@ module.exports = {
 		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
+	resourceSwapperPath: {
+		name: 'Resource Swapper Path',
+		id: 'resourceSwapperPath',
+		cat: 'Maintenance',
+		type: 'text',
+		val: '',
+		placeholder: 'Resource Swapper Folder Path',
+		html: function () { return clientUtil.genCSettingsHTML(this) }
+	},
 	enableUserscripts: {
 		name: 'Enable Userscripts',
 		id: 'enableUserscripts',
@@ -95,5 +104,14 @@ module.exports = {
 		val: false,
 		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
-	}
+	},
+	userscriptsPath: {
+		name: 'Userscripts Path',
+		id: 'userscriptsPath',
+		cat: 'Maintenance',
+		type: 'text',
+		val: '',
+		placeholder: 'Userscripts Folder Path',
+		html: function () { return clientUtil.genCSettingsHTML(this) }
+	},
 }
