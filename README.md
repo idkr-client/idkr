@@ -30,7 +30,6 @@ W: Windows, M: macOS, L: Linux
 - ANGLE Grapchics Backend * (W)
 	- Performance of the client can be affected by this option
 	- If you experiencing problems like crashes, try using different backend
-	- Probably only effective on Windows
 - Color Profile *
 - Pointer Raw Input *
 - Auto Update Behavior
