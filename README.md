@@ -68,3 +68,16 @@ Most of "Control" key can be replaced by "Command" key in macOS.
 Looking for contributors!  
 Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/issues), or our [Discord server](https://discord.gg/wEZbFFX).  
 Please include details about the bug and your platform in the bug report.
+
+## Building
+```sh
+# Update if necessary
+git pull
+
+# Install dependencies
+npm i
+
+# Build
+npm run dist
+```
+After building the client, new directory named `dist` containing executable binary files (`.exe`, `.dmg`, or `.appImage`) should be created.
