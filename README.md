@@ -48,19 +48,19 @@ ___
 Most of "Control" key can be replaced by "Command" key in macOS.  
 | Shortcut | Action |
 | --- | --- |
-| Control + Shift + Delete | Clear cache and restart |
-| Control + Alt + F | Open settings window |
-| Escape | Exit pointer lock |
+| Control + Shift + Delete | Clear Cache and Restart |
+| Control + Alt + F | Open Settings Window |
+| Escape | Exit Pointer Lock |
 | F5 | Reload |
-| Shift + F5 | Reload ignoring cache |
-| F6 (Game window) | Navigate to main page (Seek match) |
-| F11 | Toggle fullscreen |
-| Control + Shift + I (WL)<br>Command + Option + I (M) | Toggle DevTools |
-| Alt + Left (WL)<br>Command + Left (M) | Go back |
-| Alt + Right (WL)<br>Command + Right (M) | Go forward |
-| Control + L | Copy current URL |
-| Control + N | Open a game window |
-| Control + Shift + N | Duplicate current window |
+| Shift + F5 | Force Reload |
+| F6 (Game window) | Navigate to Main Page (Seek Match) |
+| F11 | Toggle Full Screen |
+| Control + Shift + I (WL)<br>Command + Option + I (M) | Toggle Developer Tools |
+| Alt + Left (WL)<br>Command + Left (M) | Go Back |
+| Alt + Right (WL)<br>Command + Right (M) | Go Forward |
+| Control + L | Copy Current URL |
+| Control + N | Open a Game Window |
+| Control + Shift + N | Duplicate Current Window |
 | Control + Alt + R | Restart |
 
 ## Current State
