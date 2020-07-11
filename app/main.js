@@ -21,7 +21,7 @@ app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
 // app.commandLine.appendSwitch('enable-zero-copy')
 if (!config.get('acceleratedCanvas', true)) app.commandLine.appendSwitch('disable-accelerated-2d-canvas', true)
 if (config.get('disableFrameRateLimit', true)) app.commandLine.appendSwitch('disable-frame-rate-limit')
-if (config.get('enablePointerLockOptions', false)) app.commandLine.appendSwitch('enable-pointer-lock-options')
+// if (config.get('enablePointerLockOptions', false)) app.commandLine.appendSwitch('enable-pointer-lock-options')
 let angleBackend = config.get('angleBackend', 'default'),
 	colorProfile = config.get('colorProfile', 'default')
 if (angleBackend != 'default') app.commandLine.appendSwitch('use-angle', angleBackend)
