@@ -31,7 +31,6 @@ W: Windows, M: macOS, L: Linux
 	- Performance of the client can be affected by this option
 	- If you experiencing problems like crashes, try using different backend
 - Color Profile *
-- Pointer Raw Input *
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended but other options are here just because you can
 - Resource Swapper Mode *
