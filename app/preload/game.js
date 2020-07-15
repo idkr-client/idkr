@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 window.clientUtil.events.on('game-load', () => {
-	settingsWindow = windows[0]
+	settingsWindow = window.windows[0]
 	settingsWindow.getCSettings = function () {
 		let tempHTML = '',
 			previousCategory = null
