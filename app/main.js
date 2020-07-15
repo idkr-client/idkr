@@ -1,7 +1,7 @@
 require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
-	{ BrowserWindow, clipboard, app, ipcMain, shell } = require("electron"),
+	{ BrowserWindow, app, clipboard, ipcMain, protocol, shell } = require("electron"),
 	Store = require('electron-store'),
 	log = require('electron-log'),
 	shortcuts = require('electron-localshortcut'),
@@ -73,7 +73,7 @@ function recursiveSwap(win) {
 			recursiveSwapHostname(win)
 			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
 				let url = new URL(details.url)
-				callback({ redirectURL: 'file:///' + path.join(swapDir, url.hostname, url.pathname) })
+				callback({ redirectURL: 'idkr:' + path.join(swapDir, url.hostname, url.pathname) })
 			})
 			break
 	}
@@ -164,8 +164,7 @@ function initWindow(url, webContents) {
 		show: false,
 		webContents: webContents,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload/global.js'),
-			webSecurity: false
+			preload: path.join(__dirname, 'preload/global.js')
 		}
 	})
 	let contents = win.webContents
@@ -314,5 +313,8 @@ function locationType(url = '') {
 	}
 }
 
-app.once('ready', () => initSplashWindow())
+app.once('ready', () => {
+	protocol.registerFileProtocol('idkr', (request, callback) => callback({ path: request.url.replace(/^idkr:/, '') }))
+	initSplashWindow()
+})
 app.on('window-all-closed', () => app.quit())
