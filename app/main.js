@@ -109,7 +109,7 @@ function setupWindow(win, isWeb) {
 		})
 	})
 	shortcuts.register(win, 'CommandOrControl+Alt+F', () => initSettingsWindow())
-	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()'))
+	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true)) // Need more info
 
 	if (!isWeb) return win
 
