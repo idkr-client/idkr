@@ -58,7 +58,7 @@ function recursiveSwap(win) {
 				})
 			}
 			recursiveSwapNormal(win)
-			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'file:///' + path.join(swapDir, new URL(details.url).pathname) }) })
+			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'idkr:' + path.join(swapDir, new URL(details.url).pathname) }) })
 			break
 
 		case 'advanced':
