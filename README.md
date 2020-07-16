@@ -22,6 +22,8 @@ W: Windows, M: macOS, L: Linux
 - Settings search works for client related settings (unlike official client)
 - Prompt window (used when importing settings) has a "Load File" button
 	- This button lets you select a file and loads its content directly without opening the file in external editor and copy pasting
+- Even more secure than official client
+	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a way that makes resource swapper work without having to disable `webSecurity`.
 
 ### Settings
 - Disable Frame Rate Limit *
