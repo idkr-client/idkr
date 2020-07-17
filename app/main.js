@@ -38,9 +38,12 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 	})
 })
 
-const swapDir = config.get('resourceSwapperPath', path.join(app.getPath('documents'), 'idkr/swap'))
+let swapDirConfig = config.get('resourceSwapperPath', ''),
+	userscriptsDirConfig = config.get('resourceSwapperPath', '')
+const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
+	userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts')
 
-ensureDirs(swapDir, config.get('userscriptsPath', path.join(app.getPath('documents'), 'idkr/scripts')))
+ensureDirs(swapDir, userscriptsDir)
 
 function recursiveSwap(win) {
 	const urls = []
@@ -48,6 +51,7 @@ function recursiveSwap(win) {
 		case 'normal':
 			function recursiveSwapNormal(win, prefix = '') {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
+					console.log(prefix)
 					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
 					else {
 						let pathname = `${prefix}/${dirent.name}`,
@@ -79,9 +83,9 @@ function recursiveSwap(win) {
 	}
 }
 
-function ensureDirs(...paths) {
-	paths.forEach(path => { try { if (!fs.existsSync(path)) fs.mkdirSync(path, { recursive: true }) } catch (err) { console.error(err) } })
-}
+function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
+
+function ensureDirs(...paths) { paths.forEach(pathstr => { console.log(pathstr); try { if (!fs.existsSync(pathstr)) fs.mkdirSync(pathstr, { recursive: true }) } catch (err) { console.error(err) } }) }
 
 function setupWindow(win, isWeb) {
 	let contents = win.webContents

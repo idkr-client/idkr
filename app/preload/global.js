@@ -14,6 +14,8 @@ window.prompt = (message, defaultValue) => ipcRenderer.sendSync('prompt', messag
 
 let windowType = locationType(location.href)
 
+function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
+
 window.clientUtil = {
 	events: new events(),
 	settings: require('../exports/settings'),
@@ -54,7 +56,8 @@ window.clientUtil = {
 				isPlatformMatching() { return this.platforms.some(platform => ['all', process.platform].includes(platform)) }
 			}
 
-			let scriptsPath = config.get('userscriptsPath', path.join(remote.app.getPath('documents'), 'idkr/scripts'))
+			let userscriptsDirConfig = config.get('resourceSwapperPath', '')
+			let scriptsPath = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(remote.app.getPath('documents'), 'idkr/scripts')
 			fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
 				try {
 					let script = new Userscript(require(path.join(scriptsPath, filename)))
