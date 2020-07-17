@@ -16,7 +16,6 @@ mac:
     - target: dmg
       arch:
         - x64
-        - ia32
 linux:
   artifactName: ${productName}-v${version}-portable-${os}-${arch}.${ext}
   target:
