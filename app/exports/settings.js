@@ -94,6 +94,7 @@ module.exports = {
 		type: 'text',
 		val: '',
 		placeholder: 'Resource Swapper Folder Path',
+		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 	enableUserscripts: {
@@ -112,6 +113,7 @@ module.exports = {
 		type: 'text',
 		val: '',
 		placeholder: 'Userscripts Folder Path',
+		needsRestart: true,
 		html: function () { return clientUtil.genCSettingsHTML(this) }
 	},
 }
