@@ -58,7 +58,7 @@ function recursiveSwap(win) {
 				})
 			}
 			recursiveSwapNormal(win)
-			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => { callback({ redirectURL: 'idkr:' + path.join(swapDir, new URL(details.url).pathname) }) })
+			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr:' + path.join(swapDir, new URL(details.url).pathname) }))
 			break
 
 		case 'advanced':
@@ -314,7 +314,7 @@ function locationType(url = '') {
 }
 
 app.once('ready', () => {
-	protocol.registerFileProtocol('idkr', (request, callback) => callback({ path: request.url.replace(/^idkr:/, '') }))
+	protocol.registerFileProtocol('idkr', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr:/, '')) }))
 	initSplashWindow()
 })
 app.on('window-all-closed', () => app.quit())
