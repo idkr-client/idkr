@@ -74,8 +74,11 @@ window.clientUtil = {
 	},
 	initUtil: function () {
 		for (let [key, entry] of Object.entries(this.settings)) {
-			if (entry.platforms && !entry.platforms.includes(process.platform)) return delete this.settings[key]
-			if (entry.dontInit) return
+			if (entry.platforms && !entry.platforms.includes(process.platform)) {
+				delete this.settings[key]
+				continue
+			}
+			if (entry.dontInit) continue
 			let savedVal = config.get(entry.id)
 			if (savedVal != null) entry.val = savedVal
 			if (entry.min || entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max))
