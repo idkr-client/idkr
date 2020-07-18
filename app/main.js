@@ -51,7 +51,6 @@ function recursiveSwap(win) {
 		case 'normal':
 			function recursiveSwapNormal(win, prefix = '') {
 				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-					console.log(prefix)
 					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
 					else {
 						let pathname = `${prefix}/${dirent.name}`,
@@ -85,7 +84,7 @@ function recursiveSwap(win) {
 
 function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
 
-function ensureDirs(...paths) { paths.forEach(pathstr => { console.log(pathstr); try { if (!fs.existsSync(pathstr)) fs.mkdirSync(pathstr, { recursive: true }) } catch (err) { console.error(err) } }) }
+function ensureDirs(...paths) { paths.forEach(pathstr => { try { if (!fs.existsSync(pathstr)) fs.mkdirSync(pathstr, { recursive: true }) } catch (err) { console.error(err) } }) }
 
 function setupWindow(win, isWeb) {
 	let contents = win.webContents
