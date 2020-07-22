@@ -38,47 +38,58 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 	})
 })
 
-let swapDirConfig = config.get('resourceSwapperPath', ''),
-	userscriptsDirConfig = config.get('resourceSwapperPath', '')
-const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
-	userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts')
+let isDocumentsAccessible
+try {
+	fs.accessSync(app.getPath('documents'), fs.constants.R_OK)
+	isDocumentsAccessible = true
+} catch (err) {
+	console.log('No access to documents', err)
+	isDocumentsAccessible = false
+}
 
-ensureDirs(swapDir, userscriptsDir)
+if (isDocumentsAccessible) {
+	let swapDirConfig = config.get('resourceSwapperPath', ''),
+		userscriptsDirConfig = config.get('resourceSwapperPath', '')
+	const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
+		userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts')
 
-function recursiveSwap(win) {
-	const urls = []
-	switch (config.get('resourceSwapperMode', 'normal')) {
-		case 'normal':
-			function recursiveSwapNormal(win, prefix = '') {
-				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-					if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
-					else {
-						let pathname = `${prefix}/${dirent.name}`,
-							isAsset = /^\/(models|textures)($|\/)/.test(pathname)
-						if (isAsset) urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`)
-						else urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`)
-					}
+	ensureDirs(swapDir, userscriptsDir)
+
+	function recursiveSwap(win) {
+		const urls = []
+		switch (config.get('resourceSwapperMode', 'normal')) {
+			case 'normal':
+				function recursiveSwapNormal(win, prefix = '') {
+					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
+						if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
+						else {
+							let pathname = `${prefix}/${dirent.name}`,
+								isAsset = /^\/(models|textures)($|\/)/.test(pathname)
+							if (isAsset) urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`)
+							else urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`)
+						}
+					})
+				}
+				recursiveSwapNormal(win)
+				if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr:' + path.join(swapDir, new URL(details.url).pathname) }))
+				break
+
+			case 'advanced':
+				function recursiveSwapHostname(win, prefix = '', hostname = '') {
+					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
+						if (hostname) {
+							if (dirent.isDirectory()) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
+							else urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`)
+						} else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
+					})
+				}
+				recursiveSwapHostname(win)
+				if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
+					let url = new URL(details.url)
+					callback({ redirectURL: 'idkr:' + path.join(swapDir, url.hostname, url.pathname) })
 				})
-			}
-			recursiveSwapNormal(win)
-			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr:' + path.join(swapDir, new URL(details.url).pathname) }))
-			break
-
-		case 'advanced':
-			function recursiveSwapHostname(win, prefix = '', hostname = '') {
-				fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-					if (hostname) {
-						if (dirent.isDirectory()) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
-						else urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`)
-					} else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
-				})
-			}
-			recursiveSwapHostname(win)
-			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
-				let url = new URL(details.url)
-				callback({ redirectURL: 'idkr:' + path.join(swapDir, url.hostname, url.pathname) })
-			})
-			break
+				break
+		}
 	}
 }
 
@@ -149,7 +160,7 @@ function setupWindow(win, isWeb) {
 		app.quit()
 	})
 
-	recursiveSwap(win)
+	if (isDocumentsAccessible) recursiveSwap(win)
 
 	function navigateNewWindow(event, url, webContents) {
 		event.preventDefault()
