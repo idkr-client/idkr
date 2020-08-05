@@ -94,7 +94,7 @@ if (isDocumentsAccessible) {
 	}
 }
 
-app.setUserTasks([{
+if (process.platform == 'win32') app.setUserTasks([{
 	program: process.execPath,
 	arguments: '--new-window=game',
 	title: 'New game window',
