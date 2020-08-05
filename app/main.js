@@ -5,7 +5,8 @@ const fs = require('fs'),
 	Store = require('electron-store'),
 	log = require('electron-log'),
 	shortcuts = require('electron-localshortcut'),
-	{ argv } = require('yargs')
+	yargs = require('yargs'),
+	argv = yargs.argv
 
 Object.assign(console, log.functions)
 const config = new Store()
@@ -92,6 +93,22 @@ if (isDocumentsAccessible) {
 		}
 	}
 }
+
+app.setUserTasks([{
+	program: process.execPath,
+	arguments: '--new-window=game',
+	title: 'New game window',
+	description: 'Opens a new game window',
+	iconPath: process.execPath,
+	iconIndex: 0
+}, {
+	program: process.execPath,
+	arguments: '--new-window=social',
+	title: 'New social window',
+	description: 'Opens a new social window',
+	iconPath: process.execPath,
+	iconIndex: 0
+}])
 
 function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
 
@@ -329,6 +346,18 @@ function locationType(url = '') {
 
 app.once('ready', () => {
 	protocol.registerFileProtocol('idkr', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr:/, '')) }))
+	app.on('second-instance', (e, argv) => {
+		let instanceArgv = yargs.parse(argv)
+		console.log('Second instance: ' + argv)
+		switch (instanceArgv['new-window']) {
+			case 'game':
+				initWindow('https://krunker.io/')
+				break
+			case 'social':
+				initWindow('https://krunker.io/social.html')
+				break
+		}
+	})
 	initSplashWindow()
 })
 app.on('window-all-closed', () => app.quit())
