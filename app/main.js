@@ -72,7 +72,7 @@ if (isDocumentsAccessible) {
 					})
 				}
 				recursiveSwapNormal(win)
-				if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr:' + path.join(swapDir, new URL(details.url).pathname) }))
+				if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, new URL(details.url).pathname) }))
 				break
 
 			case 'advanced':
@@ -87,7 +87,7 @@ if (isDocumentsAccessible) {
 				recursiveSwapHostname(win)
 				if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
 					let url = new URL(details.url)
-					callback({ redirectURL: 'idkr:' + path.join(swapDir, url.hostname, url.pathname) })
+					callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, url.hostname, url.pathname) })
 				})
 				break
 		}
@@ -345,7 +345,7 @@ function locationType(url = '') {
 }
 
 app.once('ready', () => {
-	protocol.registerFileProtocol('idkr', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr:/, '')) }))
+	protocol.registerFileProtocol('idkr-swap', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr-swap:/, '')) }))
 	app.on('second-instance', (e, argv) => {
 		let instanceArgv = yargs.parse(argv)
 		console.log('Second instance: ' + argv)
