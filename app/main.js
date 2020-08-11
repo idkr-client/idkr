@@ -39,7 +39,7 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 	})
 })
 
-let isDocumentsAccessible
+let isDocumentsAccessible, swapperMode = config.get('resourceSwapperMode', 'normal')
 try {
 	fs.accessSync(app.getPath('documents'), fs.constants.R_OK)
 	isDocumentsAccessible = true
@@ -58,7 +58,7 @@ if (isDocumentsAccessible) {
 
 	function recursiveSwap(win) {
 		const urls = []
-		switch (config.get('resourceSwapperMode', 'normal')) {
+		switch (swapperMode) {
 			case 'normal':
 				function recursiveSwapNormal(win, prefix = '') {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
@@ -345,7 +345,7 @@ function locationType(url = '') {
 }
 
 app.once('ready', () => {
-	protocol.registerFileProtocol('idkr-swap', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr-swap:/, '')) }))
+	if (isDocumentsAccessible && swapperMode != 'disabled') protocol.registerFileProtocol('idkr-swap', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr-swap:/, '')) }))
 	app.on('second-instance', (e, argv) => {
 		let instanceArgv = yargs.parse(argv)
 		console.log('Second instance: ' + argv)
