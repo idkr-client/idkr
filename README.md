@@ -69,15 +69,34 @@ Looking for contributors!
 Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/issues), or our [Discord server](https://discord.gg/wEZbFFX).  
 Please include details about the bug and your platform in the bug report.
 
-## Building
-```sh
-# Update if necessary
-git pull
+## Running/Building From The Source Code
+Pre-built releases are cool but you may want to use latest features/bugfixes or maybe binaries for your platform is not provided.  
+This is a simple tutorial to get the source code, install dependencies, and run or build the client.  
 
+### Requirements
+- [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/get-npm)
+- [git](https://git-scm.com/downloads) (Optional for easier clone/pull operations)
+
+### Downloading The Source Code
+If you use git (recommended):
+```sh
+# If its your first time getting the code
+git clone https://github.com/Mixaz017/idkr.git
+
+# If you already cloned the repository and want to update to the latest commit
+git pull
+```
+If you don't use git, [Download ZIP](https://github.com/Mixaz017/idkr/archive/master.zip) and extract. You have to do this every time you want to update the client, so use git to save your time if possible.
+
+### Run Or Build the Client
+```sh
 # Install dependencies
 npm i
 
-# Build
+# If you want to run the client without building it
+npm start
+
+# If you want to build the client
 npm run dist
 ```
-After building the client, new directory named `dist` containing executable binary files (`.exe`, `.dmg`, or `.appImage`) should be created.
+After building the client, new directory named `dist` containing executable binary files (`.exe`, `.dmg`, or `.appImage`) should be created (or overwrited if aleady exists).
