@@ -1,6 +1,6 @@
 appId: com.hyamix.idkr
 win:
-  artifactName: ${productName}-v${version}-portable-${os}-${arch}.${ext}
+  artifactName: ${productName}-portable-${os}-${arch}.${ext}
   target:
     - target: nsis
       arch:
@@ -11,13 +11,13 @@ win:
         - x64
         - ia32
 mac:
-  artifactName: ${productName}-v${version}-portable-${os}-${arch}.${ext}
+  artifactName: ${productName}-portable-${os}-${arch}.${ext}
   target:
     - target: dmg
       arch:
         - x64
 linux:
-  artifactName: ${productName}-v${version}-portable-${os}-${arch}.${ext}
+  artifactName: ${productName}-portable-${os}-${arch}.${ext}
   target:
     - target: appImage
       arch:
@@ -25,7 +25,7 @@ linux:
         - ia32
   category: game
 nsis:
-  artifactName: ${productName}-v${version}-setup-${os}-${arch}.${ext}
+  artifactName: ${productName}-setup-${os}-${arch}.${ext}
   oneClick: false
   perMachine: true
   allowToChangeInstallationDirectory: true
