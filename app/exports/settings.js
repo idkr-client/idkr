@@ -51,6 +51,17 @@ module.exports = {
 		html: function () { return clientUtil.genCSettingsHTML(this) },
 		info: 'Forces color profile.'
 	},
+	chromiumFlags: {
+		name: 'Chromium Flags',
+		id: 'chromiumFlags',
+		cat: 'Chromium',
+		type: 'text',
+		val: '',
+		placeholder: '--flag=value',
+		needsRestart: true,
+		html: function () { return clientUtil.genCSettingsHTML(this) },
+		info: 'Additional Chromium flags.'
+	},
 	// enablePointerLockOptions: {
 	// 	name: 'Pointer Raw Input',
 	// 	id: 'enablePointerLockOptions',
