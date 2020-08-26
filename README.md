@@ -15,6 +15,11 @@ Testings are greatly appreciated! Let me know in the Discord or GitHub if someth
 ### Links
 - [Discord server](https://discord.gg/wEZbFFX)
 - [Latest prebuilt release](https://github.com/Mixaz017/idkr/releases/latest)
+	- [Windows installer](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-setup-win.exe)
+	- [Windows portable](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-portable-win.exe)
+	- [macOS portable](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-portable-mac.dmg)
+	- [Linux portable (x86_64)](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-portable-linux-x86_64.AppImage)
+	- [Linux portable (i836)](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-portable-linux-i386.AppImage)
 
 ## Features
 W: Windows, M: macOS, L: Linux  
