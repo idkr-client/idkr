@@ -3,7 +3,7 @@ name: Build idkr
 on: push
 
 jobs:
-  release:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:
