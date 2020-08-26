@@ -33,6 +33,8 @@ W: Windows, M: macOS, L: Linux
 	- Performance of the client can be affected by this option
 	- If you experiencing problems like crashes, try using different backend
 - Color Profile *
+- Chromium Flags *
+	- This setting could overwrite existing flags/settings such as `force-color-profile` (Color Profile setting)
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended but other options are here just because you can
 - Resource Swapper Mode *
