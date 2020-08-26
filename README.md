@@ -72,7 +72,7 @@ Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/is
 Please include details about the bug and your platform in the bug report.
 
 ## Running/Building From The Source Code
-Pre-built releases are cool but you may want to use latest features/bugfixes or maybe binaries for your platform is not provided.  
+Pre-built releases are cool but you may want to use latest features/bugfixes.
 This is a simple tutorial to get the source code, install dependencies, and run or build the client.  
 
 ### Requirements
