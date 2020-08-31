@@ -1,9 +1,9 @@
-const { ipcRenderer, remote } = require('electron')
+const { ipcRenderer } = require('electron')
 
 ipcRenderer.on('prompt-data', (event, ipcMessage = '', ipcDefault = '') => {
 	message.innerText = ipcMessage
 	promptInput.value = ipcDefault
-	remote.getCurrentWindow().setBounds({ height: promptBody.getBoundingClientRect().height })
+	ipcRenderer.invoke('set-bounds', { height: promptBody.getBoundingClientRect().height })
 	promptInput.focus()
 })
 

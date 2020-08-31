@@ -49,6 +49,10 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 	})
 })
 
+ipcMain.handle('set-bounds', (event, bounds) => {
+	BrowserWindow.fromWebContents(event.sender).setBounds(bounds)
+})
+
 let isDocumentsAccessible, swapperMode = config.get('resourceSwapperMode', 'normal')
 try {
 	fs.accessSync(app.getPath('documents'), fs.constants.R_OK)
