@@ -36,6 +36,8 @@ ipcMain.handle('get-app-info', () => {
 	}
 })
 
+ipcMain.on('get-path', (event, name) => event.returnValue = app.getPath(name))
+
 ipcMain.on('prompt', (event, message, defaultValue) => {
 	let promptWin = initPromptWindow(message, defaultValue),
 		returnValue = null

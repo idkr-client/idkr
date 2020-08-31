@@ -2,7 +2,7 @@ require('v8-compile-cache')
 const events = require('events'),
 	fs = require('fs'),
 	path = require('path'),
-	{ ipcRenderer, remote } = require("electron"),
+	{ ipcRenderer } = require("electron"),
 	Store = require('electron-store'),
 	log = require('electron-log')
 
@@ -11,6 +11,8 @@ const config = new Store()
 Object.assign(console, log.functions)
 
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync('prompt', message, defaultValue)
+
+const documentsPath = ipcRenderer.sendSync('get-path', 'documents')
 
 let windowType = locationType(location.href)
 
@@ -54,7 +56,7 @@ window.clientUtil = {
 		}
 
 		let userscriptsDirConfig = config.get('resourceSwapperPath', '')
-		let scriptsPath = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(remote.app.getPath('documents'), 'idkr/scripts')
+		let scriptsPath = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(documentsPath, 'idkr/scripts')
 		fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
 			try {
 				let script = new Userscript(require(path.join(scriptsPath, filename)))
@@ -88,7 +90,7 @@ else window.clientUtil.initUtil()
 
 let isDocumentsAccessible
 try {
-	fs.accessSync(remote.app.getPath('documents'), fs.constants.R_OK)
+	fs.accessSync(documentsPath, fs.constants.R_OK)
 	isDocumentsAccessible = true
 } catch (e) { isDocumentsAccessible = false }
 
