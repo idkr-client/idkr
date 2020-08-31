@@ -14,8 +14,6 @@ window.prompt = (message, defaultValue) => ipcRenderer.sendSync('prompt', messag
 
 let windowType = locationType(location.href)
 
-function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
-
 window.clientUtil = {
 	events: new events(),
 	settings: require('../exports/settings'),
@@ -101,6 +99,8 @@ switch (windowType) {
 		require('./game.js')
 		break
 }
+
+function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
 
 function locationType(url = '') {
 	if (!isValidURL(url)) return 'unknown'
