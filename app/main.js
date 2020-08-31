@@ -64,7 +64,7 @@ if (isDocumentsAccessible) {
 
 	ensureDirs(swapDir, userscriptsDir)
 
-	function recursiveSwap(win) {
+	var recursiveSwap = (win) => {
 		const urls = []
 		switch (swapperMode) {
 			case 'normal':
