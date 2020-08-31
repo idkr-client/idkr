@@ -137,14 +137,9 @@ function setupWindow(win, isWeb) {
 	shortcuts.register(win, isMac ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack())
 	shortcuts.register(win, isMac ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward())
 	shortcuts.register(win, 'CommandOrControl+Shift+Delete', () => {
-		contents.session.clearCache().then(err => {
-			if (err) {
-				console.error(err)
-				alert('Failed to clear cache')
-			} else {
-				app.relaunch()
-				app.quit()
-			}
+		contents.session.clearCache().then(() => {
+			app.relaunch()
+			app.quit()
 		})
 	})
 	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true)) // Need more info
