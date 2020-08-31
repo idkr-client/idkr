@@ -57,7 +57,6 @@ Most of "Control" key can be replaced by "Command" key in macOS.
 | Shortcut | Action |
 | --- | --- |
 | Control + Shift + Delete | Clear Cache and Restart |
-| Control + Alt + F | Open Settings Window |
 | Escape | Exit Pointer Lock |
 | F5 | Reload |
 | Shift + F5 | Force Reload |

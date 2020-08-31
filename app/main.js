@@ -140,7 +140,6 @@ function setupWindow(win, isWeb) {
 			}
 		})
 	})
-	shortcuts.register(win, 'CommandOrControl+Alt+F', () => initSettingsWindow())
 	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true)) // Need more info
 
 	if (!isWeb) return win
@@ -296,27 +295,6 @@ function initPromptWindow(message, defaultValue) {
 	})
 
 	win.loadFile('app/html/prompt.html')
-
-	return win
-}
-
-function initSettingsWindow() {
-	let win = new BrowserWindow({
-		width: 600,
-		height: 600,
-		center: true,
-		show: false,
-		frame: false,
-		transparent: true,
-		webPreferences: {
-			preload: path.join(__dirname, 'preload/settings.js')
-		}
-	})
-	let contents = win.webContents
-
-	setupWindow(win)
-
-	win.loadFile('app/html/settings.html')
 
 	return win
 }
