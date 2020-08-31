@@ -29,6 +29,13 @@ if (angleBackend != 'default') app.commandLine.appendSwitch('use-angle', angleBa
 if (colorProfile != 'default') app.commandLine.appendSwitch('force-color-profile', colorProfile)
 yargs.parse(config.get('chromiumFlags', ''), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])))
 
+ipcMain.handle('get-app-info', () => {
+	return {
+		name: app.name,
+		version: app.getVersion()
+	}
+})
+
 ipcMain.on('prompt', (event, message, defaultValue) => {
 	let promptWin = initPromptWindow(message, defaultValue),
 		returnValue = null

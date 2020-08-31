@@ -1,7 +1,7 @@
-const { remote, ipcRenderer } = require('electron')
+const { ipcRenderer } = require('electron')
 
 document.addEventListener('DOMContentLoaded', () => {
-	version.innerText = `${remote.app.name}@${remote.app.getVersion()}`
+	ipcRenderer.invoke('get-app-info').then(info => version.innerText = `${info.name}@${info.version}`)
 })
 
 ipcRenderer.on('message', (event, messageText = '', detailsText = '') => {
