@@ -92,7 +92,10 @@ let isDocumentsAccessible
 try {
 	fs.accessSync(documentsPath, fs.constants.R_OK)
 	isDocumentsAccessible = true
-} catch (e) { isDocumentsAccessible = false }
+} catch (err) {
+	console.error('Could not access documents with read R_OK permission', err)
+	isDocumentsAccessible = false
+}
 
 if (isDocumentsAccessible && config.get('enableUserscripts', false)) { window.clientUtil.loadScripts() }
 
