@@ -21,7 +21,7 @@ window.clientUtil = {
 	settings: require('../exports/settings'),
 	setCSetting: function (name, value) {
 		let entry = Object.values(this.settings).find(entry => entry.id == name)
-		if (entry.min || entry.max) value = Math.max(entry.min, Math.min(value, entry.max))
+		if (entry.min && entry.max) value = Math.max(entry.min, Math.min(value, entry.max))
 		config.set(name, value)
 		entry.val = value
 		if (entry.set) entry.set(value)
@@ -79,7 +79,7 @@ window.clientUtil = {
 			if (entry.dontInit) continue
 			let savedVal = config.get(entry.id)
 			if (savedVal != null) entry.val = savedVal
-			if (entry.min || entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max))
+			if (entry.min && entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max))
 			if (entry.set) entry.set(entry.val, true)
 		}
 	}
