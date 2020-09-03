@@ -41,14 +41,14 @@ window.clientUtil = {
 	loadScripts: function () {
 		class Userscript {
 			constructor(initiator) {
-				this.name = initiator.name || 'Unnamed userscript'
-				this.version = initiator.version || 'Version unknown'
-				this.author = initiator.author || 'Unknown author'
-				this.description = initiator.discription || 'No description provided'
-				this.locations = initiator.locations || ['all']
-				this.platforms = initiator.platforms || ['all']
-				this.settings = initiator.settings || null
-				this.run = initiator.run || null
+				this.name = initiator.name ?? 'Unnamed userscript'
+				this.version = initiator.version ?? 'Version unknown'
+				this.author = initiator.author ?? 'Unknown author'
+				this.description = initiator.discription ?? 'No description provided'
+				this.locations = initiator.locations ?? ['all']
+				this.platforms = initiator.platforms ?? ['all']
+				this.settings = initiator.settings ?? null
+				this.run = initiator.run ?? null
 			}
 
 			isLocationMatching() { return this.locations.some(location => ['all', windowType].includes(location)) }
@@ -65,7 +65,7 @@ window.clientUtil = {
 				else {
 					if (script.hasOwnProperty('settings')) Object.assign(clientUtil.settings, script.settings)
 					script.run?.(config)
-					console.log(`[USH] Loaded userscript: ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
+					console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`)
 				}
 			} catch (err) { console.error('[USH] Failed to load userscript:', err) }
 		})
