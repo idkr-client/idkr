@@ -24,7 +24,7 @@ window.clientUtil = {
 		if (entry.min && entry.max) value = Math.max(entry.min, Math.min(value, entry.max))
 		config.set(name, value)
 		entry.val = value
-		if (entry.set) entry.set(value)
+		entry.set?.(value)
 		let element = document.getElementById('c_slid_' + entry.id)
 		if (element) element.value = value
 		element = document.getElementById('c_slid_input_' + entry.id)
@@ -80,7 +80,7 @@ window.clientUtil = {
 			let savedVal = config.get(entry.id)
 			if (savedVal != null) entry.val = savedVal
 			if (entry.min && entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max))
-			if (entry.set) entry.set(entry.val, true)
+			entry.set?.(entry.val, true)
 		}
 	}
 }
