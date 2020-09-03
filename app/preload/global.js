@@ -64,7 +64,7 @@ window.clientUtil = {
 				else if (!script.isPlatformMatching()) console.log(`[USH] Ignored, platform not matching: ${script.name}`)
 				else {
 					if (script.hasOwnProperty('settings')) Object.assign(clientUtil.settings, script.settings)
-					script.run(config)
+					script.run?.(config)
 					console.log(`[USH] Loaded userscript: ${script.name || 'Unnamed userscript'} by ${script.author || 'Unknown author'}`)
 				}
 			} catch (err) { console.error('[USH] Failed to load userscript:', err) }
