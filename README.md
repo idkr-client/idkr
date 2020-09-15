@@ -35,6 +35,7 @@ W: Windows, M: macOS, L: Linux
 - Accelerated Canvas *
 	- Only disable this if you have problems or performance issues with your GPU
 - ANGLE Grapchics Backend * (W)
+	- Set this to "D3D9" if you have video capture/recording problems
 	- Performance of the client can be affected by this option
 	- If you experiencing problems like crashes, try using different backend
 - Color Profile *
