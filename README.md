@@ -18,6 +18,7 @@ https://discord.gg/wEZbFFX
 A server dedicated to idkr.
 
 ### Download
+[Latest release / changelog](https://github.com/Mixaz017/idkr/releases/latest)
 - [Windows installer](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-setup-win.exe)
 - [Windows portable](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-portable-win.exe)
 - [macOS portable](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-portable-mac.dmg)
