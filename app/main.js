@@ -92,10 +92,10 @@ if (isDocumentsAccessible) {
 			case 'advanced':
 				function recursiveSwapHostname(win, prefix = '', hostname = '') {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-						if (hostname) {
-							if (dirent.isDirectory()) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
-							else urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`)
-						} else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
+						if (dirent.isDirectory()) {
+							if (hostname) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
+							else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
+						} else if (hostname) urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`)
 					})
 				}
 				recursiveSwapHostname(win)
