@@ -1,6 +1,6 @@
 {
   "name": "idkr",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "idk, just a Krunker client",
   "main": "app/main.js",
   "scripts": {
