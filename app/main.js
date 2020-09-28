@@ -11,7 +11,7 @@ const fs = require('fs'),
 Object.assign(console, log.functions)
 const config = new Store()
 
-const DEBUG = Boolean(argv.debug || config.get('debug')),
+const DEBUG = argv.debug,
 	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
 
 if (!app.requestSingleInstanceLock()) app.quit()
