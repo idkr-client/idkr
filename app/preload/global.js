@@ -57,18 +57,22 @@ window.clientUtil = {
 
 		let userscriptsDirConfig = config.get('resourceSwapperPath', '')
 		let scriptsPath = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(documentsPath, 'idkr/scripts')
-		fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
-			try {
-				let script = new Userscript(require(path.join(scriptsPath, filename)))
-				if (!script.isLocationMatching()) console.log(`[USH] Ignored, location not matching: ${script.name}`)
-				else if (!script.isPlatformMatching()) console.log(`[USH] Ignored, platform not matching: ${script.name}`)
-				else {
-					if (script.hasOwnProperty('settings')) Object.assign(clientUtil.settings, script.settings)
-					script.run?.(config)
-					console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`)
-				}
-			} catch (err) { console.error('[USH] Failed to load userscript:', err) }
-		})
+		try {
+			fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
+				try {
+					let script = new Userscript(require(path.join(scriptsPath, filename)))
+					if (!script.isLocationMatching()) console.log(`[USH] Ignored, location not matching: ${script.name}`)
+					else if (!script.isPlatformMatching()) console.log(`[USH] Ignored, platform not matching: ${script.name}`)
+					else {
+						if (script.hasOwnProperty('settings')) Object.assign(clientUtil.settings, script.settings)
+						script.run?.(config)
+						console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`)
+					}
+				} catch (err) { console.error('[USH] Failed to load userscript:', err) }
+			})
+		} catch (err) {
+			console.error('[USH] Failed to load scripts:', err)
+		}
 	},
 	initUtil: function () {
 		for (let [key, entry] of Object.entries(this.settings)) {
@@ -88,16 +92,7 @@ window.clientUtil = {
 if (windowType == 'game') window.clientUtil.events.on('game-load', () => window.clientUtil.initUtil())
 else window.clientUtil.initUtil()
 
-let isDocumentsAccessible
-try {
-	fs.accessSync(documentsPath, fs.constants.R_OK)
-	isDocumentsAccessible = true
-} catch (err) {
-	console.error('Could not access documents with read R_OK permission', err)
-	isDocumentsAccessible = false
-}
-
-if (isDocumentsAccessible && config.get('enableUserscripts', false)) { window.clientUtil.loadScripts() }
+if (config.get('enableUserscripts', false)) { window.clientUtil.loadScripts() }
 
 switch (windowType) {
 	case 'game':

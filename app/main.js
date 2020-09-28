@@ -53,28 +53,21 @@ ipcMain.handle('set-bounds', (event, bounds) => {
 	BrowserWindow.fromWebContents(event.sender).setBounds(bounds)
 })
 
-let isDocumentsAccessible, swapperMode = config.get('resourceSwapperMode', 'normal')
-try {
-	fs.accessSync(app.getPath('documents'), fs.constants.R_OK)
-	isDocumentsAccessible = true
-} catch (err) {
-	console.log('No access to documents', err)
-	isDocumentsAccessible = false
-}
+let swapperMode = config.get('resourceSwapperMode', 'normal')
 
-if (isDocumentsAccessible) {
-	let swapDirConfig = config.get('resourceSwapperPath', ''),
-		userscriptsDirConfig = config.get('resourceSwapperPath', '')
-	const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
-		userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts')
+let swapDirConfig = config.get('resourceSwapperPath', ''),
+	userscriptsDirConfig = config.get('resourceSwapperPath', '')
+const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
+	userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts')
 
-	ensureDirs(swapDir, userscriptsDir)
+ensureDirs(swapDir, userscriptsDir)
 
-	var recursiveSwap = (win) => {
-		const urls = []
-		switch (swapperMode) {
-			case 'normal':
-				function recursiveSwapNormal(win, prefix = '') {
+function recursiveSwap(win) {
+	const urls = []
+	switch (swapperMode) {
+		case 'normal':
+			function recursiveSwapNormal(win, prefix = '') {
+				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 						if (dirent.isDirectory()) recursiveSwapNormal(win, `${prefix}/${dirent.name}`)
 						else {
@@ -84,27 +77,34 @@ if (isDocumentsAccessible) {
 							else urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`)
 						}
 					})
+				} catch (err) {
+					console.error('Failed to swap resources in normal mode', err, prefix)
 				}
-				recursiveSwapNormal(win)
-				if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, new URL(details.url).pathname) }))
-				break
+			}
+			recursiveSwapNormal(win)
+			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, new URL(details.url).pathname) }))
+			break
 
-			case 'advanced':
-				function recursiveSwapHostname(win, prefix = '', hostname = '') {
+		case 'advanced':
+			function recursiveSwapHostname(win, prefix = '', hostname = '') {
+				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 						if (dirent.isDirectory()) {
 							if (hostname) recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname)
 							else recursiveSwapHostname(win, prefix + dirent.name, dirent.name)
 						} else if (hostname) urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`)
 					})
+				} catch (err) {
+					console.error('Failed to swap resources in advanced mode', err, prefix, hostname)
 				}
-				recursiveSwapHostname(win)
-				if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
-					let url = new URL(details.url)
-					callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, url.hostname, url.pathname) })
-				})
-				break
-		}
+				
+			}
+			recursiveSwapHostname(win)
+			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
+				let url = new URL(details.url)
+				callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, url.hostname, url.pathname) })
+			})
+			break
 	}
 }
 
@@ -185,7 +185,7 @@ function setupWindow(win, isWeb) {
 		app.quit()
 	})
 
-	if (isDocumentsAccessible) recursiveSwap(win)
+	recursiveSwap(win)
 
 	function navigateNewWindow(event, url, webContents) {
 		event.preventDefault()
@@ -332,7 +332,7 @@ function locationType(url = '') {
 }
 
 app.once('ready', () => {
-	if (isDocumentsAccessible && swapperMode != 'disabled') protocol.registerFileProtocol('idkr-swap', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr-swap:/, '')) }))
+	if (swapperMode != 'disabled') protocol.registerFileProtocol('idkr-swap', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr-swap:/, '')) }))
 	app.on('second-instance', (e, argv) => {
 		let instanceArgv = yargs.parse(argv)
 		console.log('Second instance: ' + argv)
