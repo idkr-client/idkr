@@ -57,6 +57,7 @@ W: Windows, M: macOS, L: Linux
 ___
 *: applies after restarting  
 \<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows)
+
 ### Keyboard Shortcuts
 Most of "Control" key can be replaced by "Command" key in macOS.  
 | Shortcut | Action |
