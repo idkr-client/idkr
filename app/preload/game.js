@@ -1,7 +1,3 @@
-const Store = require('electron-store')
-
-const config = new Store()
-
 let settingsWindow = null
 
 Object.assign(window.clientUtil, {
