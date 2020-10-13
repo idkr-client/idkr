@@ -97,7 +97,6 @@ function recursiveSwap(win) {
 				} catch (err) {
 					console.error('Failed to swap resources in advanced mode', err, prefix, hostname)
 				}
-				
 			}
 			recursiveSwapHostname(win)
 			if (urls.length) win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
@@ -332,7 +331,7 @@ function locationType(url = '') {
 }
 
 app.once('ready', () => {
-	if (swapperMode != 'disabled') protocol.registerFileProtocol('idkr-swap', (request, callback) => callback({ path: decodeURI(request.url.replace(/^idkr-swap:/, '')) }))
+	if (swapperMode != 'disabled') protocol.registerFileProtocol('idkr-swap', (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ''))))
 	app.on('second-instance', (e, argv) => {
 		let instanceArgv = yargs.parse(argv)
 		console.log('Second instance: ' + argv)
