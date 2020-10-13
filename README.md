@@ -10,7 +10,7 @@ This client aims for:
 - Linux: Supported
 - macOS: Not supported, may or may not work
 
-Testings are greatly appreciated! Let me know in the Discord or GitHub if something didnt work right.
+Testing is greatly appreciated! Let me know on Discord or GitHub if something doesn't work right.
 
 ## Links
 ### Discord Server
@@ -30,9 +30,9 @@ W: Windows, M: macOS, L: Linux
 
 - Settings search works for client related settings (unlike official client)
 - Prompt window (used when importing settings) has a "Load File" button
-	- This button lets you select a file and loads its content directly without opening the file in external editor and copy pasting
+	- This button lets you select a file and load its contents directly without opening the file in external editor and copy pasting it
 - Even more secure than official client
-	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a way that makes resource swapper work without having to disable `webSecurity`.
+	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a way to makes resource swapper work without having to disable `webSecurity`.
 
 ### Settings
 - Disable Frame Rate Limit *
@@ -41,7 +41,7 @@ W: Windows, M: macOS, L: Linux
 - ANGLE Grapchics Backend * (W)
 	- Set this to "D3D9" if you have video capture/recording problems
 	- Performance of the client can be affected by this option
-	- If you experiencing problems like crashes, try using different backend
+	- If you are experiencing problems like crashes, try using different backend
 - Color Profile *
 - Chromium Flags *
 	- This setting could overwrite existing flags/settings such as `force-color-profile` (Color Profile setting)
@@ -51,7 +51,7 @@ W: Windows, M: macOS, L: Linux
 	- Place swap files in `<documents>/idkr/swap`
 - Enable Userscripts *
 	- Put userscripts in `<documents>/idkr/scripts`
-	- Only use truly trusted scripts, they are danger than web extensions. It can cause serious damage if used wrongly.
+	- Only use truly trusted scripts, they are dangerous than web extensions. It can cause serious damage if used wrongly.
 	- [Example script](https://gist.github.com/Mixaz017/bb6d334c4718a4c4bb626380d3844bc8)
 	- This is an experimental feature!
 ___
