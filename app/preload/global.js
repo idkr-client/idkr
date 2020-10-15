@@ -21,18 +21,18 @@ window.clientUtil = {
 	settings: require('../exports/settings'),
 	setCSetting: function (name, value) {
 		let entry = Object.values(this.settings).find(entry => entry.id == name)
-		if (entry.min && entry.max) value = Math.max(entry.min, Math.min(value, entry.max))
+		if (entry.min && entry.max) { value = Math.max(entry.min, Math.min(value, entry.max)) }
 		config.set(name, value)
 		entry.val = value
 		entry.set?.(value)
 		let element = document.getElementById('c_slid_' + entry.id)
-		if (element) element.value = value
+		if (element) { element.value = value }
 		element = document.getElementById('c_slid_input_' + entry.id)
-		if (element) element.value = value
+		if (element) { element.value = value }
 	},
 	delayIDs: {},
 	delaySetCSetting: function (name, target, delay = 600) {
-		if (this.delayIDs.hasOwnProperty(name)) clearTimeout(this.delayIDs[name])
+		if (this.delayIDs.hasOwnProperty(name)) { clearTimeout(this.delayIDs[name]) }
 		this.delayIDs[name] = setTimeout(() => {
 			setCSetting(name, target.value)
 			delete this.delayIDs[name]
@@ -61,10 +61,10 @@ window.clientUtil = {
 			fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
 				try {
 					let script = new Userscript(require(path.join(scriptsPath, filename)))
-					if (!script.isLocationMatching()) console.log(`[USH] Ignored, location not matching: ${script.name}`)
-					else if (!script.isPlatformMatching()) console.log(`[USH] Ignored, platform not matching: ${script.name}`)
+					if (!script.isLocationMatching()) { console.log(`[USH] Ignored, location not matching: ${script.name}`) }
+					else if (!script.isPlatformMatching()) { console.log(`[USH] Ignored, platform not matching: ${script.name}`) }
 					else {
-						if (script.hasOwnProperty('settings')) Object.assign(clientUtil.settings, script.settings)
+						if (script.hasOwnProperty('settings')) { Object.assign(clientUtil.settings, script.settings) }
 						script.run?.(config)
 						console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`)
 					}
@@ -80,17 +80,17 @@ window.clientUtil = {
 				delete this.settings[key]
 				continue
 			}
-			if (entry.dontInit) continue
+			if (entry.dontInit) { continue }
 			let savedVal = config.get(entry.id)
-			if (savedVal != null) entry.val = savedVal
-			if (entry.min && entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max))
+			if (savedVal != null) { entry.val = savedVal }
+			if (entry.min && entry.max) { entry.val = Math.max(entry.min, Math.min(entry.val, entry.max)) }
 			entry.set?.(entry.val, true)
 		}
 	}
 }
 
-if (windowType == 'game') window.clientUtil.events.on('game-load', () => window.clientUtil.initUtil())
-else window.clientUtil.initUtil()
+if (windowType == 'game') { window.clientUtil.events.on('game-load', () => window.clientUtil.initUtil()) }
+else { window.clientUtil.initUtil() }
 
 if (config.get('enableUserscripts', false)) { window.clientUtil.loadScripts() }
 
@@ -103,10 +103,10 @@ switch (windowType) {
 function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
 
 function locationType(url = '') {
-	if (!isValidURL(url)) return 'unknown'
+	if (!isValidURL(url)) { return 'unknown' }
 	const target = new URL(url)
 	if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
-		if (/^\/docs\/.+\.txt$/.test(target.pathname)) return 'docs'
+		if (/^\/docs\/.+\.txt$/.test(target.pathname)) { return 'docs' }
 		switch (target.pathname) {
 			case '/': return 'game'
 			case '/social.html': return 'social'
@@ -114,7 +114,7 @@ function locationType(url = '') {
 			case '/editor.html': return 'editor'
 			default: return 'unknown'
 		}
-	} else return 'external'
+	} else { return 'external' }
 
 	function isValidURL(url = '') {
 		try {

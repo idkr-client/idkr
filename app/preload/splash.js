@@ -5,6 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 ipcRenderer.on('message', (event, messageText = '', detailsText = '') => {
-	if (messageText != null) message.innerText = messageText
-	if (detailsText != null) details.innerText = detailsText
+	if (messageText != null) { message.innerText = messageText }
+	if (detailsText != null) { details.innerText = detailsText }
 })
