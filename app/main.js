@@ -254,7 +254,7 @@ function initSplashWindow() {
 					autoUpdater.on('error', err => {
 						console.error(err)
 						contents.send('message', 'Error: ' + err.name)
-						reject(`Error occured: ${err.name}`)
+						reject(`Error occurred: ${err.name}`)
 					})
 					autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'))
 					autoUpdater.on('update-available', info => {
