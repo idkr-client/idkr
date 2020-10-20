@@ -29,12 +29,10 @@ if (angleBackend != 'default') { app.commandLine.appendSwitch('use-angle', angle
 if (colorProfile != 'default') { app.commandLine.appendSwitch('force-color-profile', colorProfile) }
 yargs.parse(config.get('chromiumFlags', ''), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])))
 
-ipcMain.handle('get-app-info', () => {
-	return {
-		name: app.name,
-		version: app.getVersion()
-	}
-})
+ipcMain.handle('get-app-info', () => ({
+	name: app.name,
+	version: app.getVersion()
+}))
 
 ipcMain.on('get-path', (event, name) => event.returnValue = app.getPath(name))
 
@@ -309,9 +307,7 @@ function initPromptWindow(message, defaultValue) {
 	let contents = win.webContents
 
 	setupWindow(win)
-	win.once('ready-to-show', () => {
-		contents.send('prompt-data', message, defaultValue)
-	})
+	win.once('ready-to-show', () => contents.send('prompt-data', message, defaultValue))
 
 	win.loadFile('app/html/prompt.html')
 
