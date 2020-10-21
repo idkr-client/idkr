@@ -1,7 +1,7 @@
 require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
-	{ BrowserWindow, app, clipboard, ipcMain, protocol, shell } = require("electron"),
+	{ BrowserWindow, app, clipboard, ipcMain, protocol, shell } = require('electron'),
 	Store = require('electron-store'),
 	log = require('electron-log'),
 	shortcuts = require('electron-localshortcut'),
@@ -168,8 +168,8 @@ function setupWindow(win, isWeb) {
 		if (windowType == 'game') { shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/')) }
 	})
 
-	contents.on("new-window", (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
-	contents.on("will-navigate", (event, url) => {
+	contents.on('new-window', (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
+	contents.on('will-navigate', (event, url) => {
 		if (locationType(url) == 'external') {
 			event.preventDefault()
 			shell.openExternal(url)
@@ -244,7 +244,7 @@ function initSplashWindow() {
 		return new Promise((resolve, reject) => {
 			if (AUTO_UPDATE == 'skip') { resolve() }
 			else {
-				contents.on("dom-ready", () => {
+				contents.on('dom-ready', () => {
 					contents.send('message', 'Initializing the auto updater...')
 					const { autoUpdater } = require('electron-updater')
 					autoUpdater.logger = log
@@ -282,7 +282,7 @@ function initSplashWindow() {
 	}
 
 	setupWindow(win)
-	win.loadFile("app/html/splash.html")
+	win.loadFile('app/html/splash.html')
 	return win
 
 	function launchGame() {

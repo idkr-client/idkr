@@ -2,7 +2,7 @@ require('v8-compile-cache')
 const events = require('events'),
 	fs = require('fs'),
 	path = require('path'),
-	{ ipcRenderer } = require("electron"),
+	{ ipcRenderer } = require('electron'),
 	Store = require('electron-store'),
 	log = require('electron-log')
 
