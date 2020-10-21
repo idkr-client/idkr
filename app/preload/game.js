@@ -15,6 +15,9 @@ Object.assign(window.clientUtil, {
 	}
 })
 
+// Workaround to avoid getting client popup
+window.OffCliV = true
+
 document.addEventListener('DOMContentLoaded', () => {
 	let windowsObserver = new MutationObserver(() => {
 		windowsObserver.disconnect()
