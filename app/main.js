@@ -145,7 +145,17 @@ function setupWindow(win, isWeb) {
 	if (DEBUG) { contents.openDevTools() }
 	win.removeMenu()
 	win.once('ready-to-show', () => {
-		if (locationType(contents.getURL()) == 'game') { win.setFullScreen(config.get('fullScreen', false)) }
+		let windowType = locationType(contents.getURL())
+
+		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true))
+		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false))
+		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true))
+		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false))
+
+		let windowStateConfig = config.get('windowState.' + windowType, {})
+		if (windowStateConfig.maximized) { win.maximize() }
+		if (windowStateConfig.fullScreen) { win.setFullScreen(true) }
+
 		win.show()
 	})
 
@@ -165,9 +175,21 @@ function setupWindow(win, isWeb) {
 
 	// Codes only runs on web windows
 
-	contents.on('dom-ready', () => {
+	win.once('ready-to-show', () => {
 		let windowType = locationType(contents.getURL())
-		if (windowType == 'game') { shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/')) }
+
+		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true))
+		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false))
+		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true))
+		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false))
+
+		let windowStateConfig = config.get('windowState.' + windowType, {})
+		if (windowStateConfig.maximized) { win.maximize() }
+		if (windowStateConfig.fullScreen) { win.setFullScreen(true) }
+	})
+
+	contents.on('dom-ready', () => {
+		if (locationType(contents.getURL()) == 'game') { shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/')) }
 	})
 
 	contents.on('new-window', (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
@@ -183,11 +205,7 @@ function setupWindow(win, isWeb) {
 
 	shortcuts.register(win, 'F5', () => contents.reload())
 	shortcuts.register(win, 'Shift+F5', () => contents.reloadIgnoringCache())
-	shortcuts.register(win, 'F11', () => {
-		let full = win.isFullScreen()
-		win.setFullScreen(!full)
-		if (locationType(contents.getURL()) == 'game') { config.set('fullScreen', !full) }
-	})
+	shortcuts.register(win, 'F11', () => win.setFullScreen(!win.isFullScreen()))
 	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()))
 	shortcuts.register(win, 'CommandOrControl+N', () => initWindow('https://krunker.io/'))
 	shortcuts.register(win, 'CommandOrControl+Shift+N', () => initWindow(contents.getURL()))
