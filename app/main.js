@@ -11,6 +11,8 @@ const fs = require('fs'),
 Object.assign(console, log.functions)
 const config = new Store()
 
+console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`)
+
 const DEBUG = argv.debug,
 	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
 
