@@ -1,5 +1,4 @@
 #uiBase.onMenu #idkrMenuTimer {
-	display: flex;
 	align-items: center;
 	position: absolute;
 	top: calc(50% + 60px);
