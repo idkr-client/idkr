@@ -358,8 +358,14 @@ function locationType(url = '') {
 	}
 }
 
+// Workaround for Electron 8.x
+protocol.registerSchemesAsPrivileged([{
+	scheme: 'idkr-swap',
+	privileges: { secure: true, corsEnabled: true }
+}])
+
 app.once('ready', () => {
-	if (swapperMode != 'disabled') { protocol.registerFileProtocol('idkr-swap', (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, '')))) }
+	protocol.registerFileProtocol('idkr-swap', (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ''))))
 	app.on('second-instance', (e, argv) => {
 		let instanceArgv = yargs.parse(argv)
 		console.log('Second instance: ' + argv)
