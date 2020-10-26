@@ -1,3 +1,5 @@
+const path = require('path')
+
 let settingsWindow = null
 
 Object.assign(window.clientUtil, {
@@ -24,6 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
 		window.clientUtil.events.emit('game-load')
 	})
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true })
+
+	const gameCSS = Object.assign(document.createElement('link'), {
+		rel: 'stylesheet', href: 'idkr-swap:' + path.join(__dirname, '../css/game.css')
+	})
+	document.head.appendChild(gameCSS)
+
+	let timerVal = document.getElementById('timerVal')
+	if (timerVal) {
+		const menuTimer = Object.assign(document.createElement('span'), { id: 'idkrMenuTimer' })
+		document.getElementById('menuHider')?.appendChild(menuTimer)
+
+		const timerObserver = new MutationObserver(() => menuTimer.innerText = timerVal.innerText)
+		timerObserver.observe(timerVal, { childList: true })
+	}
 })
 
 window.clientUtil.events.on('game-load', () => {
