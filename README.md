@@ -34,7 +34,10 @@ W: Windows, M: macOS, L: Linux
 - Even more secure than official client
 	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a way to makes resource swapper work without having to disable `webSecurity`.
 
+Other features that has its settings are listed below
+
 ### Settings
+- Show Menu Timer
 - Disable Frame Rate Limit *
 - Accelerated Canvas *
 	- Only disable this if you have problems or performance issues with your GPU
@@ -93,7 +96,7 @@ This is a simple tutorial to get the source code, install dependencies, and run 
 If you use git (recommended):
 ```sh
 # If its your first time getting the code
-git clone https://github.com/Mixaz017/idkr.git
+git clone --depth 1 https://github.com/Mixaz017/idkr.git
 
 # If you already cloned the repository and want to update to the latest commit
 git pull
