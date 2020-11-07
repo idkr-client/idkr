@@ -55,7 +55,7 @@ window.clientUtil = {
 			isPlatformMatching() { return this.platforms.some(platform => ['all', process.platform].includes(platform)) }
 		}
 
-		let userscriptsDirConfig = config.get('resourceSwapperPath', '')
+		let userscriptsDirConfig = config.get('userscriptsPath', '')
 		let scriptsPath = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(documentsPath, 'idkr/scripts')
 		try {
 			fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
