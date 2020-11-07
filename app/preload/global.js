@@ -34,7 +34,7 @@ window.clientUtil = {
 	delaySetCSetting: function (name, target, delay = 600) {
 		if (this.delayIDs[name]) { clearTimeout(this.delayIDs[name]) }
 		this.delayIDs[name] = setTimeout(() => {
-			setCSetting(name, target.value)
+			this.setCSetting(name, target.value)
 			delete this.delayIDs[name]
 		}, delay)
 	},
