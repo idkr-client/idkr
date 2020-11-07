@@ -56,7 +56,7 @@ ipcMain.handle('set-bounds', (event, bounds) => {
 let swapperMode = config.get('resourceSwapperMode', 'normal')
 
 let swapDirConfig = config.get('resourceSwapperPath', ''),
-    userscriptsDirConfig = config.get('userscriptsPath', '')
+	userscriptsDirConfig = config.get('userscriptsPath', '')
 
 const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
 	userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts')
