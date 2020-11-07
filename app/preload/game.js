@@ -47,8 +47,8 @@ window.clientUtil.events.on('game-load', () => {
 	settingsWindow.getCSettings = function () {
 		let tempHTML = '',
 			previousCategory = null
-		Object.values(clientUtil.settings).forEach(entry => {
-			if (settingsWindow.settingSearch && !clientUtil.searchMatches(entry) || entry.hide) { return }
+		Object.values(window.clientUtil.settings).forEach(entry => {
+			if (settingsWindow.settingSearch && !window.clientUtil.searchMatches(entry) || entry.hide) { return }
 			if (previousCategory != entry.cat) {
 				previousCategory = entry.cat
 				tempHTML += `<div class='setHed'>${entry.cat}</div>`
