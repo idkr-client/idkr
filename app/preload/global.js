@@ -32,7 +32,7 @@ window.clientUtil = {
 	},
 	delayIDs: {},
 	delaySetCSetting: function (name, target, delay = 600) {
-		if (this.delayIDs.hasOwnProperty(name)) { clearTimeout(this.delayIDs[name]) }
+		if (this.delayIDs[name]) { clearTimeout(this.delayIDs[name]) }
 		this.delayIDs[name] = setTimeout(() => {
 			setCSetting(name, target.value)
 			delete this.delayIDs[name]
@@ -64,7 +64,7 @@ window.clientUtil = {
 					if (!script.isLocationMatching()) { console.log(`[USH] Ignored, location not matching: ${script.name}`) }
 					else if (!script.isPlatformMatching()) { console.log(`[USH] Ignored, platform not matching: ${script.name}`) }
 					else {
-						if (script.hasOwnProperty('settings')) { Object.assign(clientUtil.settings, script.settings) }
+						if (script.settings) { Object.assign(window.clientUtil.settings, script.settings) }
 						script.run?.(config)
 						console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`)
 					}
