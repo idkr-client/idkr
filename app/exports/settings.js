@@ -138,5 +138,5 @@ module.exports = {
 		placeholder: 'Userscripts Folder Path',
 		needsRestart: true,
 		html: function () { return window.clientUtil.genCSettingsHTML(this) }
-	},
+	}
 }
