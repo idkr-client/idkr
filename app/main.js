@@ -83,7 +83,7 @@ function recursiveSwap(win) {
 				}
 			}
 			recursiveSwapNormal(win)
-			if (urls.length) { win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, new URL(details.url).pathname) })) }
+			if (urls.length) { win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, new URL(details.url).pathname) })) }
 			break
 
 		case 'advanced':
@@ -103,7 +103,7 @@ function recursiveSwap(win) {
 			if (urls.length) {
 				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
 					let url = new URL(details.url)
-					callback({ redirectURL: 'idkr-swap:' + path.join(swapDir, url.hostname, url.pathname) })
+					callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, url.hostname, url.pathname) })
 				})
 			}
 			break
