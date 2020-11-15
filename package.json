@@ -27,7 +27,8 @@
   "homepage": "https://github.com/Mixaz017/idkr#readme",
   "devDependencies": {
     "electron": "^9.3.4",
-    "electron-builder": "^22.8.1"
+    "electron-builder": "^22.8.1",
+    "eslint": "^7.13.0"
   },
   "dependencies": {
     "electron-localshortcut": "^3.2.1",
