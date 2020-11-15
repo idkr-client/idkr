@@ -254,7 +254,7 @@ function initWindow(url, webContents) {
 			preload: path.join(__dirname, 'preload/global.js')
 		}
 	})
-	let contents = win.webContents
+	// let contents = win.webContents
 	setupWindow(win, true)
 
 	if (!webContents) { win.loadURL(url) }
