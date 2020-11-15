@@ -381,4 +381,3 @@ app.once('ready', () => {
 	})
 	initSplashWindow()
 })
-app.on('window-all-closed', () => app.quit())
