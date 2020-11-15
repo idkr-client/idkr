@@ -6,11 +6,12 @@ const fs = require('fs'),
 	Store = require('electron-store'),
 	log = require('electron-log'),
 	shortcuts = require('electron-localshortcut'),
-	yargs = require('yargs'),
-	argv = yargs.argv
+	yargs = require('yargs')
 
 Object.assign(console, log.functions)
-const config = new Store()
+
+const argv = yargs.argv,
+	config = new Store()
 
 console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`)
 
