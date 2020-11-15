@@ -74,6 +74,15 @@ module.exports = {
 		html: function () { return window.clientUtil.genCSettingsHTML(this) },
 		info: 'Additional Chromium flags.'
 	},
+	discordRPC: {
+		name: 'Discord RPC',
+		id: 'discordRPC',
+		cat: 'Discord',
+		type: 'checkbox',
+		val: true,
+		needsRestart: true,
+		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+	},
 	// enablePointerLockOptions: {
 	// 	name: 'Pointer Raw Input',
 	// 	id: 'enablePointerLockOptions',

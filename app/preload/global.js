@@ -123,3 +123,80 @@ function locationType(url = '') {
 		} catch (e) { return false }
 	}
 }
+
+let rpcIntervalId
+
+function setFocusEvent() {
+	window.addEventListener('focus', () => {
+		function sendRPCGamePresence() {
+			try {
+				let gameActivity = window.getGameActivity()
+
+				Object.assign(rpcActivity, {
+					state: gameActivity.map,
+					details: gameActivity.mode
+				})
+
+				if (gameActivity.time) {
+					rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1e3
+				}
+				ipcRenderer.invoke('rpc-activity', rpcActivity)
+			} catch (error) {
+				// console.log(error)
+				ipcRenderer.invoke('rpc-activity', Object.assign(rpcActivity, {
+					state: 'Playing',
+					startTimestamp: Math.floor(Date.now() / 1e3)
+				}))
+			}
+		}
+
+		let rpcActivity = {
+				largeImageKey: 'idkr-logo',
+				largeImageText: 'idkr client'
+			},
+			isIntervalSet = false
+		switch (windowType) {
+			case 'game':
+				sendRPCGamePresence()
+				if (rpcIntervalId) { clearInterval(rpcIntervalId) }
+				rpcIntervalId = setInterval(sendRPCGamePresence, 5e3)
+				isIntervalSet = true
+				break
+			case 'docs':
+				rpcActivity.state = 'Reading Docs'
+				break
+			case 'social':
+				rpcActivity.state = 'In the Hub'
+				break
+			case 'viewer':
+				rpcActivity.state = 'In the Texture Viewer'
+				break
+			case 'editor':
+				rpcActivity.state = 'In the Editor'
+				break
+			default:
+				rpcActivity.state = 'Unknown'
+				break
+		}
+
+		if (!isIntervalSet) {
+			ipcRenderer.invoke('rpc-activity', Object.assign(rpcActivity, {
+				startTimestamp: Math.floor(performance.timeOrigin / 1e3)
+			}))
+		}
+	}, { once: true })
+}
+
+ipcRenderer.on('rpc-stop', () => {
+	setFocusEvent()
+	if (rpcIntervalId) { clearInterval(rpcIntervalId) }
+})
+
+setFocusEvent()
+
+window.addEventListener('unload', () => {
+	ipcRenderer.invoke('rpc-activity', {
+		state: 'Idle',
+		startTimestamp: Math.floor(Date.now() / 1e3)
+	})
+})

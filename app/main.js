@@ -1,6 +1,7 @@
 require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
+	DiscordRPC = require('discord-rpc'),
 	{ BrowserWindow, app, clipboard, ipcMain, protocol, shell } = require('electron'),
 	Store = require('electron-store'),
 	log = require('electron-log'),
@@ -51,6 +52,20 @@ ipcMain.on('prompt', (event, message, defaultValue) => {
 
 ipcMain.handle('set-bounds', (event, bounds) => {
 	BrowserWindow.fromWebContents(event.sender).setBounds(bounds)
+})
+
+const isRPCEnabled = config.get('discordRPC', true)
+
+let lastSender = null
+ipcMain.handle('rpc-activity', (event, activity) => {
+	if (isRPCEnabled) {
+		if (lastSender != event.sender) {
+			lastSender?.send('rpc-stop')
+			lastSender = event.sender
+			lastSender.on('destroyed', () => lastSender = null)
+		}
+		rpc.setActivity(activity).catch(console.error)
+	}
 })
 
 let swapperMode = config.get('resourceSwapperMode', 'normal')
@@ -365,6 +380,15 @@ protocol.registerSchemesAsPrivileged([{
 	privileges: { secure: true, corsEnabled: true }
 }])
 
+const rpcClientId = '770954802443059220'
+
+DiscordRPC.register(rpcClientId)
+const rpc = new DiscordRPC.Client({ transport: 'ipc' })
+
+rpc.on('ready', () => {
+	console.log('Discord RPC ready')
+})
+
 app.once('ready', () => {
 	protocol.registerFileProtocol('idkr-swap', (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ''))))
 	app.on('second-instance', (e, argv) => {
@@ -379,5 +403,8 @@ app.once('ready', () => {
 				break
 		}
 	})
+
+	if (isRPCEnabled) { rpc.login({ clientId: rpcClientId }).catch(console.error) }
+
 	initSplashWindow()
 })
