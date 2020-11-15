@@ -309,7 +309,7 @@ function initSplashWindow() {
 						win.setProgressBar(info.percent / 100)
 					})
 					autoUpdater.on('update-downloaded', info => {
-						contents.send('message', null, 'Installing...')
+						contents.send('message', null, `Installing v${info.version}...`)
 						autoUpdater.quitAndInstall(true, true)
 					})
 
