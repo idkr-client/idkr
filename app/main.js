@@ -316,7 +316,7 @@ function initSplashWindow() {
 					autoUpdater.autoDownload = AUTO_UPDATE == 'download'
 					autoUpdater.checkForUpdates()
 				})
-			};
+			}
 		})
 	}
 
