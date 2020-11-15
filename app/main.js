@@ -82,8 +82,8 @@ ensureDirs(swapDir, userscriptsDir)
 function recursiveSwap(win) {
 	const urls = []
 	switch (swapperMode) {
-		case 'normal':
-			function recursiveSwapNormal(win, prefix = '') {
+		case 'normal': {
+			const recursiveSwapNormal = (win, prefix = '') => {
 				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 						if (dirent.isDirectory()) { recursiveSwapNormal(win, `${prefix}/${dirent.name}`) }
@@ -101,9 +101,10 @@ function recursiveSwap(win) {
 			recursiveSwapNormal(win)
 			if (urls.length) { win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, new URL(details.url).pathname) })) }
 			break
+		}
 
-		case 'advanced':
-			function recursiveSwapHostname(win, prefix = '', hostname = '') {
+		case 'advanced': {
+			const recursiveSwapHostname = (win, prefix = '', hostname = '') => {
 				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 						if (dirent.isDirectory()) {
@@ -123,6 +124,7 @@ function recursiveSwap(win) {
 				})
 			}
 			break
+		}
 	}
 }
 
