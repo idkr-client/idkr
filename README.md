@@ -37,7 +37,6 @@ W: Windows, M: macOS, L: Linux
 Other features that has its settings are listed below
 
 ### Settings
-- Show Menu Timer
 - Disable Frame Rate Limit *
 - Accelerated Canvas *
 	- Only disable this if you have problems or performance issues with your GPU
