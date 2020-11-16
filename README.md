@@ -28,7 +28,7 @@ A server dedicated to idkr.
 ## Features
 W: Windows, M: macOS, L: Linux  
 
-- Settings search works for client related settings (unlike official client)
+- Settings search works for client related settings
 - Prompt window (used when importing settings) has a "Load File" button
 	- This button lets you select a file and load its contents directly without opening the file in external editor and copy pasting it
 - Even more secure than official client
