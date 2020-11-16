@@ -1,16 +1,16 @@
 module.exports = {
-	menuTimer: {
-		name: 'Show Menu Timer',
-		id: 'menuTimer',
-		cat: 'Interface',
-		type: 'checkbox',
-		val: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) },
-		set: value => {
-			let menuTimer = document.getElementById('idkrMenuTimer')
-			if (menuTimer) { menuTimer.style.display = value ? 'flex' : 'none' }
-		}
-	},
+	// menuTimer: {
+	// 	name: 'Show Menu Timer',
+	// 	id: 'menuTimer',
+	// 	cat: 'Interface',
+	// 	type: 'checkbox',
+	// 	val: true,
+	// 	html: function () { return window.clientUtil.genCSettingsHTML(this) },
+	// 	set: value => {
+	// 		let menuTimer = document.getElementById('idkrMenuTimer')
+	// 		if (menuTimer) { menuTimer.style.display = value ? 'flex' : 'none' }
+	// 	}
+	// },
 	disableFrameRateLimit: {
 		name: 'Disable Frame Rate Limit',
 		id: 'disableFrameRateLimit',
