@@ -131,14 +131,14 @@ function recursiveSwap(win) {
 if (process.platform == 'win32') {
 	app.setUserTasks([{
 		program: process.execPath,
-		arguments: '--new-window=game',
+		arguments: '--new-window=https://krunker.io/',
 		title: 'New game window',
 		description: 'Opens a new game window',
 		iconPath: process.execPath,
 		iconIndex: 0
 	}, {
 		program: process.execPath,
-		arguments: '--new-window=social',
+		arguments: '--new-window=https://krunker.io/social.html',
 		title: 'New social window',
 		description: 'Opens a new social window',
 		iconPath: process.execPath,
@@ -397,13 +397,8 @@ app.once('ready', () => {
 	app.on('second-instance', (e, argv) => {
 		let instanceArgv = yargs.parse(argv)
 		console.log('Second instance: ' + argv)
-		switch (instanceArgv['new-window']) {
-			case 'game':
-				initWindow('https://krunker.io/')
-				break
-			case 'social':
-				initWindow('https://krunker.io/social.html')
-				break
+		if (!['unknown', 'external'].includes(locationType(instanceArgv['new-window']))) {
+			initWindow(instanceArgv['new-window'])
 		}
 	})
 
