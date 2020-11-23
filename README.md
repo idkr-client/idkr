@@ -1,4 +1,7 @@
 # idkr
+![Total downloads](https://img.shields.io/github/downloads/mixaz017/idkr/total)
+[![Discord server](https://discord.com/api/guilds/697366856914173994/widget.png)](https://discord.gg/wEZbFFX)
+
 idk, just a Krunker client  
 This client aims for:
 - Stable behavior and performance
