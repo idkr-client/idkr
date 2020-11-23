@@ -54,7 +54,7 @@ Other features that has its settings are listed below
 	- Place swap files in `<documents>/idkr/swap`
 - Enable Userscripts *
 	- Put userscripts in `<documents>/idkr/scripts`
-	- Only use truly trusted scripts, they are dangerous than web extensions. It can cause serious damage if used wrongly.
+	- Only use truly trusted scripts, they are more dangerous than web extensions. It can cause serious damage if used wrongly.
 	- [Example script](https://gist.github.com/Mixaz017/bb6d334c4718a4c4bb626380d3844bc8)
 	- This is an experimental feature!
 ___
