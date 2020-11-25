@@ -11,7 +11,7 @@ This client aims for:
 ## Supported Platforms
 - Windows: Supported, main platform
 - Linux: Supported
-- macOS: Not supported, may or may not work
+- macOS: Not confirmed by the developer, may or may not work
 
 Testing is greatly appreciated! Let me know on Discord or GitHub if something doesn't work right.
 
