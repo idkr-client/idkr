@@ -33,9 +33,9 @@ W: Windows, M: macOS, L: Linux
 
 - Settings search works for client related settings
 - Prompt window (used when importing settings) has a "Load File" button
-	- This button lets you select a file and load its contents directly without opening the file in external editor and copy pasting it
-- Even more secure than official client
-	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a way to makes resource swapper work without having to disable `webSecurity`.
+	- This button lets you select a file and load its contents directly without opening the file in an external editor and copy pasting it
+- Even secure than official client
+	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a method that makes resource swapper work without having to disable `webSecurity`.
 
 Other features that has its settings are listed below
 
