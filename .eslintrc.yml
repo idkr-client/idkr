@@ -13,4 +13,5 @@ rules:
     - error
     - tab
     - SwitchCase: 1
+      ignoredNodes: [ObjectExpression]
   prefer-arrow-callback: error

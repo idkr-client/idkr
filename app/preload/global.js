@@ -151,9 +151,9 @@ function setFocusEvent() {
 		}
 
 		let rpcActivity = {
-				largeImageKey: 'idkr-logo',
-				largeImageText: 'idkr client'
-			},
+			largeImageKey: 'idkr-logo',
+			largeImageText: 'idkr client'
+		},
 			isIntervalSet = false
 		switch (windowType) {
 			case 'game':
