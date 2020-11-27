@@ -407,4 +407,4 @@ app.once('ready', () => {
 	initSplashWindow()
 })
 
-app.on('quit', () => rpc.destroy())
+app.on('quit', () => { if (isRPCEnabled) { rpc.destroy() } })
