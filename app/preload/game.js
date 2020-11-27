@@ -33,17 +33,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.clientUtil.events.on('game-load', () => {
 	settingsWindow = window.windows[0]
+	let clientTabIndex = settingsWindow.tabs.push({ name: 'idkr', categories: [] })
 	settingsWindow.getCSettings = function () {
+		if (clientTabIndex != settingsWindow.tabIndex + 1 && !settingsWindow.settingSearch) { return '' }
 		let tempHTML = '',
 			previousCategory = null
 		Object.values(window.clientUtil.settings).forEach(entry => {
 			if (settingsWindow.settingSearch && !window.clientUtil.searchMatches(entry) || entry.hide) { return }
 			if (previousCategory != entry.cat) {
+				if (previousCategory) { tempHTML += '</div>' }
 				previousCategory = entry.cat
-				tempHTML += `<div class='setHed'>${entry.cat}</div>`
+				tempHTML += `<div class='setHed' id='setHed_${btoa(entry.cat)}' onclick='window.windows[0].collapseFolder(this)'><span class='material-icons plusOrMinus'>keyboard_arrow_down</span> ${entry.cat}</div><div id='setBod_${btoa(entry.cat)}'>`
 			}
 			tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name}${entry.needsRestart ? ' <span style="color: #eb5656">*</span>' : ''} ${entry.html()}</div>`
 		})
-		return tempHTML
+		return tempHTML ? tempHTML + '</div>' : ''
 	}
 })
