@@ -197,6 +197,8 @@ setFocusEvent()
 window.addEventListener('unload', () => {
 	ipcRenderer.invoke('rpc-activity', {
 		state: 'Idle',
-		startTimestamp: Math.floor(Date.now() / 1e3)
+		startTimestamp: Math.floor(Date.now() / 1e3),
+		largeImageKey: 'idkr-logo',
+		largeImageText: 'idkr client'
 	})
 })
