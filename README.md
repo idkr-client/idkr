@@ -54,12 +54,14 @@ Other features that has its settings are listed below
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended but other options are here just because you can
 - Resource Swapper Mode *
-	- Place swap files in `<documents>/idkr/swap`
+- Resource Swapper Path
+	- Defaults to `<documents>/idkr/swap`
 - Enable Userscripts *
-	- Put userscripts in `<documents>/idkr/scripts`
 	- Only use truly trusted scripts, they are more dangerous than web extensions. It can cause serious damage if used wrongly.
 	- [Example script](https://gist.github.com/Mixaz017/bb6d334c4718a4c4bb626380d3844bc8)
 	- This is an experimental feature!
+- Userscripts Path
+	- Defaults to `<documents>/idkr/scripts`
 ___
 *: applies after restarting  
 \<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows)
