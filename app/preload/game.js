@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 window.clientUtil.events.on('game-load', () => {
 	settingsWindow = window.windows[0]
 	let clientTabIndex = settingsWindow.tabs.push({ name: 'idkr', categories: [] })
-	settingsWindow.getCSettings = function () {
+	settingsWindow.getCSettings = () => {
 		if (clientTabIndex != settingsWindow.tabIndex + 1 && !settingsWindow.settingSearch) { return '' }
 		let tempHTML = '',
 			previousCategory = null
