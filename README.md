@@ -95,7 +95,7 @@ This is a simple tutorial to get the source code, install dependencies, and run 
 
 ### Requirements
 - [Node.js](https://nodejs.org/en/download/) and [npm](https://www.npmjs.com/get-npm)
-- [git](https://git-scm.com/downloads) (Optional for easier clone/pull operations)
+- [git](https://git-scm.com/downloads) and [GitHub CLI](https://cli.github.com/) (Optional for easier clone/pull operations)
 
 ### Downloading The Source Code
 If you use git (recommended):
@@ -103,10 +103,13 @@ If you use git (recommended):
 # If its your first time getting the code
 git clone --depth 1 https://github.com/Mixaz017/idkr.git
 
+# ...or if you use GitHub CLI instead
+gh repo clone Mixaz017/idkr -- --depth 1
+
 # If you already cloned the repository and want to update to the latest commit
 git pull
 ```
-If you don't use git, [Download ZIP](https://github.com/Mixaz017/idkr/archive/master.zip) and extract. You have to do this every time you want to update the client, so use git to save your time if possible.
+If you don't use git, [Download ZIP](https://github.com/Mixaz017/idkr/archive/master.zip) and extract. You have to do this every time you want to update the client, so I recommend using git instead.
 
 ### Run Or Build the Client
 ```sh
