@@ -9,11 +9,11 @@ This client aims for:
 - Constructive to the community (open source and MIT license)
 
 ## Supported Platforms
-- Windows: Supported, main platform
-- Linux: Supported
-- macOS: Not confirmed by the developer, may or may not work
-
-Testing is greatly appreciated! Let me know on Discord or GitHub if something doesn't work right.
+| Platform | Status | File Extension |
+|-|-|-|
+| Windows | Supported (Main platform) | `.exe` |
+| macOS | Not confirmed by the developer | `.dmg` |
+| Linux | Supported | `.AppImage` |
 
 ## Links
 ### Discord Server
