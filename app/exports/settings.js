@@ -4,7 +4,7 @@ module.exports = {
 		id: 'disableFrameRateLimit',
 		cat: 'Performance',
 		type: 'checkbox',
-		val: true,
+		val: false,
 		needsRestart: true,
 		html: function () { return window.clientUtil.genCSettingsHTML(this) }
 	},
