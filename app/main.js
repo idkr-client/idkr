@@ -2,7 +2,7 @@ require('v8-compile-cache')
 const fs = require('fs'),
 	path = require('path'),
 	DiscordRPC = require('discord-rpc'),
-	{ BrowserWindow, app, clipboard, ipcMain, protocol, shell } = require('electron'),
+	{ BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require('electron'),
 	Store = require('electron-store'),
 	log = require('electron-log'),
 	shortcuts = require('electron-localshortcut'),
@@ -219,8 +219,14 @@ function setupWindow(win, isWeb) {
 		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') { navigateNewWindow(event, url) }
 	})
 
-	// event.preventDefault() didn't work after confirm() or dialog.showMessageBox(), so ignoring beforeunload as a workaround for now
-	contents.on('will-prevent-unload', event => event.preventDefault())
+	contents.on('will-prevent-unload', event => {
+		if (!dialog.showMessageBoxSync({
+			buttons: ['Leave', 'Cancel'],
+			title: 'Leave site?',
+			message: 'Changes you made may not be saved.',
+			noLink: true
+		})) { event.preventDefault() }
+	})
 
 	shortcuts.register(win, 'F5', () => contents.reload())
 	shortcuts.register(win, 'Shift+F5', () => contents.reloadIgnoringCache())
