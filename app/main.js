@@ -61,7 +61,7 @@ let lastSender = null
 ipcMain.handle('rpc-activity', (event, activity) => {
 	if (isRPCEnabled) {
 		if (lastSender != event.sender) {
-			lastSender?.send('rpc-stop')
+			if (lastSender) { lastSender.send('rpc-stop') }
 			lastSender = event.sender
 			lastSender.on('destroyed', () => lastSender = null)
 		}

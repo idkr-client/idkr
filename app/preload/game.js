@@ -2,8 +2,8 @@ let settingsWindow = null
 
 Object.assign(window.clientUtil, {
 	searchMatches: entry => {
-		let query = settingsWindow.settingSearch.toLowerCase() ?? ''
-		return (entry.name.toLowerCase() ?? '').includes(query) || (entry.cat.toLowerCase() ?? '').includes(query)
+		let query = settingsWindow.settingSearch.toLowerCase() || ''
+		return (entry.name.toLowerCase() || '').includes(query) || (entry.cat.toLowerCase() || '').includes(query)
 	},
 	genCSettingsHTML: options => {
 		switch (options.type) {

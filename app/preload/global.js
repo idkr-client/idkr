@@ -24,7 +24,7 @@ window.clientUtil = {
 		if (entry.min && entry.max) { value = Math.max(entry.min, Math.min(value, entry.max)) }
 		config.set(name, value)
 		entry.val = value
-		entry.set?.(value)
+		if (entry.set) { entry.set(value) }
 		let element = document.getElementById('c_slid_' + entry.id)
 		if (element) { element.value = value }
 		element = document.getElementById('c_slid_input_' + entry.id)
@@ -41,14 +41,14 @@ window.clientUtil = {
 	loadScripts: function () {
 		class Userscript {
 			constructor(initiator) {
-				this.name = initiator.name ?? 'Unnamed userscript'
-				this.version = initiator.version ?? 'Version unknown'
-				this.author = initiator.author ?? 'Unknown author'
-				this.description = initiator.discription ?? 'No description provided'
-				this.locations = initiator.locations ?? ['all']
-				this.platforms = initiator.platforms ?? ['all']
-				this.settings = initiator.settings ?? null
-				this.run = initiator.run ?? null
+				this.name = initiator.name || 'Unnamed userscript'
+				this.version = initiator.version || 'Version unknown'
+				this.author = initiator.author || 'Unknown author'
+				this.description = initiator.discription || 'No description provided'
+				this.locations = initiator.locations || ['all']
+				this.platforms = initiator.platforms || ['all']
+				this.settings = initiator.settings || null
+				this.run = initiator.run || null
 			}
 
 			isLocationMatching() { return this.locations.some(location => ['all', windowType].includes(location)) }
@@ -65,7 +65,7 @@ window.clientUtil = {
 					else if (!script.isPlatformMatching()) { console.log(`[USH] Ignored, platform not matching: ${script.name}`) }
 					else {
 						if (script.settings) { Object.assign(window.clientUtil.settings, script.settings) }
-						script.run?.(config)
+						if (script.run) { script.run(config) }
 						console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`)
 					}
 				} catch (err) { console.error('[USH] Failed to load userscript:', err) }
@@ -84,7 +84,7 @@ window.clientUtil = {
 			let savedVal = config.get(entry.id)
 			if (savedVal != null) { entry.val = savedVal }
 			if (entry.min && entry.max) { entry.val = Math.max(entry.min, Math.min(entry.val, entry.max)) }
-			entry.set?.(entry.val, true)
+			if (entry.set) { entry.set(entry.val, true) }
 		}
 	}
 }
