@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	})
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true })
 
+	let clientExit = document.getElementById('clientExit')
+	if (clientExit) { clientExit.style = 'display: flex;' }
+
 	// const gameCSS = Object.assign(document.createElement('link'), {
 	// 	rel: 'stylesheet', href: 'idkr-swap:' + path.join(__dirname, '../css/game.css')
 	// })
@@ -32,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 window.clientUtil.events.on('game-load', () => {
+	window.closeClient = close
 	settingsWindow = window.windows[0]
 	let clientTabIndex = settingsWindow.tabs.push({ name: 'idkr', categories: [] })
 	settingsWindow.getCSettings = () => {
