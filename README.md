@@ -17,8 +17,10 @@ This client aims for:
 
 ## Links
 ### Discord Server
-https://discord.gg/wEZbFFX  
-A server dedicated to idkr.
+https://discord.gg/wEZbFFX
+
+### Wiki
+https://github.com/Mixaz017/idkr/wiki
 
 ### Download
 [Latest release / changelog](https://github.com/Mixaz017/idkr/releases/latest)
