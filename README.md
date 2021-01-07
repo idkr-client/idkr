@@ -124,4 +124,4 @@ npm start
 # If you want to build the client
 npm run dist
 ```
-After building the client, new directory named `dist` containing executable binary files (`.exe`, `.dmg`, or `.AppImage`) should be created (or overwrited if aleady exists).
+After building the client, new directory named `dist` containing executable binary files (`.exe`, `.dmg`, or `.AppImage`) should be created (or overwrited if already exists).
