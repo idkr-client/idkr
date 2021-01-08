@@ -31,30 +31,29 @@ https://github.com/Mixaz017/idkr/wiki
 - [Linux portable (i836)](https://github.com/Mixaz017/idkr/releases/latest/download/idkr-portable-linux-i386.AppImage)
 
 ## Features
-W: Windows, M: macOS, L: Linux  
+(W): Windows, (M): macOS, (L): Linux  
 
-- Settings search works for client related settings
-- Prompt window (used when importing settings) has a "Load File" button
-	- This button lets you select a file and load its contents directly without opening the file in an external editor and copy pasting it
+- Prompt window (used when importing settings) has a "Load File" button.
+	- This button lets you select a file and load its contents directly without opening the file in an external editor and copy pasting it.
 - Even secure than official client
 	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a method that makes resource swapper work without having to disable `webSecurity`.
 
-Other features that has its settings are listed below
+Other features that have its settings are listed below.
 
 ### Settings
 - Disable Frame Rate Limit *
 - Accelerated Canvas *
-	- Only disable this if you have problems or performance issues with your GPU
+	- Only disable this if you have problems or performance issues with your GPU.
 - ANGLE Grapchics Backend * (W)
-	- Set this to "D3D9" if you have video capture/recording problems
-	- Performance of the client can be affected by this option
-	- If you are experiencing problems like crashes, try using different backend
+	- Set this to "D3D9" if you have video capture/recording problems.
+	- Performance of the client can be affected by this option.
+	- If you are experiencing problems like crashes, try using a different backend.
 - Color Profile *
 - Chromium Flags *
-	- This setting could overwrite existing flags/settings such as `force-color-profile` (Color Profile setting)
+	- This setting could overwrite existing flags/settings such as `force-color-profile` (Color Profile setting).
 - Discord RPC *
 - Auto Update Behavior
-	- Setting this to "Download" is highly recommended but other options are here just because you can
+	- Setting this to "Download" is highly recommended since you won't have to worry about manually updating the client but other options are here in case you don't wish the automatic updates.
 - Resource Swapper Mode *
 - Resource Swapper Path
 	- Defaults to `<documents>/idkr/swap`
@@ -66,7 +65,7 @@ Other features that has its settings are listed below
 	- Defaults to `<documents>/idkr/scripts`
 ___
 *: applies after restarting  
-\<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows)
+\<documents>: Your OS's document folder (`%userprofile%/Documents` in default Windows).
 
 ### Keyboard Shortcuts
 Most of "Control" key can be replaced by "Command" key in macOS.  
