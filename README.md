@@ -51,7 +51,7 @@ Other features that have its settings are listed below.
 - Color Profile *
 - Chromium Flags *
 	- This setting could overwrite existing flags/settings such as `force-color-profile` (Color Profile setting).
-- Discord RPC *
+- Discord Rich Presence *
 - Auto Update Behavior
 	- Setting this to "Download" is highly recommended since you won't have to worry about manually updating the client but other options are here in case you don't wish the automatic updates.
 - Resource Swapper Mode *

@@ -63,7 +63,7 @@ module.exports = {
 		info: 'Additional Chromium flags.'
 	},
 	discordRPC: {
-		name: 'Discord RPC',
+		name: 'Discord Rich Presence',
 		id: 'discordRPC',
 		cat: 'Discord',
 		type: 'checkbox',
