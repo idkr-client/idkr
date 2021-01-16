@@ -1,4 +1,4 @@
-require('v8-compile-cache')
+require('v8-compile-cache');
 const fs = require('fs'),
 	path = require('path'),
 	DiscordRPC = require('discord-rpc'),
@@ -6,101 +6,101 @@ const fs = require('fs'),
 	Store = require('electron-store'),
 	log = require('electron-log'),
 	shortcuts = require('electron-localshortcut'),
-	yargs = require('yargs')
+	yargs = require('yargs');
 
-Object.assign(console, log.functions)
+Object.assign(console, log.functions);
 
 const argv = yargs.argv,
-	config = new Store()
+	config = new Store();
 
-console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`)
+console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`);
 
 const DEBUG = argv.debug,
-	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download')
+	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download');
 
-if (!app.requestSingleInstanceLock()) { app.quit() }
+if (!app.requestSingleInstanceLock()) { app.quit(); }
 
-app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 // app.commandLine.appendSwitch('disable-gpu-vsync')
 // app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // app.commandLine.appendSwitch('enable-zero-copy')
-if (!config.get('acceleratedCanvas', true)) { app.commandLine.appendSwitch('disable-accelerated-2d-canvas', 'true') }
-if (config.get('disableFrameRateLimit', false)) { app.commandLine.appendSwitch('disable-frame-rate-limit') }
+if (!config.get('acceleratedCanvas', true)) { app.commandLine.appendSwitch('disable-accelerated-2d-canvas', 'true'); }
+if (config.get('disableFrameRateLimit', false)) { app.commandLine.appendSwitch('disable-frame-rate-limit'); }
 // if (config.get('enablePointerLockOptions', false)) { app.commandLine.appendSwitch('enable-pointer-lock-options') }
 let angleBackend = config.get('angleBackend', 'default'),
-	colorProfile = config.get('colorProfile', 'default')
-if (angleBackend != 'default') { app.commandLine.appendSwitch('use-angle', angleBackend) }
-if (colorProfile != 'default') { app.commandLine.appendSwitch('force-color-profile', colorProfile) }
-yargs.parse(config.get('chromiumFlags', ''), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])))
+	colorProfile = config.get('colorProfile', 'default');
+if (angleBackend != 'default') { app.commandLine.appendSwitch('use-angle', angleBackend); }
+if (colorProfile != 'default') { app.commandLine.appendSwitch('force-color-profile', colorProfile); }
+yargs.parse(config.get('chromiumFlags', ''), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
 
 ipcMain.handle('get-app-info', () => ({
 	name: app.name,
 	version: app.getVersion()
-}))
+}));
 
-ipcMain.on('get-path', (event, name) => event.returnValue = app.getPath(name))
+ipcMain.on('get-path', (event, name) => event.returnValue = app.getPath(name));
 
 ipcMain.on('prompt', (event, message, defaultValue) => {
 	let promptWin = initPromptWindow(message, defaultValue),
-		returnValue = null
+		returnValue = null;
 
-	ipcMain.on('prompt-return', (event, value) => returnValue = value)
+	ipcMain.on('prompt-return', (event, value) => returnValue = value);
 
 	promptWin.on('closed', () => {
-		event.returnValue = returnValue
-	})
-})
+		event.returnValue = returnValue;
+	});
+});
 
 ipcMain.handle('set-bounds', (event, bounds) => {
-	BrowserWindow.fromWebContents(event.sender).setBounds(bounds)
-})
+	BrowserWindow.fromWebContents(event.sender).setBounds(bounds);
+});
 
-const isRPCEnabled = config.get('discordRPC', true)
+const isRPCEnabled = config.get('discordRPC', true);
 
-let lastSender = null
+let lastSender = null;
 ipcMain.handle('rpc-activity', (event, activity) => {
 	if (isRPCEnabled) {
 		if (lastSender != event.sender) {
-			if (lastSender) { lastSender.send('rpc-stop') }
-			lastSender = event.sender
-			lastSender.on('destroyed', () => lastSender = null)
+			if (lastSender) { lastSender.send('rpc-stop'); }
+			lastSender = event.sender;
+			lastSender.on('destroyed', () => lastSender = null);
 		}
-		rpc.setActivity(activity).catch(console.error)
+		rpc.setActivity(activity).catch(console.error);
 	}
-})
+});
 
-let swapperMode = config.get('resourceSwapperMode', 'normal')
+let swapperMode = config.get('resourceSwapperMode', 'normal');
 
 let swapDirConfig = config.get('resourceSwapperPath', ''),
-	userscriptsDirConfig = config.get('userscriptsPath', '')
+	userscriptsDirConfig = config.get('userscriptsPath', '');
 
 const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
-	userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts')
+	userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts');
 
-ensureDirs(swapDir, userscriptsDir)
+ensureDirs(swapDir, userscriptsDir);
 
 function recursiveSwap(win) {
-	const urls = []
+	const urls = [];
 	switch (swapperMode) {
 		case 'normal': {
 			const recursiveSwapNormal = (win, prefix = '') => {
 				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-						if (dirent.isDirectory()) { recursiveSwapNormal(win, `${prefix}/${dirent.name}`) }
+						if (dirent.isDirectory()) { recursiveSwapNormal(win, `${prefix}/${dirent.name}`); }
 						else {
 							let pathname = `${prefix}/${dirent.name}`,
-								isAsset = /^\/(models|textures)($|\/)/.test(pathname)
-							if (isAsset) { urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`) }
-							else { urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`) }
+								isAsset = /^\/(models|textures)($|\/)/.test(pathname);
+							if (isAsset) { urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`); }
+							else { urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`); }
 						}
-					})
+					});
 				} catch (err) {
-					console.error('Failed to swap resources in normal mode', err, prefix)
+					console.error('Failed to swap resources in normal mode', err, prefix);
 				}
-			}
-			recursiveSwapNormal(win)
-			if (urls.length) { win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, new URL(details.url).pathname) })) }
-			break
+			};
+			recursiveSwapNormal(win);
+			if (urls.length) { win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, new URL(details.url).pathname) })); }
+			break;
 		}
 
 		case 'advanced': {
@@ -108,22 +108,22 @@ function recursiveSwap(win) {
 				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 						if (dirent.isDirectory()) {
-							if (hostname) { recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname) }
-							else { recursiveSwapHostname(win, prefix + dirent.name, dirent.name) }
-						} else if (hostname) { urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`) }
-					})
+							if (hostname) { recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname); }
+							else { recursiveSwapHostname(win, prefix + dirent.name, dirent.name); }
+						} else if (hostname) { urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`); }
+					});
 				} catch (err) {
-					console.error('Failed to swap resources in advanced mode', err, prefix, hostname)
+					console.error('Failed to swap resources in advanced mode', err, prefix, hostname);
 				}
-			}
-			recursiveSwapHostname(win)
+			};
+			recursiveSwapHostname(win);
 			if (urls.length) {
 				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
-					let url = new URL(details.url)
-					callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, url.hostname, url.pathname) })
-				})
+					let url = new URL(details.url);
+					callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, url.hostname, url.pathname) });
+				});
 			}
-			break
+			break;
 		}
 	}
 }
@@ -143,81 +143,81 @@ if (process.platform == 'win32') {
 		description: 'Opens a new social window',
 		iconPath: process.execPath,
 		iconIndex: 0
-	}])
+	}]);
 }
 
-function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root) }
+function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root); }
 
 function ensureDirs(...paths) {
 	paths.forEach(pathstr => {
 		try {
 			if (!fs.existsSync(pathstr)) {
-				fs.mkdirSync(pathstr, { recursive: true })
+				fs.mkdirSync(pathstr, { recursive: true });
 			}
-		} catch (err) { console.error(err) }
-	})
+		} catch (err) { console.error(err); }
+	});
 }
 
 function setupWindow(win, isWeb) {
-	let contents = win.webContents
+	let contents = win.webContents;
 
-	if (DEBUG) { contents.openDevTools() }
-	win.removeMenu()
+	if (DEBUG) { contents.openDevTools(); }
+	win.removeMenu();
 	win.once('ready-to-show', () => {
-		let windowType = locationType(contents.getURL())
+		let windowType = locationType(contents.getURL());
 
-		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true))
-		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false))
-		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true))
-		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false))
+		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true));
+		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false));
+		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true));
+		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false));
 
-		let windowStateConfig = config.get('windowState.' + windowType, {})
-		if (windowStateConfig.maximized) { win.maximize() }
-		if (windowStateConfig.fullScreen) { win.setFullScreen(true) }
+		let windowStateConfig = config.get('windowState.' + windowType, {});
+		if (windowStateConfig.maximized) { win.maximize(); }
+		if (windowStateConfig.fullScreen) { win.setFullScreen(true); }
 
-		win.show()
-	})
+		win.show();
+	});
 
-	let isMac = process.platform == 'darwin'
-	shortcuts.register(win, isMac ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools())
-	shortcuts.register(win, isMac ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack())
-	shortcuts.register(win, isMac ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward())
+	let isMac = process.platform == 'darwin';
+	shortcuts.register(win, isMac ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools());
+	shortcuts.register(win, isMac ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack());
+	shortcuts.register(win, isMac ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward());
 	shortcuts.register(win, 'CommandOrControl+Shift+Delete', () => {
 		contents.session.clearCache().then(() => {
-			app.relaunch()
-			app.quit()
-		})
-	})
-	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true)) // Need more info
+			app.relaunch();
+			app.quit();
+		});
+	});
+	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true)); // Need more info
 
-	if (!isWeb) { return win }
+	if (!isWeb) { return win; }
 
 	// Codes only runs on web windows
 
 	win.once('ready-to-show', () => {
-		let windowType = locationType(contents.getURL())
+		let windowType = locationType(contents.getURL());
 
-		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true))
-		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false))
-		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true))
-		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false))
+		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true));
+		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false));
+		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true));
+		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false));
 
-		let windowStateConfig = config.get('windowState.' + windowType, {})
-		if (windowStateConfig.maximized) { win.maximize() }
-		if (windowStateConfig.fullScreen) { win.setFullScreen(true) }
-	})
+		let windowStateConfig = config.get('windowState.' + windowType, {});
+		if (windowStateConfig.maximized) { win.maximize(); }
+		if (windowStateConfig.fullScreen) { win.setFullScreen(true); }
+	});
 
 	contents.on('dom-ready', () => {
-		if (locationType(contents.getURL()) == 'game') { shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/')) }
-	})
+		if (locationType(contents.getURL()) == 'game') { shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/')); }
+	});
 
-	contents.on('new-window', (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents))
+	contents.on('new-window', (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents));
 	contents.on('will-navigate', (event, url) => {
 		if (locationType(url) == 'external') {
-			event.preventDefault()
-			shell.openExternal(url)
-		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') { navigateNewWindow(event, url) }
-	})
+			event.preventDefault();
+			shell.openExternal(url);
+		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') { navigateNewWindow(event, url); }
+	});
 
 	contents.on('will-prevent-unload', event => {
 		if (!dialog.showMessageBoxSync({
@@ -225,29 +225,29 @@ function setupWindow(win, isWeb) {
 			title: 'Leave site?',
 			message: 'Changes you made may not be saved.',
 			noLink: true
-		})) { event.preventDefault() }
-	})
+		})) { event.preventDefault(); }
+	});
 
-	shortcuts.register(win, 'F5', () => contents.reload())
-	shortcuts.register(win, 'Shift+F5', () => contents.reloadIgnoringCache())
-	shortcuts.register(win, 'F11', () => win.setFullScreen(!win.isFullScreen()))
-	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()))
-	shortcuts.register(win, 'CommandOrControl+N', () => initWindow('https://krunker.io/'))
-	shortcuts.register(win, 'CommandOrControl+Shift+N', () => initWindow(contents.getURL()))
+	shortcuts.register(win, 'F5', () => contents.reload());
+	shortcuts.register(win, 'Shift+F5', () => contents.reloadIgnoringCache());
+	shortcuts.register(win, 'F11', () => win.setFullScreen(!win.isFullScreen()));
+	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()));
+	shortcuts.register(win, 'CommandOrControl+N', () => initWindow('https://krunker.io/'));
+	shortcuts.register(win, 'CommandOrControl+Shift+N', () => initWindow(contents.getURL()));
 	shortcuts.register(win, 'CommandOrControl+Alt+R', () => {
-		app.relaunch()
-		app.quit()
-	})
+		app.relaunch();
+		app.quit();
+	});
 
-	recursiveSwap(win)
+	recursiveSwap(win);
 
 	function navigateNewWindow(event, url, webContents) {
-		event.preventDefault()
-		if (locationType(url) == 'external') { shell.openExternal(url) }
-		else if (locationType(url) != 'unknown') { event.newGuest = initWindow(url, webContents) }
+		event.preventDefault();
+		if (locationType(url) == 'external') { shell.openExternal(url); }
+		else if (locationType(url) != 'unknown') { event.newGuest = initWindow(url, webContents); }
 	}
 
-	return win
+	return win;
 }
 
 function initWindow(url, webContents) {
@@ -260,13 +260,13 @@ function initWindow(url, webContents) {
 			preload: path.join(__dirname, 'preload/global.js'),
 			enableRemoteModule: true
 		}
-	})
+	});
 	// let contents = win.webContents
-	setupWindow(win, true)
+	setupWindow(win, true);
 
-	if (!webContents) { win.loadURL(url) }
+	if (!webContents) { win.loadURL(url); }
 
-	return win
+	return win;
 }
 
 function initSplashWindow() {
@@ -281,59 +281,59 @@ function initSplashWindow() {
 		webPreferences: {
 			preload: path.join(__dirname, 'preload/splash.js')
 		}
-	})
-	let contents = win.webContents
+	});
+	let contents = win.webContents;
 
-	autoUpdate().finally(() => launchGame())
+	autoUpdate().finally(() => launchGame());
 
 	async function autoUpdate() {
 		return new Promise((resolve, reject) => {
-			if (AUTO_UPDATE == 'skip') { resolve() }
+			if (AUTO_UPDATE == 'skip') { resolve(); }
 			else {
 				contents.on('dom-ready', () => {
-					contents.send('message', 'Initializing the auto updater...')
-					const { autoUpdater } = require('electron-updater')
-					autoUpdater.logger = log
+					contents.send('message', 'Initializing the auto updater...');
+					const { autoUpdater } = require('electron-updater');
+					autoUpdater.logger = log;
 
 					autoUpdater.on('error', err => {
-						console.error(err)
-						contents.send('message', 'Error: ' + err.name)
-						reject(`Error occurred: ${err.name}`)
-					})
-					autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'))
+						console.error(err);
+						contents.send('message', 'Error: ' + err.name);
+						reject(`Error occurred: ${err.name}`);
+					});
+					autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'));
 					autoUpdater.on('update-available', info => {
-						console.log(info)
-						contents.send('message', `Update v${info.version} available`, info.releaseDate)
-						if (AUTO_UPDATE != 'download') { resolve() }
-					})
+						console.log(info);
+						contents.send('message', `Update v${info.version} available`, info.releaseDate);
+						if (AUTO_UPDATE != 'download') { resolve(); }
+					});
 					autoUpdater.on('update-not-available', info => {
-						console.log(info)
-						contents.send('message', 'No update available')
-						resolve()
-					})
+						console.log(info);
+						contents.send('message', 'No update available');
+						resolve();
+					});
 					autoUpdater.on('download-progress', info => {
-						contents.send('message', `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + 'kB/s')
-						win.setProgressBar(info.percent / 100)
-					})
+						contents.send('message', `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + 'kB/s');
+						win.setProgressBar(info.percent / 100);
+					});
 					autoUpdater.on('update-downloaded', info => {
-						contents.send('message', null, `Installing v${info.version}...`)
-						autoUpdater.quitAndInstall(true, true)
-					})
+						contents.send('message', null, `Installing v${info.version}...`);
+						autoUpdater.quitAndInstall(true, true);
+					});
 
-					autoUpdater.autoDownload = AUTO_UPDATE == 'download'
-					autoUpdater.checkForUpdates()
-				})
+					autoUpdater.autoDownload = AUTO_UPDATE == 'download';
+					autoUpdater.checkForUpdates();
+				});
 			}
-		})
+		});
 	}
 
-	setupWindow(win)
-	win.loadFile('app/html/splash.html')
-	return win
+	setupWindow(win);
+	win.loadFile('app/html/splash.html');
+	return win;
 
 	function launchGame() {
-		initWindow('https://krunker.io/')
-		setTimeout(() => win.destroy(), 2000)
+		initWindow('https://krunker.io/');
+		setTimeout(() => win.destroy(), 2000);
 	}
 }
 
@@ -349,37 +349,37 @@ function initPromptWindow(message, defaultValue) {
 		webPreferences: {
 			preload: path.join(__dirname, 'preload/prompt.js')
 		}
-	})
-	let contents = win.webContents
+	});
+	let contents = win.webContents;
 
-	setupWindow(win)
-	win.once('ready-to-show', () => contents.send('prompt-data', message, defaultValue))
+	setupWindow(win);
+	win.once('ready-to-show', () => contents.send('prompt-data', message, defaultValue));
 
-	win.loadFile('app/html/prompt.html')
+	win.loadFile('app/html/prompt.html');
 
-	return win
+	return win;
 }
 
 function locationType(url = '') {
-	if (!isValidURL(url)) { return 'unknown' }
-	const target = new URL(url)
+	if (!isValidURL(url)) { return 'unknown'; }
+	const target = new URL(url);
 	if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
-		if (/^\/docs\/.+\.txt$/.test(target.pathname)) { return 'docs' }
+		if (/^\/docs\/.+\.txt$/.test(target.pathname)) { return 'docs'; }
 		switch (target.pathname) {
-			case '/': return 'game'
-			case '/social.html': return 'social'
-			case '/viewer.html': return 'viewer'
-			case '/editor.html': return 'editor'
-			default: return 'unknown'
+			case '/': return 'game';
+			case '/social.html': return 'social';
+			case '/viewer.html': return 'viewer';
+			case '/editor.html': return 'editor';
+			default: return 'unknown';
 		}
-	} else { return 'external' }
+	} else { return 'external'; }
 
 	function isValidURL(url = '') {
 		try {
-			new URL(url)
-			return true
+			new URL(url);
+			return true;
 		} catch (e) {
-			return false
+			return false;
 		}
 	}
 }
@@ -388,35 +388,35 @@ function locationType(url = '') {
 protocol.registerSchemesAsPrivileged([{
 	scheme: 'idkr-swap',
 	privileges: { secure: true, corsEnabled: true }
-}])
+}]);
 
-const rpcClientId = '770954802443059220'
+const rpcClientId = '770954802443059220';
 
-DiscordRPC.register(rpcClientId)
-const rpc = new DiscordRPC.Client({ transport: 'ipc' })
+DiscordRPC.register(rpcClientId);
+const rpc = new DiscordRPC.Client({ transport: 'ipc' });
 
 rpc.on('ready', () => {
-	console.log('Discord RPC ready')
-})
+	console.log('Discord RPC ready');
+});
 
 app.once('ready', () => {
-	protocol.registerFileProtocol('idkr-swap', (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ''))))
+	protocol.registerFileProtocol('idkr-swap', (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ''))));
 	app.on('second-instance', (e, argv) => {
-		let instanceArgv = yargs.parse(argv)
-		console.log('Second instance: ' + argv)
+		let instanceArgv = yargs.parse(argv);
+		console.log('Second instance: ' + argv);
 		if (!['unknown', 'external'].includes(locationType(instanceArgv['new-window']))) {
-			initWindow(instanceArgv['new-window'])
+			initWindow(instanceArgv['new-window']);
 		}
-	})
+	});
 
-	if (isRPCEnabled) { rpc.login({ clientId: rpcClientId }).catch(console.error) }
+	if (isRPCEnabled) { rpc.login({ clientId: rpcClientId }).catch(console.error); }
 
-	initSplashWindow()
-})
+	initSplashWindow();
+});
 
 app.on('quit', () => {
 	if (isRPCEnabled) {
-		rpc.clearActivity()
-		rpc.destroy()
+		rpc.clearActivity();
+		rpc.destroy();
 	}
-})
+});

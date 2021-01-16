@@ -6,7 +6,7 @@ module.exports = {
 		type: 'checkbox',
 		val: false,
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	},
 	acceleratedCanvas: {
 		name: 'Accelerated Canvas',
@@ -15,7 +15,7 @@ module.exports = {
 		type: 'checkbox',
 		val: true,
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) },
+		html: function () { return window.clientUtil.genCSettingsHTML(this); },
 		info: 'Enables the use of the GPU to perform 2d canvas rendering instead of using software rendering.'
 	},
 	angleBackend: {
@@ -33,7 +33,7 @@ module.exports = {
 		},
 		val: 'default',
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	},
 	colorProfile: {
 		name: 'Color Profile',
@@ -48,7 +48,7 @@ module.exports = {
 		},
 		val: 'default',
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) },
+		html: function () { return window.clientUtil.genCSettingsHTML(this); },
 		info: 'Forces color profile.'
 	},
 	chromiumFlags: {
@@ -59,7 +59,7 @@ module.exports = {
 		val: '',
 		placeholder: '--flag=value',
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) },
+		html: function () { return window.clientUtil.genCSettingsHTML(this); },
 		info: 'Additional Chromium flags.'
 	},
 	discordRPC: {
@@ -69,7 +69,7 @@ module.exports = {
 		type: 'checkbox',
 		val: true,
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	},
 	// enablePointerLockOptions: {
 	// 	name: 'Pointer Raw Input',
@@ -91,7 +91,7 @@ module.exports = {
 			skip: 'Skip'
 		},
 		val: 'download',
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	},
 	resourceSwapperMode: {
 		name: 'Resource Swapper Mode',
@@ -105,7 +105,7 @@ module.exports = {
 		},
 		val: 'normal',
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	},
 	resourceSwapperPath: {
 		name: 'Resource Swapper Path',
@@ -115,7 +115,7 @@ module.exports = {
 		val: '',
 		placeholder: 'Resource Swapper Folder Path',
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	},
 	enableUserscripts: {
 		name: 'Enable Userscripts',
@@ -124,7 +124,7 @@ module.exports = {
 		type: 'checkbox',
 		val: false,
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	},
 	userscriptsPath: {
 		name: 'Userscripts Path',
@@ -134,6 +134,6 @@ module.exports = {
 		val: '',
 		placeholder: 'Userscripts Folder Path',
 		needsRestart: true,
-		html: function () { return window.clientUtil.genCSettingsHTML(this) }
+		html: function () { return window.clientUtil.genCSettingsHTML(this); }
 	}
-}
+};
