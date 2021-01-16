@@ -14,4 +14,7 @@ rules:
     - tab
     - SwitchCase: 1
       ignoredNodes: [ObjectExpression]
+  semi: 
+    - error
+    - always
   prefer-arrow-callback: error
