@@ -30,28 +30,18 @@ class AccountManager {
 	}
 
 	addAccount(name, pass) {
-		if (name.replace(/\s/, '') === '' || pass.replace(/\s/, '') === '') {
-			return alert('Username and Password must not be empty');
-		}
-		let arr = [];
-		JSON.parse(this.localStorage.getItem('altAccounts')).forEach(e => arr.push(e));
-		arr.push({ username: name, password: pass });
-		this.localStorage.setItem('altAccounts', JSON.stringify(arr));
+		if (name.replace(/\s/, '') === '' || pass.replace(/\s/, '') === '') return alert('Username and Password must not be empty');
+		this.localStorage.setItem('altAccounts', JSON.stringify(
+			[].concat(JSON.parse(this.localStorage.getItem('altAccounts')), { username: name, password: pass })
+		));
 		this.window.showWindow(27);
 		this.openPopup();
 	}
 
 	deleteAccount(name) {
-		let accounts = JSON.parse(this.localStorage.getItem('altAccounts'));
-		let empty = 0;
-		for (let i = 0; i < accounts['length']; i++) {
-			if (accounts[i].username === name) {
-				empty = i;
-				break;
-			}
-		}
-		accounts.splice(empty, 1);
-		this.localStorage.setItem('altAccounts', JSON.stringify(accounts));
+		this.localStorage.setItem('altAccounts', JSON.stringify(
+			JSON.parse(this.localStorage.getItem('altAccounts')).filter(e => e.username !== name)
+		));
 		this.window.showWindow(27);
 		this.openPopup();
 		this.deleteModeStatus = false;
@@ -73,7 +63,6 @@ class AccountManager {
 		const altTemp = this.document.createElement('div');
 		altTemp.className = 'button';
 		altTemp.innerText = 'username';
-		const altHolder = this.document.getElementById('altAccounts');
 
 		this.document.getElementById('altAdd').addEventListener('click', () => {
 			this.document.getElementById('menuWindow').innerHTML = HTML.FORM;
@@ -86,7 +75,7 @@ class AccountManager {
 			const div = altTemp.cloneNode(true);
 			div.innerText = e.username;
 			div.id = 'altAccountsLISTED';
-			altHolder.appendChild(div);
+			this.document.getElementById('altAccounts').appendChild(div);
 			div.addEventListener('click', () => (this.deleteModeStatus ? this.deleteAccount(e.username) : this.login(e.username, e.password)));
 		});
 	}
