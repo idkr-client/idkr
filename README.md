@@ -34,9 +34,9 @@ https://github.com/Mixaz017/idkr/wiki
 (W): Windows, (M): macOS, (L): Linux  
 
 - Prompt window (used when importing settings) has a "Load File" button.
-	- This button lets you select a file and load its contents directly without opening the file in an external editor and copy pasting it.
-- Even secure than official client
-	- Official client disables `webSecurity`, which is a bad thing to do, in order to get the resource swapper work. However, idkr uses a method that makes resource swapper work without having to disable `webSecurity`.
+	- This button lets you select a file and load its contents directly without opening the file in an external editor and copy-pasting it.
+- Even secure than the official client
+	- The official client disables `webSecurity`, which is a bad thing to do, to get the resource swapper work. However, idkr uses a method that makes resource swapper work without having to disable `webSecurity`.
 
 Other features that have its settings are listed below.
 
@@ -44,7 +44,7 @@ Other features that have its settings are listed below.
 - Disable Frame Rate Limit *
 - Accelerated Canvas *
 	- Only disable this if you have problems or performance issues with your GPU.
-- ANGLE Grapchics Backend * (W)
+- ANGLE Graphics Backend * (W)
 	- Set this to "D3D9" if you have video capture/recording problems.
 	- Performance of the client can be affected by this option.
 	- If you are experiencing problems like crashes, try using a different backend.
@@ -91,7 +91,7 @@ Bug reports are welcomed via GitHub [issues](https://github.com/Mixaz017/idkr/is
 Please include details about the bug and your platform in the bug report.
 
 ## Running/Building From The Source Code
-Pre-built releases are cool but you may want to use latest features/bugfixes.
+Pre-built releases are cool but you may want to use the latest features/bugfixes.
 This is a simple tutorial to get the source code, install dependencies, and run or build the client.  
 
 ### Requirements
@@ -101,7 +101,7 @@ This is a simple tutorial to get the source code, install dependencies, and run 
 ### Downloading The Source Code
 If you use git (recommended):
 ```sh
-# If its your first time getting the code
+# If it's your first time getting the code
 git clone --depth 1 https://github.com/Mixaz017/idkr.git
 
 # ...or if you use GitHub CLI instead
@@ -123,4 +123,4 @@ npm start
 # If you want to build the client
 npm run dist
 ```
-After building the client, new directory named `dist` containing executable binary files (`.exe`, `.dmg`, or `.AppImage`) should be created (or overwrited if already exists).
+After building the client, a new directory named `dist` containing executable binary files (`.exe`, `.dmg`, or `.AppImage`) will be created (existing files will be overwritten).

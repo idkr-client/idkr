@@ -1,10 +1,10 @@
 const { ipcRenderer } = require('electron');
 
 window.addEventListener('DOMContentLoaded', () => {
-	const message = document.getElementById('message'),
-		promptInput = document.getElementById('promptInput'),
-		promptBody = document.getElementById('promptBody'),
-		fileSelect = document.getElementById('fileSelect');
+	const message = document.getElementById('message');
+	const promptInput = document.getElementById('promptInput');
+	const promptBody = document.getElementById('promptBody');
+	const fileSelect = document.getElementById('fileSelect');
 
 	ipcRenderer.on('prompt-data', (event, ipcMessage = '', ipcDefault = '') => {
 		message.innerText = ipcMessage;

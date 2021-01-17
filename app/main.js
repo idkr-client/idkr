@@ -1,36 +1,46 @@
 require('v8-compile-cache');
-const fs = require('fs'),
-	path = require('path'),
-	DiscordRPC = require('discord-rpc'),
-	{ BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require('electron'),
-	Store = require('electron-store'),
-	log = require('electron-log'),
-	shortcuts = require('electron-localshortcut'),
-	yargs = require('yargs');
+const fs = require('fs');
+const path = require('path');
+const DiscordRPC = require('discord-rpc');
+const { BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require('electron');
+const Store = require('electron-store');
+const log = require('electron-log');
+const shortcuts = require('electron-localshortcut');
+const yargs = require('yargs');
 
 Object.assign(console, log.functions);
 
-const argv = yargs.argv,
-	config = new Store();
+const argv = yargs.argv;
+const config = new Store();
 
 console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`);
 
-const DEBUG = argv.debug,
-	AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download');
+const DEBUG = argv.debug;
+const AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download');
 
-if (!app.requestSingleInstanceLock()) { app.quit(); }
+if (!app.requestSingleInstanceLock()) {
+	app.quit();
+}
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 // app.commandLine.appendSwitch('disable-gpu-vsync')
 // app.commandLine.appendSwitch('ignore-gpu-blacklist')
 // app.commandLine.appendSwitch('enable-zero-copy')
-if (!config.get('acceleratedCanvas', true)) { app.commandLine.appendSwitch('disable-accelerated-2d-canvas', 'true'); }
-if (config.get('disableFrameRateLimit', false)) { app.commandLine.appendSwitch('disable-frame-rate-limit'); }
+if (!config.get('acceleratedCanvas', true)) {
+	app.commandLine.appendSwitch('disable-accelerated-2d-canvas', 'true');
+}
+if (config.get('disableFrameRateLimit', false)) {
+	app.commandLine.appendSwitch('disable-frame-rate-limit');
+}
 // if (config.get('enablePointerLockOptions', false)) { app.commandLine.appendSwitch('enable-pointer-lock-options') }
-let angleBackend = config.get('angleBackend', 'default'),
-	colorProfile = config.get('colorProfile', 'default');
-if (angleBackend != 'default') { app.commandLine.appendSwitch('use-angle', angleBackend); }
-if (colorProfile != 'default') { app.commandLine.appendSwitch('force-color-profile', colorProfile); }
+let angleBackend = config.get('angleBackend', 'default');
+let colorProfile = config.get('colorProfile', 'default');
+if (angleBackend != 'default') {
+	app.commandLine.appendSwitch('use-angle', angleBackend);
+}
+if (colorProfile != 'default') {
+	app.commandLine.appendSwitch('force-color-profile', colorProfile);
+}
 yargs.parse(config.get('chromiumFlags', ''), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
 
 ipcMain.handle('get-app-info', () => ({
@@ -41,8 +51,8 @@ ipcMain.handle('get-app-info', () => ({
 ipcMain.on('get-path', (event, name) => event.returnValue = app.getPath(name));
 
 ipcMain.on('prompt', (event, message, defaultValue) => {
-	let promptWin = initPromptWindow(message, defaultValue),
-		returnValue = null;
+	let promptWin = initPromptWindow(message, defaultValue);
+	let returnValue = null;
 
 	ipcMain.on('prompt-return', (event, value) => returnValue = value);
 
@@ -61,7 +71,9 @@ let lastSender = null;
 ipcMain.handle('rpc-activity', (event, activity) => {
 	if (isRPCEnabled) {
 		if (lastSender != event.sender) {
-			if (lastSender) { lastSender.send('rpc-stop'); }
+			if (lastSender) {
+				lastSender.send('rpc-stop');
+			}
 			lastSender = event.sender;
 			lastSender.on('destroyed', () => lastSender = null);
 		}
@@ -71,11 +83,11 @@ ipcMain.handle('rpc-activity', (event, activity) => {
 
 let swapperMode = config.get('resourceSwapperMode', 'normal');
 
-let swapDirConfig = config.get('resourceSwapperPath', ''),
-	userscriptsDirConfig = config.get('userscriptsPath', '');
+let swapDirConfig = config.get('resourceSwapperPath', '');
+let userscriptsDirConfig = config.get('userscriptsPath', '');
 
-const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap'),
-	userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts');
+const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap');
+const userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts');
 
 ensureDirs(swapDir, userscriptsDir);
 
@@ -86,12 +98,16 @@ function recursiveSwap(win) {
 			const recursiveSwapNormal = (win, prefix = '') => {
 				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-						if (dirent.isDirectory()) { recursiveSwapNormal(win, `${prefix}/${dirent.name}`); }
-						else {
-							let pathname = `${prefix}/${dirent.name}`,
-								isAsset = /^\/(models|textures)($|\/)/.test(pathname);
-							if (isAsset) { urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`); }
-							else { urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`); }
+						if (dirent.isDirectory()) {
+							recursiveSwapNormal(win, `${prefix}/${dirent.name}`);
+						} else {
+							let pathname = `${prefix}/${dirent.name}`;
+							let isAsset = /^\/(models|textures)($|\/)/.test(pathname);
+							if (isAsset) {
+								urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`);
+							} else {
+								urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`);
+							}
 						}
 					});
 				} catch (err) {
@@ -99,7 +115,9 @@ function recursiveSwap(win) {
 				}
 			};
 			recursiveSwapNormal(win);
-			if (urls.length) { win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, new URL(details.url).pathname) })); }
+			if (urls.length) {
+				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, new URL(details.url).pathname) }));
+			}
 			break;
 		}
 
@@ -108,9 +126,14 @@ function recursiveSwap(win) {
 				try {
 					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 						if (dirent.isDirectory()) {
-							if (hostname) { recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname); }
-							else { recursiveSwapHostname(win, prefix + dirent.name, dirent.name); }
-						} else if (hostname) { urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`); }
+							if (hostname) {
+								recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname);
+							} else {
+								recursiveSwapHostname(win, prefix + dirent.name, dirent.name);
+							}
+						} else if (hostname) {
+							urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`);
+						}
 					});
 				} catch (err) {
 					console.error('Failed to swap resources in advanced mode', err, prefix, hostname);
@@ -146,7 +169,9 @@ if (process.platform == 'win32') {
 	}]);
 }
 
-function isValidPath(pathstr = '') { return Boolean(path.parse(pathstr).root); }
+function isValidPath(pathstr = '') {
+	return Boolean(path.parse(pathstr).root);
+}
 
 function ensureDirs(...paths) {
 	paths.forEach(pathstr => {
@@ -154,14 +179,18 @@ function ensureDirs(...paths) {
 			if (!fs.existsSync(pathstr)) {
 				fs.mkdirSync(pathstr, { recursive: true });
 			}
-		} catch (err) { console.error(err); }
+		} catch (err) {
+			console.error(err);
+		}
 	});
 }
 
 function setupWindow(win, isWeb) {
 	let contents = win.webContents;
 
-	if (DEBUG) { contents.openDevTools(); }
+	if (DEBUG) {
+		contents.openDevTools();
+	}
 	win.removeMenu();
 	win.once('ready-to-show', () => {
 		let windowType = locationType(contents.getURL());
@@ -172,8 +201,12 @@ function setupWindow(win, isWeb) {
 		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false));
 
 		let windowStateConfig = config.get('windowState.' + windowType, {});
-		if (windowStateConfig.maximized) { win.maximize(); }
-		if (windowStateConfig.fullScreen) { win.setFullScreen(true); }
+		if (windowStateConfig.maximized) {
+			win.maximize();
+		}
+		if (windowStateConfig.fullScreen) {
+			win.setFullScreen(true);
+		}
 
 		win.show();
 	});
@@ -190,7 +223,9 @@ function setupWindow(win, isWeb) {
 	});
 	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true)); // Need more info
 
-	if (!isWeb) { return win; }
+	if (!isWeb) {
+		return win;
+	}
 
 	// Codes only runs on web windows
 
@@ -203,12 +238,18 @@ function setupWindow(win, isWeb) {
 		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false));
 
 		let windowStateConfig = config.get('windowState.' + windowType, {});
-		if (windowStateConfig.maximized) { win.maximize(); }
-		if (windowStateConfig.fullScreen) { win.setFullScreen(true); }
+		if (windowStateConfig.maximized) {
+			win.maximize();
+		}
+		if (windowStateConfig.fullScreen) {
+			win.setFullScreen(true);
+		}
 	});
 
 	contents.on('dom-ready', () => {
-		if (locationType(contents.getURL()) == 'game') { shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/')); }
+		if (locationType(contents.getURL()) == 'game') {
+			shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/'));
+		}
 	});
 
 	contents.on('new-window', (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents));
@@ -216,7 +257,9 @@ function setupWindow(win, isWeb) {
 		if (locationType(url) == 'external') {
 			event.preventDefault();
 			shell.openExternal(url);
-		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') { navigateNewWindow(event, url); }
+		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') {
+			navigateNewWindow(event, url);
+		}
 	});
 
 	contents.on('will-prevent-unload', event => {
@@ -225,7 +268,9 @@ function setupWindow(win, isWeb) {
 			title: 'Leave site?',
 			message: 'Changes you made may not be saved.',
 			noLink: true
-		})) { event.preventDefault(); }
+		})) {
+			event.preventDefault();
+		}
 	});
 
 	shortcuts.register(win, 'F5', () => contents.reload());
@@ -243,8 +288,11 @@ function setupWindow(win, isWeb) {
 
 	function navigateNewWindow(event, url, webContents) {
 		event.preventDefault();
-		if (locationType(url) == 'external') { shell.openExternal(url); }
-		else if (locationType(url) != 'unknown') { event.newGuest = initWindow(url, webContents); }
+		if (locationType(url) == 'external') {
+			shell.openExternal(url);
+		} else if (locationType(url) != 'unknown') {
+			event.newGuest = initWindow(url, webContents);
+		}
 	}
 
 	return win;
@@ -264,7 +312,9 @@ function initWindow(url, webContents) {
 	// let contents = win.webContents
 	setupWindow(win, true);
 
-	if (!webContents) { win.loadURL(url); }
+	if (!webContents) {
+		win.loadURL(url);
+	}
 
 	return win;
 }
@@ -288,8 +338,9 @@ function initSplashWindow() {
 
 	async function autoUpdate() {
 		return new Promise((resolve, reject) => {
-			if (AUTO_UPDATE == 'skip') { resolve(); }
-			else {
+			if (AUTO_UPDATE == 'skip') {
+				resolve();
+			} else {
 				contents.on('dom-ready', () => {
 					contents.send('message', 'Initializing the auto updater...');
 					const { autoUpdater } = require('electron-updater');
@@ -304,7 +355,9 @@ function initSplashWindow() {
 					autoUpdater.on('update-available', info => {
 						console.log(info);
 						contents.send('message', `Update v${info.version} available`, info.releaseDate);
-						if (AUTO_UPDATE != 'download') { resolve(); }
+						if (AUTO_UPDATE != 'download') {
+							resolve();
+						}
 					});
 					autoUpdater.on('update-not-available', info => {
 						console.log(info);
@@ -361,10 +414,14 @@ function initPromptWindow(message, defaultValue) {
 }
 
 function locationType(url = '') {
-	if (!isValidURL(url)) { return 'unknown'; }
+	if (!isValidURL(url)) {
+		return 'unknown';
+	}
 	const target = new URL(url);
 	if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
-		if (/^\/docs\/.+\.txt$/.test(target.pathname)) { return 'docs'; }
+		if (/^\/docs\/.+\.txt$/.test(target.pathname)) {
+			return 'docs';
+		}
 		switch (target.pathname) {
 			case '/': return 'game';
 			case '/social.html': return 'social';
@@ -372,7 +429,9 @@ function locationType(url = '') {
 			case '/editor.html': return 'editor';
 			default: return 'unknown';
 		}
-	} else { return 'external'; }
+	} else {
+		return 'external';
+	}
 
 	function isValidURL(url = '') {
 		try {
@@ -409,7 +468,9 @@ app.once('ready', () => {
 		}
 	});
 
-	if (isRPCEnabled) { rpc.login({ clientId: rpcClientId }).catch(console.error); }
+	if (isRPCEnabled) {
+		rpc.login({ clientId: rpcClientId }).catch(console.error);
+	}
 
 	initSplashWindow();
 });
