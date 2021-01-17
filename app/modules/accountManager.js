@@ -16,9 +16,7 @@ class AccountManager {
 		this.localStorage = localStorage;
 		this.deleteModeStatus = false;
 
-		if (!this.localStorage.getItem('altAccounts')) {
-			this.localStorage.setItem('altAccounts', '[]');
-		}
+		!this.localStorage.getItem('altAccounts') && this.localStorage.setItem('altAccounts', '[]');
 	}
 
 	deleteMode() {
@@ -39,6 +37,8 @@ class AccountManager {
 		JSON.parse(this.localStorage.getItem('altAccounts')).forEach(e => arr.push(e));
 		arr.push({ username: name, password: pass });
 		this.localStorage.setItem('altAccounts', JSON.stringify(arr));
+		this.window.showWindow(27);
+		this.openPopup();
 	}
 
 	deleteAccount(name) {
@@ -52,7 +52,7 @@ class AccountManager {
 		}
 		accounts.splice(empty, 1);
 		this.localStorage.setItem('altAccounts', JSON.stringify(accounts));
-		eval('showWindow(27)');
+		this.window.showWindow(27);
 		this.openPopup();
 		this.deleteModeStatus = false;
 		this.deleteMode();
@@ -92,7 +92,7 @@ class AccountManager {
 	}
 
 	openPopup() {
-		eval('showWindow(27)');
+		this.window.showWindow(27);
 		this.document.getElementById('windowHeader').innerText = 'Account Manager';
 		this.document.getElementById('menuWindow').innerHTML = HTML.ALT_MENU;
 		this.document.getElementById('altDelete').addEventListener('click', () => this.deleteMode());
