@@ -17,4 +17,5 @@ rules:
   semi: 
     - error
     - always
+  quotes: [error, single, { avoidEscape: true }]
   prefer-arrow-callback: error
