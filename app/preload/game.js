@@ -1,3 +1,4 @@
+let AccountManager = require("../modules/accountManager");
 let settingsWindow = null;
 
 Object.assign(window.clientUtil, {
@@ -18,12 +19,16 @@ Object.assign(window.clientUtil, {
 // Workaround to avoid getting client popup
 window.OffCliV = true;
 
+let accoutManager = new AccountManager(window, document, localStorage);
+
 document.addEventListener('DOMContentLoaded', () => {
 	let windowsObserver = new MutationObserver(() => {
 		windowsObserver.disconnect();
 		window.clientUtil.events.emit('game-load');
 	});
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
+
+    accoutManager.injectStyles();
 
 	let clientExit = document.getElementById('clientExit');
 	if (clientExit) { clientExit.style = 'display: flex;'; }
