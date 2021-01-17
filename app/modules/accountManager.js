@@ -16,7 +16,7 @@ class AccountManager {
 		this.localStorage = localStorage;
 		this.deleteModeStatus = false;
 
-		if (!this.localStorage.getItem('altAccounts')){
+		if (!this.localStorage.getItem('altAccounts')) {
 			this.localStorage.setItem('altAccounts', '[]');
 		}
 	}
@@ -24,15 +24,15 @@ class AccountManager {
 	deleteMode() {
 		for (let account of this.document.getElementById('altAccounts').children) {
 			account.id = this.deleteModeStatus ? 'altAccountsLISTED' : 'deleteMode';
-			this.deleteModeStatus 
+			this.deleteModeStatus
 				? this.document.getElementById('altDelete').classList.remove('deleteColor')
 				: this.document.getElementById('altDelete').classList.add('deleteColor');
-		} 
+		}
 		this.deleteModeStatus = !this.deleteModeStatus;
 	}
 
 	addAccount(name, pass) {
-		if (name.replace(/\s/, '') === '' || pass.replace(/\s/, '') === ''){
+		if (name.replace(/\s/, '') === '' || pass.replace(/\s/, '') === '') {
 			return alert('Username and Password must not be empty');
 		}
 		let arr = [];
@@ -45,9 +45,9 @@ class AccountManager {
 		let accounts = JSON.parse(this.localStorage.getItem('altAccounts'));
 		let empty = 0;
 		for (let i = 0; i < accounts['length']; i++) {
-			if (accounts[i].username === name) { 
+			if (accounts[i].username === name) {
 				empty = i;
-				break; 
+				break;
 			}
 		}
 		accounts.splice(empty, 1);
@@ -74,7 +74,7 @@ class AccountManager {
 		altTemp.className = 'button';
 		altTemp.innerText = 'username';
 		const altHolder = this.document.getElementById('altAccounts');
-		
+
 		this.document.getElementById('altAdd').addEventListener('click', () => {
 			this.document.getElementById('menuWindow').innerHTML = HTML.FORM;
 			this.document.getElementById('addAccountButtonB').addEventListener('click', () => {
