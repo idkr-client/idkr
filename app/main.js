@@ -32,6 +32,9 @@ if (!config.get('acceleratedCanvas', true)) {
 if (config.get('disableFrameRateLimit', false)) {
 	app.commandLine.appendSwitch('disable-frame-rate-limit');
 }
+if (config.get('inProcessGPU', false)) {
+	app.commandLine.appendSwitch('in-process-gpu');
+}
 // if (config.get('enablePointerLockOptions', false)) { app.commandLine.appendSwitch('enable-pointer-lock-options') }
 let angleBackend = config.get('angleBackend', 'default');
 let colorProfile = config.get('colorProfile', 'default');
