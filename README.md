@@ -49,6 +49,8 @@ Other features that have its settings are listed below.
 	- Performance of the client can be affected by this option.
 	- If you are experiencing problems like crashes, try using a different backend.
 - Color Profile *
+- In-Process GPU *
+	- Enabling this may help with window capture.
 - Chromium Flags *
 	- This setting could overwrite existing flags/settings such as `force-color-profile` (Color Profile setting).
 - Discord Rich Presence *
