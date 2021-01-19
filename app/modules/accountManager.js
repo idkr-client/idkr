@@ -4,9 +4,9 @@
 
 const HTML = {
 	BTN_INNER: '<div id="accManagerBtn" class="button buttonB" style="height:78px;width:60px;vertical-align:bottom;margin-left:-5px;margin-right:10px"><img src="./img/menu-icons/profile.png" style="height:45px;margin-left:-10px"></div>',
-	ALT_MENU: '<div id="altAccounts"></div><div id="buttons"><div class="accountButton" id="altAdd">Add new account</div><div class="accountButton" id="altDelete">Delete account</div><div>',
+	ALT_MENU: '<div id="altAccounts"></div><div id="buttons"><div class="accountButton" id="altAdd">Add new account</div></div>',
 	FORM: '<input id="accName" type="text" placeholder="Enter Username" class="accountInput" style="margin-top:25px;" value=""><input id="accPass" type="password" placeholder="Enter Password" class="accountInput"><div id="accResp" style="margin-top:10px;font-size:18px;color:rgba(0,0,0,0.5);"><span style="color:rgba(0,0,0,0.8)"></span></div><div class="accountButton" id="addAccountButtonB" style="">Add Account</div></div></div>',
-	STYLE: '.deleteColor {color:black!important;background-color:#313131!important;} #deleteMode {-webkit-animation: shake 0.13s infinite;} @keyframes shake {0% {transform: rotate(5deg);} 100% {transform: rotate(-5deg);}}'
+	STYLE: '.altAccountsLISTED{margin-right:10px;padding:0!important;background:0 0!important;box-shadow:unset!important}.altdeletebtn{display:inline-block;padding:10px 13px;color:#fff;background-color:#ff4747;box-shadow:inset 0 -7px 0 0 #992b2b}.altlistelement{display:inline-block;padding:10px 15px 10px 17px;color:#fff;background-color:#ffc147;box-shadow:inset 0 -7px 0 0 #b08531}.deleteColor{color:#000!important;background-color:#313131!important}'
 };
 
 class AccountManager {
@@ -14,19 +14,8 @@ class AccountManager {
 		this.window = window;
 		this.document = document;
 		this.localStorage = localStorage;
-		this.deleteModeStatus = false;
 
 		!this.localStorage.getItem('altAccounts') && this.localStorage.setItem('altAccounts', '[]');
-	}
-
-	deleteMode() {
-		for (let account of this.document.getElementById('altAccounts').children) {
-			account.id = this.deleteModeStatus ? 'altAccountsLISTED' : 'deleteMode';
-			this.deleteModeStatus
-				? this.document.getElementById('altDelete').classList.remove('deleteColor')
-				: this.document.getElementById('altDelete').classList.add('deleteColor');
-		}
-		this.deleteModeStatus = !this.deleteModeStatus;
 	}
 
 	addAccount(name, pass) {
@@ -44,8 +33,6 @@ class AccountManager {
 		));
 		this.window.showWindow(27);
 		this.openPopup();
-		this.deleteModeStatus = false;
-		this.deleteMode();
 	}
 
 	login(name, pass) {
@@ -59,33 +46,37 @@ class AccountManager {
 		this.document.getElementsByClassName('accountButton')[1].style.display = 'none';
 	}
 
-	watcher() {
-		const altTemp = this.document.createElement('div');
-		altTemp.className = 'button';
-		altTemp.innerText = 'username';
-
-		this.document.getElementById('altAdd').addEventListener('click', () => {
-			this.document.getElementById('menuWindow').innerHTML = HTML.FORM;
-			this.document.getElementById('addAccountButtonB').addEventListener('click', () => {
-				this.addAccount(this.document.getElementById('accName').value, this.document.getElementById('accPass').value);
-			});
-		});
-
-		JSON.parse(this.localStorage.getItem('altAccounts')).forEach(e => {
-			const div = altTemp.cloneNode(true);
-			div.innerText = e.username;
-			div.id = 'altAccountsLISTED';
-			this.document.getElementById('altAccounts').appendChild(div);
-			div.addEventListener('click', () => (this.deleteModeStatus ? this.deleteAccount(e.username) : this.login(e.username, e.password)));
-		});
-	}
-
 	openPopup() {
 		this.window.showWindow(27);
 		this.document.getElementById('windowHeader').innerText = 'Account Manager';
 		this.document.getElementById('menuWindow').innerHTML = HTML.ALT_MENU;
-		this.document.getElementById('altDelete').addEventListener('click', () => this.deleteMode());
 		this.watcher();
+	}
+
+	watcher() {
+		let storage = JSON.parse(this.localStorage.getItem('altAccounts'));
+
+		this.document.getElementById('altAdd').addEventListener('click', () => {
+			this.document.getElementById('menuWindow').innerHTML = HTML.FORM;
+			this.document.getElementById('addAccountButtonB').addEventListener('click', () => (
+				this.addAccount(this.document.getElementById('accName').value, this.document.getElementById('accPass').value)
+			));
+		});
+
+		storage.forEach(e => {
+			const div = this.document.createElement('div');
+			div.innerHTML = `<span class="altlistelement">${e.username}</span><span class="altdeletebtn">X</span>`;
+			div.className = 'button altAccountsLISTED';
+			this.document.getElementById('altAccounts').appendChild(div);
+		});
+
+		this.document.querySelectorAll('.altlistelement').forEach(i => i.addEventListener('click', (e) => {
+			let selected = storage.filter(obj => obj.username === e.target.innerText)[0];
+			this.login(selected.username, selected.password);
+		}));
+
+		this.document.querySelectorAll('.altdeletebtn')
+			.forEach(i => i.addEventListener('click', (e) => this.deleteAccount(e.target.previousElementSibling.innerText)));
 	}
 
 	createDom(str) {
