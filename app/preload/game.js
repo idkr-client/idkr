@@ -44,6 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
 window.clientUtil.events.on('game-load', () => {
 	window.closeClient = close;
 	settingsWindow = window.windows[0];
+
+	// Patch getSettings to fix custom tab bug
+	let origGetSettings = settingsWindow.getSettings;
+	settingsWindow.getSettings = (...args) => origGetSettings.call(settingsWindow, ...args).replace(/^<\/div>/, '');
+
 	let clientTabIndex = settingsWindow.tabs.push({ name: 'idkr', categories: [] });
 	settingsWindow.getCSettings = () => {
 		if (clientTabIndex != settingsWindow.tabIndex + 1 && !settingsWindow.settingSearch) {

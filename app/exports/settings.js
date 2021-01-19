@@ -39,7 +39,8 @@ module.exports = {
 		needsRestart: true,
 		html: function () {
 			return window.clientUtil.genCSettingsHTML(this);
-		}
+		},
+		info: 'Choose the graphics backend for ANGLE. D3D11 is used on most Windows computers by default. Using the OpenGL driver as the graphics backend may result in higher performance, particularly on NVIDIA GPUs. It can increase battery and memory usage of video playback.'
 	},
 	colorProfile: {
 		name: 'Color Profile',
@@ -58,6 +59,18 @@ module.exports = {
 			return window.clientUtil.genCSettingsHTML(this);
 		},
 		info: 'Forces color profile.'
+	},
+	inProcessGPU: {
+		name: 'In-Process GPU',
+		id: 'inProcessGPU',
+		cat: 'Chromium',
+		type: 'checkbox',
+		val: false,
+		needsRestart: true,
+		html: function () {
+			return window.clientUtil.genCSettingsHTML(this);
+		},
+		info: 'Run the GPU process as a thread in the browser process. Using this may help with window capture.'
 	},
 	chromiumFlags: {
 		name: 'Chromium Flags',
