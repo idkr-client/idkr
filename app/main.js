@@ -478,9 +478,9 @@ app.once('ready', () => {
 	initSplashWindow();
 });
 
-app.on('quit', () => {
+app.on('quit', async () => {
 	if (isRPCEnabled) {
-		rpc.clearActivity();
+		await rpc.clearActivity();
 		rpc.destroy();
 	}
 });
