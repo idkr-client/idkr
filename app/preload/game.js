@@ -1,4 +1,4 @@
-let AccountManager = require("../modules/accountManager");
+let AccountManager = require('../modules/accountManager');
 let settingsWindow = null;
 
 Object.assign(window.clientUtil, {
