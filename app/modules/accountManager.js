@@ -71,7 +71,7 @@ class AccountManager {
 		});
 
 		this.document.querySelectorAll('.altlistelement').forEach(i => i.addEventListener('click', (e) => {
-			let selected = storage.filter(obj => obj.username === e.target.innerText)[0];
+			let selected = storage.find(obj => obj.username === e.target.innerText);
 			this.login(selected.username, selected.password);
 		}));
 
