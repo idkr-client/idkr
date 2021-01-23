@@ -177,13 +177,12 @@ module.exports = {
 		cat: 'Maintenance',
 		type: 'checkbox',
 		val: true,
-		needsRestart: false,
 		html: function () {
 			return window.clientUtil.genCSettingsHTML(this);
 		},
 		set: val => {
 			let btn = document.getElementById('clientExit');
-			btn.style = (val && btn) ? 'display: flex;' : 'display: none;';
+			if (btn) btn.style = val ? 'display: flex;' : 'display: none;';
 		}
 	}
 };
