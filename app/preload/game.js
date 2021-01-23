@@ -1,4 +1,7 @@
+const Store = require('electron-store');
+
 let settingsWindow = null;
+const config = new Store();
 
 Object.assign(window.clientUtil, {
 	searchMatches: entry => {
@@ -24,11 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		window.clientUtil.events.emit('game-load');
 	});
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
-
-	let clientExit = document.getElementById('clientExit');
-	if (clientExit) {
-		clientExit.style = 'display: flex;';
-	}
 
 	// const gameCSS = Object.assign(document.createElement('link'), {
 	// 	rel: 'stylesheet', href: 'idkr-swap:' + path.join(__dirname, '../css/game.css')
