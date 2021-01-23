@@ -171,7 +171,7 @@ module.exports = {
 			return window.clientUtil.genCSettingsHTML(this);
 		}
 	},
-    showExitButton: {
+	showExitButton: {
 		name: 'Show Exit Button',
 		id: 'showExitButton',
 		cat: 'Maintenance',
@@ -181,9 +181,9 @@ module.exports = {
 		html: function () {
 			return window.clientUtil.genCSettingsHTML(this);
 		},
-        set: val => {
+		set: val => {
 			let btn = document.getElementById('clientExit');
 			btn.style = val ? 'display: flex;' : 'display: none;';
-        }
+		}
 	}
 };
