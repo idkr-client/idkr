@@ -183,7 +183,7 @@ module.exports = {
 		},
 		set: val => {
 			let btn = document.getElementById('clientExit');
-			btn.style = val ? 'display: flex;' : 'display: none;';
+			btn.style = (val && btn) ? 'display: flex;' : 'display: none;';
 		}
 	}
 };

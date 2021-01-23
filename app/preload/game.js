@@ -28,11 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
 
-	let clientExit = document.getElementById('clientExit');
-	if (clientExit && config.get('showExitButton', true)) {
-		clientExit.style = 'display: flex;';
-	}
-
 	// const gameCSS = Object.assign(document.createElement('link'), {
 	// 	rel: 'stylesheet', href: 'idkr-swap:' + path.join(__dirname, '../css/game.css')
 	// })
