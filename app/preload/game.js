@@ -1,4 +1,7 @@
+const Store = require('electron-store');
+
 let settingsWindow = null;
+const config = new Store();
 
 Object.assign(window.clientUtil, {
 	searchMatches: entry => {
@@ -26,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
 
 	let clientExit = document.getElementById('clientExit');
-	if (clientExit) {
+	if (clientExit && config.get('showExitButton', true)) {
 		clientExit.style = 'display: flex;';
 	}
 
