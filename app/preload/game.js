@@ -1,7 +1,4 @@
-const Store = require('electron-store');
-
 let settingsWindow = null;
-const config = new Store();
 
 Object.assign(window.clientUtil, {
 	searchMatches: entry => {
