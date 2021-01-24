@@ -31,6 +31,7 @@ if (!config.get('acceleratedCanvas', true)) {
 }
 if (config.get('disableFrameRateLimit', false)) {
 	app.commandLine.appendSwitch('disable-frame-rate-limit');
+	app.commandLine.appendSwitch('disable-gpu-vsync');
 }
 if (config.get('inProcessGPU', false)) {
 	app.commandLine.appendSwitch('in-process-gpu');
