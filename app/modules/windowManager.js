@@ -5,9 +5,9 @@ const STYLES = '#idkr-windowHolder{width:100%;height:100%;position:absolute}#idk
 class WindowManager {
 	/**
 	 * Creates an instance of WindowManager.
-	 * @param {HTMLDocument} document
-	 * @param {String} callerId - The ID of the Button element that called this Class
-	 * @param {boolean} [hideKrunkerWindowsOnShow=true]
+	 * @param {HTMLDocument} document - Krunkers Top-Level DOM document (otherwise not accessible from within this class)
+	 * @param {String} callerId - The ID of the Button element that called/triggered this Class
+	 * @param {boolean} [hideKrunkerWindowsOnShow=true] - Should the created popup hide, when a krunker popup is opened? Default=Yes
 	 * @memberof WindowManager
 	 */
 	constructor(document, callerId, hideKrunkerWindowsOnShow = true) {
