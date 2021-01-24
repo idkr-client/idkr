@@ -1,6 +1,6 @@
 'use strict';
 
-// Inspired by Sorte#0001
+let WindowManager = require('./windowManager');
 
 const HTML = {
 	BTN_INNER: '<div id="accManagerBtn" class="button buttonB bigShadowT" style="display:block;width:300px;text-align:center;padding:15px;font-size:23px;pointer-events:all;padding-bottom:22px;margin-left:-5px;margin-top:5px">Alt-Manager</div>',
@@ -14,6 +14,8 @@ class AccountManager {
 		this.window = window;
 		this.document = document;
 		this.localStorage = localStorage;
+		this.managerWin = new WindowManager(document, 'accManagerBtn');
+		this.addWin = new WindowManager(document, 'altAdd');
 
 		!this.localStorage.getItem('altAccounts') && this.localStorage.setItem('altAccounts', '[]');
 	}
@@ -23,7 +25,7 @@ class AccountManager {
 		this.localStorage.setItem('altAccounts', JSON.stringify(
 			[].concat(JSON.parse(this.localStorage.getItem('altAccounts')), { username: name, password: pass })
 		));
-		this.window.showWindow(27);
+		this.addWin.hide();
 		this.openPopup();
 	}
 
@@ -31,7 +33,7 @@ class AccountManager {
 		this.localStorage.setItem('altAccounts', JSON.stringify(
 			JSON.parse(this.localStorage.getItem('altAccounts')).filter(e => e.username !== name)
 		));
-		this.window.showWindow(27);
+		this.managerWin.hide();
 		this.openPopup();
 	}
 
@@ -47,9 +49,8 @@ class AccountManager {
 	}
 
 	openPopup() {
-		this.window.showWindow(27);
-		this.document.getElementById('windowHeader').innerText = 'Account Manager';
-		this.document.getElementById('menuWindow').innerHTML = HTML.ALT_MENU;
+		this.managerWin.setContent(HTML.ALT_MENU);
+		this.managerWin.toggle();
 		this.watcher();
 	}
 
@@ -57,7 +58,9 @@ class AccountManager {
 		let storage = JSON.parse(this.localStorage.getItem('altAccounts'));
 
 		this.document.getElementById('altAdd').addEventListener('click', () => {
-			this.document.getElementById('menuWindow').innerHTML = HTML.FORM;
+			this.managerWin.hide();
+			this.addWin.setContent(HTML.FORM);
+			this.addWin.show();
 			this.document.getElementById('addAccountButtonB').addEventListener('click', () => (
 				this.addAccount(this.document.getElementById('accName').value, this.document.getElementById('accPass').value)
 			));
@@ -73,6 +76,7 @@ class AccountManager {
 		this.document.querySelectorAll('.altlistelement').forEach(i => i.addEventListener('click', (e) => {
 			let selected = storage.find(obj => obj.username === e.target.innerText);
 			this.login(selected.username, selected.password);
+			this.managerWin.hide();
 		}));
 
 		this.document.querySelectorAll('.altdeletebtn')
