@@ -6,7 +6,7 @@ const HTML = {
 	BTN_INNER: '<div id="accManagerBtn" class="button buttonB bigShadowT" style="display:block;width:300px;text-align:center;padding:15px;font-size:23px;pointer-events:all;padding-bottom:22px;margin-left:-5px;margin-top:5px">Alt-Manager</div>',
 	ALT_MENU: '<div id="altAccounts"></div><div id="buttons"><div class="accountButton" id="altAdd">Add new account</div></div>',
 	FORM: '<input id="accName" type="text" placeholder="Enter Username" class="accountInput" style="margin-top:25px;" value=""><input id="accPass" type="password" placeholder="Enter Password" class="accountInput"><div id="accResp" style="margin-top:10px;font-size:18px;color:rgba(0,0,0,0.5);"><span style="color:rgba(0,0,0,0.8)"></span></div><div class="accountButton" id="addAccountButtonB" style="">Add Account</div></div></div>',
-	STYLE: '.altAccountsLISTED{margin-right:10px;padding:0!important;background:0 0!important;box-shadow:unset!important}.altdeletebtn{display:inline-block;padding:10px 13px;color:#fff;background-color:#ff4747;box-shadow:inset 0 -7px 0 0 #992b2b}.altlistelement{display:inline-block;padding:10px 15px 10px 17px;color:#fff;background-color:#ffc147;box-shadow:inset 0 -7px 0 0 #b08531}.deleteColor{color:#000!important;background-color:#313131!important}'
+	STYLE: '#altAdd,#addAccountButtonB{width:100%}.altAccountsLISTED{margin-right:10px;padding:0!important;background:0 0!important;box-shadow:unset!important}.altdeletebtn{display:inline-block;padding:10px 13px;color:#fff;background-color:#ff4747;box-shadow:inset 0 -7px 0 0 #992b2b}.altlistelement{display:inline-block;padding:10px 15px 10px 17px;color:#fff;background-color:#ffc147;box-shadow:inset 0 -7px 0 0 #b08531}.deleteColor{color:#000!important;background-color:#313131!important}'
 };
 
 class AccountManager {
@@ -21,9 +21,11 @@ class AccountManager {
 	}
 
 	addAccount(name, pass) {
-		if (name.replace(/\s/, '') === '' || pass.replace(/\s/, '') === '') return alert('Username and Password must not be empty');
+		if (name.replace(/\s/, '') === '' || pass.replace(/\s/, '') === '') return alert('Username and Password fields must not be empty.');
+		let users = JSON.parse(this.localStorage.getItem('altAccounts'));
+		if (users.find(e => e.username === name)) return alert('This Username has already been added.');
 		this.localStorage.setItem('altAccounts', JSON.stringify(
-			[].concat(JSON.parse(this.localStorage.getItem('altAccounts')), { username: name, password: pass })
+			[].concat(users, { username: name, password: pass })
 		));
 		this.addWin.hide();
 		this.openPopup();
@@ -83,16 +85,14 @@ class AccountManager {
 			.forEach(i => i.addEventListener('click', (e) => this.deleteAccount(e.target.previousElementSibling.innerText)));
 	}
 
-	createDom(str) {
-		let tmp = this.document.createElement('div');
-		tmp.innerHTML = str.trim();
-		return tmp.firstChild;
-	}
-
 	injectStyles() {
 		this.document.head.appendChild(Object.assign(this.document.createElement('style'), { innerText: HTML.STYLE }));
 		let tar = this.document.getElementById('customizeButton');
-		tar.parentNode.insertBefore(this.createDom(HTML.BTN_INNER), tar.nextSibling);
+
+		let tmp = this.document.createElement('div');
+		tmp.innerHTML = HTML.BTN_INNER.trim();
+
+		tar.parentNode.insertBefore(tmp.firstChild, tar.nextSibling);
 		this.document.getElementById('accManagerBtn').addEventListener('click', () => this.openPopup());
 	}
 }
