@@ -170,5 +170,19 @@ module.exports = {
 		html: function () {
 			return window.clientUtil.genCSettingsHTML(this);
 		}
+	},
+	showExitButton: {
+		name: 'Show Exit Button',
+		id: 'showExitButton',
+		cat: 'Maintenance',
+		type: 'checkbox',
+		val: true,
+		html: function () {
+			return window.clientUtil.genCSettingsHTML(this);
+		},
+		set: val => {
+			let btn = document.getElementById('clientExit');
+			if (btn) btn.style = val ? 'display: flex;' : 'display: none;';
+		}
 	}
 };
