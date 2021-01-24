@@ -2,18 +2,18 @@
 
 const STYLES = '#idkr-windowHolder{width:100%;height:100%;position:absolute}#idkr-menuWindow{position:absolute;left:50%;top:50%;border-radius:6px;max-height:calc(100% - 480px);transform:translate(-50%,-50%);z-index:2;overflow-y:auto;display:inline-block;text-align:left;pointer-events:auto;padding:20px;width:705px;font-size:20px;background-color:#fff;-webkit-box-shadow:0 9px 0 0 #a6a6a6;-moz-box-shadow:0 9px 0 0 #a6a6a6;box-shadow:0 9px 0 0 #a6a6a6}';
 
-// TODO: This currently doesnt hide popups that have been created by krunker
-
 class WindowManager {
 	/**
 	 * Creates an instance of WindowManager.
 	 * @param {HTMLDocument} document
 	 * @param {String} callerId - The ID of the Button element that called this Class
+	 * @param {boolean} [hideKrunkerWindowsOnShow=true]
 	 * @memberof WindowManager
 	 */
-	constructor(document, callerId) {
+	constructor(document, callerId, hideKrunkerWindowsOnShow = true) {
 		this.$ = document;
 		this.callerId = callerId;
+		this.hideOnShow = hideKrunkerWindowsOnShow;
 		this.shown = false;
 
 		document.addEventListener('DOMContentLoaded', () => {
@@ -41,6 +41,7 @@ class WindowManager {
 	}
 
 	show() {
+		if (this.hideOnShow) this.$.getElementById('windowHolder').setAttribute('style', 'display: none;');
 		this.$.getElementById('idkr-windowHolder').setAttribute('style', 'display: block;');
 		this.shown = true;
 	}
@@ -51,8 +52,7 @@ class WindowManager {
 	}
 
 	toggle() {
-		this.$.getElementById('idkr-windowHolder').setAttribute('style', 'display: ' + (this.shown ? 'none' : 'block') + ';');
-		this.shown = !this.shown;
+		this.shown ? this.hide() : this.show();
 	}
 
 	isShown() {
