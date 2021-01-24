@@ -9,6 +9,14 @@ const HTML = {
 	STYLE: '#altAdd,#addAccountButtonB{width:100%}.altAccountsLISTED{margin-right:10px;padding:0!important;background:0 0!important;box-shadow:unset!important}.altdeletebtn{display:inline-block;padding:10px 13px;color:#fff;background-color:#ff4747;box-shadow:inset 0 -7px 0 0 #992b2b}.altlistelement{display:inline-block;padding:10px 15px 10px 17px;color:#fff;background-color:#ffc147;box-shadow:inset 0 -7px 0 0 #b08531}.deleteColor{color:#000!important;background-color:#313131!important}'
 };
 
+/**
+ * Creates a new instance of the AccountManager.
+ * This class should not be used anywhere else
+ * other than the single instance in app/preload/game.js
+ * thus, it is not further documented.
+ *
+ * @class AccountManager
+ */
 class AccountManager {
 	constructor(window, document, localStorage) {
 		this.window = window;
