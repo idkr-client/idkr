@@ -1,3 +1,4 @@
+let AccountManager = require('../modules/account-manager');
 let settingsWindow = null;
 
 Object.assign(window.clientUtil, {
@@ -18,12 +19,16 @@ Object.assign(window.clientUtil, {
 // Workaround to avoid getting client popup
 window.OffCliV = true;
 
+let accoutManager = new AccountManager(window, document, localStorage);
+
 document.addEventListener('DOMContentLoaded', () => {
 	let windowsObserver = new MutationObserver(() => {
 		windowsObserver.disconnect();
 		window.clientUtil.events.emit('game-load');
 	});
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
+
+	accoutManager.injectStyles();
 
 	// const gameCSS = Object.assign(document.createElement('link'), {
 	// 	rel: 'stylesheet', href: 'idkr-swap:' + path.join(__dirname, '../css/game.css')
@@ -57,7 +62,7 @@ window.clientUtil.events.on('game-load', () => {
 				previousCategory = entry.cat;
 				tempHTML += `<div class='setHed' id='setHed_${btoa(entry.cat)}' onclick='window.windows[0].collapseFolder(this)'><span class='material-icons plusOrMinus'>keyboard_arrow_down</span> ${entry.cat}</div><div id='setBod_${btoa(entry.cat)}'>`;
 			}
-			tempHTML += `<div class='settName'${entry.info ? ` title='${entry.info}'` : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name}${entry.needsRestart ? ' <span style="color: #eb5656">*</span>' : ''} ${entry.html()}</div>`;
+			tempHTML += `<div class='settName'${entry.needsRestart ? ' title="Requires Restart"' : ''}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ''}>${entry.name}${entry.needsRestart ? ' <span style="color: #eb5656">*</span>' : ''} ${entry.html()}</div>`;
 		});
 		return tempHTML ? tempHTML + '</div>' : '';
 	};
