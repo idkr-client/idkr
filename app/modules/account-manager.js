@@ -1,6 +1,6 @@
 'use strict';
 
-let WindowManager = require('./windowManager');
+let WindowManager = require('./window-manager');
 
 const HTML = {
 	BTN_INNER: '<div id="accManagerBtn" class="button buttonB bigShadowT" style="display:block;width:300px;text-align:center;padding:15px;font-size:23px;pointer-events:all;padding-bottom:22px;margin-left:-5px;margin-top:5px">Alt-Manager</div>',
