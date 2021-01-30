@@ -89,8 +89,10 @@ class AccountManager {
 			this.managerWin.hide();
 		}));
 
-		this.document.querySelectorAll('.altdeletebtn')
-			.forEach(i => i.addEventListener('click', (e) => this.deleteAccount(e.target.previousElementSibling.innerText)));
+		this.document.querySelectorAll('.altdeletebtn').forEach(i => i.addEventListener('click', (e) => {
+			let tar = e.target.previousElementSibling.innerText;
+			confirm(`Do you really want to remove the account "${tar}" from the Alt-Manager?`) && this.deleteAccount(tar);
+		}));
 	}
 
 	injectStyles() {
