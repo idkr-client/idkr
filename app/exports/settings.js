@@ -13,7 +13,7 @@ module.exports = {
 	acceleratedCanvas: {
 		name: 'Accelerated Canvas',
 		id: 'acceleratedCanvas',
-		cat: 'Chromium',
+		cat: 'Performance',
 		type: 'checkbox',
 		val: true,
 		needsRestart: true,
@@ -25,7 +25,7 @@ module.exports = {
 	angleBackend: {
 		name: 'ANGLE Graphics Backend',
 		id: 'angleBackend',
-		cat: 'Chromium',
+		cat: 'Performance',
 		platforms: ['win32'],
 		type: 'select',
 		options: {
@@ -84,6 +84,20 @@ module.exports = {
 			return window.clientUtil.genCSettingsHTML(this);
 		},
 		info: 'Additional Chromium flags.'
+	},
+	showExitButton: {
+		name: 'Show Exit Button',
+		id: 'showExitButton',
+		cat: 'Interface',
+		type: 'checkbox',
+		val: true,
+		html: function () {
+			return window.clientUtil.genCSettingsHTML(this);
+		},
+		set: val => {
+			let btn = document.getElementById('clientExit');
+			if (btn) btn.style = val ? 'display: flex;' : 'display: none;';
+		}
 	},
 	discordRPC: {
 		name: 'Discord Rich Presence',
@@ -169,20 +183,6 @@ module.exports = {
 		needsRestart: true,
 		html: function () {
 			return window.clientUtil.genCSettingsHTML(this);
-		}
-	},
-	showExitButton: {
-		name: 'Show Exit Button',
-		id: 'showExitButton',
-		cat: 'Maintenance',
-		type: 'checkbox',
-		val: true,
-		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
-		},
-		set: val => {
-			let btn = document.getElementById('clientExit');
-			if (btn) btn.style = val ? 'display: flex;' : 'display: none;';
 		}
 	}
 };
