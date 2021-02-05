@@ -259,8 +259,10 @@ function setupWindow(win, isWeb) {
 	contents.on('new-window', (event, url, frameName, disposition, options) => {
 		event.preventDefault();
 		if (locationType(url) == 'external') shell.openExternal(url);
-		else if (frameName == '_self') contents.loadURL(url);
-		else if (locationType(url) != 'unknown') event.newGuest = initWindow(url, options.webContents);
+		else if (locationType(url) != 'unknown') {
+			if (frameName == '_self') contents.loadURL(url);
+			else event.newGuest = initWindow(url, options.webContents);
+		}
 	});
 	contents.on('will-navigate', (event, url) => {
 		event.preventDefault();
