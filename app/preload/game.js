@@ -19,7 +19,7 @@ Object.assign(window.clientUtil, {
 // Workaround to avoid getting client popup
 window.OffCliV = true;
 
-let accoutManager = new AccountManager(window, document, localStorage);
+let accountManager = new AccountManager(window, document, localStorage);
 
 document.addEventListener('DOMContentLoaded', () => {
 	let windowsObserver = new MutationObserver(() => {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
 
-	accoutManager.injectStyles();
+	accountManager.injectStyles();
 
 	// const gameCSS = Object.assign(document.createElement('link'), {
 	// 	rel: 'stylesheet', href: 'idkr-swap:' + path.join(__dirname, '../css/game.css')

@@ -256,14 +256,18 @@ function setupWindow(win, isWeb) {
 		}
 	});
 
-	contents.on('new-window', (event, url, frameName, disposition, options) => navigateNewWindow(event, url, options.webContents));
-	contents.on('will-navigate', (event, url) => {
-		if (locationType(url) == 'external') {
-			event.preventDefault();
-			shell.openExternal(url);
-		} else if (locationType(url) != 'game' && locationType(contents.getURL()) == 'game') {
-			navigateNewWindow(event, url);
+	contents.on('new-window', (event, url, frameName, disposition, options) => {
+		event.preventDefault();
+		if (locationType(url) == 'external') shell.openExternal(url);
+		else if (locationType(url) != 'unknown') {
+			if (frameName == '_self') contents.loadURL(url);
+			else event.newGuest = initWindow(url, options.webContents);
 		}
+	});
+	contents.on('will-navigate', (event, url) => {
+		event.preventDefault();
+		if (locationType(url) == 'external') shell.openExternal(url);
+		else if (locationType(url) != 'unknown') contents.loadURL(url);
 	});
 
 	contents.on('will-prevent-unload', event => {
@@ -289,15 +293,6 @@ function setupWindow(win, isWeb) {
 	});
 
 	recursiveSwap(win);
-
-	function navigateNewWindow(event, url, webContents) {
-		event.preventDefault();
-		if (locationType(url) == 'external') {
-			shell.openExternal(url);
-		} else if (locationType(url) != 'unknown') {
-			event.newGuest = initWindow(url, webContents);
-		}
-	}
 
 	return win;
 }
