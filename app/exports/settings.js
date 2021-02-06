@@ -96,7 +96,21 @@ module.exports = {
 		},
 		set: val => {
 			let btn = document.getElementById('clientExit');
-			if (btn) btn.style = val ? 'display: flex;' : 'display: none;';
+			if (btn) btn.style.display = val ? 'flex' : 'none';
+		}
+	},
+    showAltManagerButton: {
+		name: 'Show Alt-Manager Button',
+		id: 'showAltManagerButton',
+		cat: 'Interface',
+		type: 'checkbox',
+		val: true,
+		html: function () {
+			return window.clientUtil.genCSettingsHTML(this);
+		},
+		set: val => {
+			let btn = document.getElementById('accManagerBtn');
+			if (btn) btn.style.display = val ? 'block' : 'none';
 		}
 	},
 	discordRPC: {
