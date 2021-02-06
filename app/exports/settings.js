@@ -99,7 +99,7 @@ module.exports = {
 			if (btn) btn.style.display = val ? 'flex' : 'none';
 		}
 	},
-    showAltManagerButton: {
+	showAltManagerButton: {
 		name: 'Show Alt-Manager Button',
 		id: 'showAltManagerButton',
 		cat: 'Interface',
