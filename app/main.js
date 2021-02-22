@@ -226,6 +226,12 @@ function setupWindow(win, isWeb) {
 		});
 	});
 	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true));
+	shortcuts.register(win, 'Control+F1', () => {
+		config.clear();
+		app.relaunch();
+		app.quit();
+	});
+	shortcuts.register(win, 'Shift+F1', () => config.openInEditor());
 
 	if (!isWeb) {
 		return win;
