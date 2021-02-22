@@ -225,7 +225,7 @@ function setupWindow(win, isWeb) {
 			app.quit();
 		});
 	});
-	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true)); // Need more info
+	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true));
 
 	if (!isWeb) {
 		return win;
