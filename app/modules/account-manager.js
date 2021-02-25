@@ -35,6 +35,7 @@ class AccountManager {
 		this.localStorage.setItem('altAccounts', JSON.stringify(
 			[].concat(users, {
 				username: name,
+				format: 'b64',
 				password: Buffer.from(String(pass)).toString('base64')
 			})
 		));
@@ -88,7 +89,12 @@ class AccountManager {
 
 		this.document.querySelectorAll('.altlistelement').forEach(i => i.addEventListener('click', (e) => {
 			let selected = storage.find(obj => obj.username === e.target.innerText);
-			this.login(selected.username, Buffer.from(String(selected.password), 'base64').toString('ascii'));
+			this.login(
+				selected.username,
+				(!!selected.format && selected.format === 'b64')
+					? Buffer.from(String(selected.password), 'base64').toString('ascii')
+					: selected.password
+			);
 			this.managerWin.hide();
 		}));
 
