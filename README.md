@@ -82,6 +82,8 @@ Most of "Control" key can be replaced by "Command" key in macOS.
 | Control + Shift + I (WL)<br>Command + Option + I (M) | Toggle Developer Tools |
 | Alt + Left (WL)<br>Command + Left (M) | Go Back |
 | Alt + Right (WL)<br>Command + Right (M) | Go Forward |
+| Control + F1 | Reset Client Settings |
+| Shift + F1 | Open Settings File in an Editor |
 | Control + L | Copy Current URL |
 | Control + N | Open a Game Window |
 | Control + Shift + N | Duplicate Current Window |
