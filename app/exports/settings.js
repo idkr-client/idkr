@@ -26,7 +26,7 @@ module.exports = {
 		name: 'ANGLE Graphics Backend',
 		id: 'angleBackend',
 		cat: 'Performance',
-		platforms: ['win32'],
+		platforms: ['win32', 'linux'],
 		type: 'select',
 		options: {
 			default: 'Default',
