@@ -98,6 +98,11 @@ window.clientUtil = {
 	},
 	initUtil: function () {
 		for (let [key, entry] of Object.entries(this.settings)) {
+			if (!('name' in entry && 'id' in entry && 'cat' in entry && 'type' in entry && 'val' in entry && 'html' in entry)) {
+				console.log(`Ignored a setting entry ${entry.id ? `"${entry.id}"` : 'with no ID'}, missing a required property`);
+				delete this.settings[key];
+				continue;
+			}
 			if (entry.platforms && !entry.platforms.includes(process.platform)) {
 				delete this.settings[key];
 				continue;
