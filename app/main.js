@@ -311,7 +311,7 @@ function initWindow(url, webContents) {
 		webContents: webContents,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload/global.js'),
-			enableRemoteModule: true
+			contextIsolation: false
 		}
 	});
 	// let contents = win.webContents
