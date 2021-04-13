@@ -10,13 +10,11 @@ const STYLES = '#settingsTabLayout{grid-template-columns:repeat(7, 1fr)}#idkr-wi
 class WindowManager {
 	/**
 	 * Creates an instance of WindowManager.
-	 * @param {HTMLDocument} document - Krunkers Top-Level DOM document (otherwise not accessible from within this class)
 	 * @param {String} callerId - The ID of the Button element that called/triggered this Class
 	 * @param {boolean} [hideKrunkerWindowsOnShow=true] - Should the created popup hide, when a krunker popup is opened? Default=Yes
 	 * @memberof WindowManager
 	 */
-	constructor(document, callerId, hideKrunkerWindowsOnShow = true) {
-		this.$ = document;
+	constructor(callerId, hideKrunkerWindowsOnShow = true) {
 		this.callerId = callerId;
 		this.hideOnShow = hideKrunkerWindowsOnShow;
 		this.shown = false;
@@ -48,7 +46,7 @@ class WindowManager {
 	 * @memberof WindowManager
 	 */
 	setContent(content) {
-		this.$.getElementById('idkr-menuWindow').innerHTML = content;
+		document.getElementById('idkr-menuWindow').innerHTML = content;
 	}
 
 	/**
@@ -57,8 +55,8 @@ class WindowManager {
 	 * @memberof WindowManager
 	 */
 	show() {
-		if (this.hideOnShow) this.$.getElementById('windowHolder').setAttribute('style', 'display: none;');
-		this.$.getElementById('idkr-windowHolder').setAttribute('style', 'display: block;');
+		if (this.hideOnShow) document.getElementById('windowHolder').setAttribute('style', 'display: none;');
+		document.getElementById('idkr-windowHolder').setAttribute('style', 'display: block;');
 		this.shown = true;
 	}
 
@@ -68,7 +66,7 @@ class WindowManager {
 	 * @memberof WindowManager
 	 */
 	hide() {
-		this.$.getElementById('idkr-windowHolder').setAttribute('style', 'display: none;');
+		document.getElementById('idkr-windowHolder').setAttribute('style', 'display: none;');
 		this.shown = false;
 	}
 
