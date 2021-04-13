@@ -22,7 +22,7 @@ class AccountManager {
 		this.managerWin = new WindowManager('accManagerBtn');
 		this.addWin = new WindowManager('altAdd');
 
-		localStorage.getItem('altAccounts') && localStorage.setItem('altAccounts', '[]');
+		!localStorage.getItem('altAccounts') && localStorage.setItem('altAccounts', '[]');
 	}
 
 	addAccount(name, pass) {
