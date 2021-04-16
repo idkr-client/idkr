@@ -1,3 +1,5 @@
+'use strict';
+
 require('v8-compile-cache');
 const events = require('events');
 // const fs = require('fs');

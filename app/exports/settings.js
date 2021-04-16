@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	disableFrameRateLimit: {
 		name: 'Disable Frame Rate Limit',

@@ -1,3 +1,5 @@
+'use strict';
+
 let AccountManager = require('../modules/account-manager');
 let settingsWindow = null;
 
