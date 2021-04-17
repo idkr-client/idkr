@@ -18,21 +18,18 @@ const HTML = {
  * @class AccountManager
  */
 class AccountManager {
-	constructor(window, document, localStorage) {
-		this.window = window;
-		this.document = document;
-		this.localStorage = localStorage;
-		this.managerWin = new WindowManager(document, 'accManagerBtn');
-		this.addWin = new WindowManager(document, 'altAdd');
+	constructor() {
+		this.managerWin = new WindowManager('accManagerBtn');
+		this.addWin = new WindowManager('altAdd');
 
-		!this.localStorage.getItem('altAccounts') && this.localStorage.setItem('altAccounts', '[]');
+		!localStorage.getItem('altAccounts') && localStorage.setItem('altAccounts', '[]');
 	}
 
 	addAccount(name, pass) {
 		if (name.replace(/\s/, '') === '' || pass.replace(/\s/, '') === '') return alert('Username and Password fields must not be empty.');
-		let users = JSON.parse(this.localStorage.getItem('altAccounts'));
+		let users = JSON.parse(localStorage.getItem('altAccounts'));
 		if (users.find(e => e.username === name)) return alert('This Username has already been added.');
-		this.localStorage.setItem('altAccounts', JSON.stringify(
+		localStorage.setItem('altAccounts', JSON.stringify(
 			[].concat(users, {
 				username: name,
 				format: 'b64',
@@ -44,22 +41,22 @@ class AccountManager {
 	}
 
 	deleteAccount(name) {
-		this.localStorage.setItem('altAccounts', JSON.stringify(
-			JSON.parse(this.localStorage.getItem('altAccounts')).filter(e => e.username !== name)
+		localStorage.setItem('altAccounts', JSON.stringify(
+			JSON.parse(localStorage.getItem('altAccounts')).filter(e => e.username !== name)
 		));
 		this.managerWin.hide();
 		this.openPopup();
 	}
 
 	login(name, pass) {
-		this.window.logoutAcc();
-		this.document.getElementById('accName').value = name;
-		this.document.getElementById('accPass').value = pass;
-		this.window.loginAcc();
-		this.document.getElementById('accName').style.display = 'none';
-		this.document.getElementById('accPass').style.display = 'none';
-		this.document.getElementsByClassName('accountButton')[0].style.display = 'none';
-		this.document.getElementsByClassName('accountButton')[1].style.display = 'none';
+		window.logoutAcc();
+		document.getElementById('accName').value = name;
+		document.getElementById('accPass').value = pass;
+		window.loginAcc();
+		document.getElementById('accName').style.display = 'none';
+		document.getElementById('accPass').style.display = 'none';
+		document.getElementsByClassName('accountButton')[0].style.display = 'none';
+		document.getElementsByClassName('accountButton')[1].style.display = 'none';
 	}
 
 	openPopup() {
@@ -69,25 +66,25 @@ class AccountManager {
 	}
 
 	watcher() {
-		let storage = JSON.parse(this.localStorage.getItem('altAccounts'));
+		let storage = JSON.parse(localStorage.getItem('altAccounts'));
 
-		this.document.getElementById('altAdd').addEventListener('click', () => {
+		document.getElementById('altAdd').addEventListener('click', () => {
 			this.managerWin.hide();
 			this.addWin.setContent(HTML.FORM);
 			this.addWin.show();
-			this.document.getElementById('addAccountButtonB').addEventListener('click', () => (
-				this.addAccount(this.document.getElementById('accName').value, this.document.getElementById('accPass').value)
+			document.getElementById('addAccountButtonB').addEventListener('click', () => (
+				this.addAccount(document.getElementById('accName').value, document.getElementById('accPass').value)
 			));
 		});
 
 		storage.forEach(e => {
-			const div = this.document.createElement('div');
+			const div = document.createElement('div');
 			div.innerHTML = `<span class="altlistelement" onmouseenter="playTick()">${e.username}</span><span class="altdeletebtn" onmouseenter="playTick()">X</span>`;
 			div.className = 'button altAccountsLISTED';
-			this.document.getElementById('altAccounts').appendChild(div);
+			document.getElementById('altAccounts').appendChild(div);
 		});
 
-		this.document.querySelectorAll('.altlistelement').forEach(i => i.addEventListener('click', (e) => {
+		document.querySelectorAll('.altlistelement').forEach(i => i.addEventListener('click', (e) => {
 			let selected = storage.find(obj => obj.username === e.target.innerText);
 			this.login(
 				selected.username,
@@ -98,21 +95,21 @@ class AccountManager {
 			this.managerWin.hide();
 		}));
 
-		this.document.querySelectorAll('.altdeletebtn').forEach(i => i.addEventListener('click', (e) => {
+		document.querySelectorAll('.altdeletebtn').forEach(i => i.addEventListener('click', (e) => {
 			let tar = e.target.previousElementSibling.innerText;
 			confirm(`Do you really want to remove the account "${tar}" from the Alt-Manager?`) && this.deleteAccount(tar);
 		}));
 	}
 
 	injectStyles() {
-		this.document.head.appendChild(Object.assign(this.document.createElement('style'), { innerText: HTML.STYLE }));
-		let tar = this.document.getElementById('customizeButton');
+		document.head.appendChild(Object.assign(document.createElement('style'), { innerText: HTML.STYLE }));
+		let tar = document.getElementById('customizeButton');
 
-		let tmp = this.document.createElement('div');
+		let tmp = document.createElement('div');
 		tmp.innerHTML = HTML.BTN_INNER.trim();
 
 		tar.parentNode.insertBefore(tmp.firstChild, tar.nextSibling);
-		this.document.getElementById('accManagerBtn').addEventListener('click', () => this.openPopup());
+		document.getElementById('accManagerBtn').addEventListener('click', () => this.openPopup());
 	}
 }
 

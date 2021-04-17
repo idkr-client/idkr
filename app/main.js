@@ -1,3 +1,5 @@
+'use strict';
+
 require('v8-compile-cache');
 const fs = require('fs');
 const path = require('path');
@@ -267,7 +269,7 @@ function setupWindow(win, isWeb) {
 		if (locationType(url) == 'external') shell.openExternal(url);
 		else if (locationType(url) != 'unknown') {
 			if (frameName == '_self') contents.loadURL(url);
-			else event.newGuest = initWindow(url, options.webContents);
+			else initWindow(url, options.webContents);
 		}
 	});
 	contents.on('will-navigate', (event, url) => {
@@ -311,7 +313,7 @@ function initWindow(url, webContents) {
 		webContents: webContents,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload/global.js'),
-			enableRemoteModule: true
+			contextIsolation: false
 		}
 	});
 	// let contents = win.webContents

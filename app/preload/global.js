@@ -1,7 +1,9 @@
+'use strict';
+
 require('v8-compile-cache');
 const events = require('events');
-const fs = require('fs');
-const path = require('path');
+// const fs = require('fs');
+// const path = require('path');
 const { ipcRenderer } = require('electron');
 const Store = require('electron-store');
 const log = require('electron-log');
@@ -12,11 +14,11 @@ Object.assign(console, log.functions);
 
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync('prompt', message, defaultValue);
 
-const documentsPath = ipcRenderer.sendSync('get-path', 'documents');
+// const documentsPath = ipcRenderer.sendSync('get-path', 'documents');
 
 let windowType = locationType(location.href);
 
-window.clientUtil = {
+window._clientUtil = {
 	events: new events(),
 	settings: require('../exports/settings'),
 	setCSetting: function (name, value) {
@@ -49,52 +51,52 @@ window.clientUtil = {
 		}, delay);
 	},
 	loadScripts: function () {
-		class Userscript {
-			constructor(initiator) {
-				this.name = initiator.name || 'Unnamed userscript';
-				this.version = initiator.version || 'Version unknown';
-				this.author = initiator.author || 'Unknown author';
-				this.description = initiator.discription || 'No description provided';
-				this.locations = initiator.locations || ['all'];
-				this.platforms = initiator.platforms || ['all'];
-				this.settings = initiator.settings || null;
-				this.run = initiator.run || null;
-			}
+		// class Userscript {
+		// 	constructor(initiator) {
+		// 		this.name = initiator.name || 'Unnamed userscript';
+		// 		this.version = initiator.version || 'Version unknown';
+		// 		this.author = initiator.author || 'Unknown author';
+		// 		this.description = initiator.discription || 'No description provided';
+		// 		this.locations = initiator.locations || ['all'];
+		// 		this.platforms = initiator.platforms || ['all'];
+		// 		this.settings = initiator.settings || null;
+		// 		this.run = initiator.run || null;
+		// 	}
 
-			isLocationMatching() {
-				return this.locations.some(location => ['all', windowType].includes(location));
-			}
-			isPlatformMatching() {
-				return this.platforms.some(platform => ['all', process.platform].includes(platform));
-			}
-		}
+		// 	isLocationMatching() {
+		// 		return this.locations.some(location => ['all', windowType].includes(location));
+		// 	}
+		// 	isPlatformMatching() {
+		// 		return this.platforms.some(platform => ['all', process.platform].includes(platform));
+		// 	}
+		// }
 
-		let userscriptsDirConfig = config.get('userscriptsPath', '');
-		let scriptsPath = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(documentsPath, 'idkr/scripts');
-		try {
-			fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
-				try {
-					let script = new Userscript(require(path.join(scriptsPath, filename)));
-					if (!script.isLocationMatching()) {
-						console.log(`[USH] Ignored, location not matching: ${script.name}`);
-					} else if (!script.isPlatformMatching()) {
-						console.log(`[USH] Ignored, platform not matching: ${script.name}`);
-					} else {
-						if (script.settings) {
-							Object.assign(window.clientUtil.settings, script.settings);
-						}
-						if (script.run) {
-							script.run(config);
-						}
-						console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`);
-					}
-				} catch (err) {
-					console.error('[USH] Failed to load userscript:', err);
-				}
-			});
-		} catch (err) {
-			console.error('[USH] Failed to load scripts:', err);
-		}
+		// let userscriptsDirConfig = config.get('userscriptsPath', '');
+		// let scriptsPath = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(documentsPath, 'idkr/scripts');
+		// try {
+		// 	fs.readdirSync(scriptsPath).filter(filename => path.extname(filename).toLowerCase() == '.js').forEach(filename => {
+		// 		try {
+		// 			let script = new Userscript(require(path.join(scriptsPath, filename)));
+		// 			if (!script.isLocationMatching()) {
+		// 				console.log(`[USH] Ignored, location not matching: ${script.name}`);
+		// 			} else if (!script.isPlatformMatching()) {
+		// 				console.log(`[USH] Ignored, platform not matching: ${script.name}`);
+		// 			} else {
+		// 				if (script.settings) {
+		// 					Object.assign(window._clientUtil.settings, script.settings);
+		// 				}
+		// 				if (script.run) {
+		// 					script.run(config);
+		// 				}
+		// 				console.log(`[USH] Loaded userscript: ${script.name} by ${script.author}`);
+		// 			}
+		// 		} catch (err) {
+		// 			console.error('[USH] Failed to load userscript:', err);
+		// 		}
+		// 	});
+		// } catch (err) {
+		// 	console.error('[USH] Failed to load scripts:', err);
+		// }
 	},
 	initUtil: function () {
 		for (let [key, entry] of Object.entries(this.settings)) {
@@ -125,14 +127,14 @@ window.clientUtil = {
 };
 
 if (windowType == 'game') {
-	window.clientUtil.events.on('game-load', () => window.clientUtil.initUtil());
+	window._clientUtil.events.on('game-load', () => window._clientUtil.initUtil());
 } else {
-	window.clientUtil.initUtil();
+	window._clientUtil.initUtil();
 }
 
-if (config.get('enableUserscripts', false)) {
-	window.clientUtil.loadScripts();
-}
+// if (config.get('enableUserscripts', false)) {
+// 	window._clientUtil.loadScripts();
+// }
 
 switch (windowType) {
 	case 'game':
@@ -140,9 +142,9 @@ switch (windowType) {
 		break;
 }
 
-function isValidPath(pathstr = '') {
-	return Boolean(path.parse(pathstr).root);
-}
+// function isValidPath(pathstr = '') {
+// 	return Boolean(path.parse(pathstr).root);
+// }
 
 function locationType(url = '') {
 	if (!isValidURL(url)) {

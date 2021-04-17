@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	disableFrameRateLimit: {
 		name: 'Disable Frame Rate Limit',
@@ -7,7 +9,7 @@ module.exports = {
 		val: false,
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		}
 	},
 	acceleratedCanvas: {
@@ -18,7 +20,7 @@ module.exports = {
 		val: true,
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		},
 		info: 'Enables the use of the GPU to perform 2d canvas rendering instead of using software rendering.'
 	},
@@ -38,7 +40,7 @@ module.exports = {
 		val: 'default',
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		},
 		info: 'Choose the graphics backend for ANGLE. D3D11 is used on most Windows computers by default. Using the OpenGL driver as the graphics backend may result in higher performance, particularly on NVIDIA GPUs. It can increase battery and memory usage of video playback.'
 	},
@@ -56,7 +58,7 @@ module.exports = {
 		val: 'default',
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		},
 		info: 'Forces color profile.'
 	},
@@ -68,7 +70,7 @@ module.exports = {
 		val: false,
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		},
 		info: 'Run the GPU process as a thread in the browser process. Using this may help with window capture.'
 	},
@@ -81,7 +83,7 @@ module.exports = {
 		placeholder: '--flag=value',
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		},
 		info: 'Additional Chromium flags.'
 	},
@@ -92,7 +94,7 @@ module.exports = {
 		type: 'checkbox',
 		val: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		},
 		set: val => {
 			let btn = document.getElementById('clientExit');
@@ -106,7 +108,7 @@ module.exports = {
 		type: 'checkbox',
 		val: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		},
 		set: val => {
 			let btn = document.getElementById('accManagerBtn');
@@ -121,7 +123,7 @@ module.exports = {
 		val: true,
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		}
 	},
 	// enablePointerLockOptions: {
@@ -131,7 +133,7 @@ module.exports = {
 	// 	type: 'checkbox',
 	// 	val: false,
 	// 	needsRestart: true,
-	// 	html: function () { return window.clientUtil.genCSettingsHTML(this) }
+	// 	html: function () { return window._clientUtil.genCSettingsHTML(this) }
 	// },
 	autoUpdate: {
 		name: 'Auto Update Behavior',
@@ -145,7 +147,7 @@ module.exports = {
 		},
 		val: 'download',
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		}
 	},
 	resourceSwapperMode: {
@@ -161,7 +163,7 @@ module.exports = {
 		val: 'normal',
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		}
 	},
 	resourceSwapperPath: {
@@ -173,30 +175,31 @@ module.exports = {
 		placeholder: 'Resource Swapper Folder Path',
 		needsRestart: true,
 		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
-		}
-	},
-	enableUserscripts: {
-		name: 'Enable Userscripts',
-		id: 'enableUserscripts',
-		cat: 'Maintenance',
-		type: 'checkbox',
-		val: false,
-		needsRestart: true,
-		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
-		}
-	},
-	userscriptsPath: {
-		name: 'Userscripts Path',
-		id: 'userscriptsPath',
-		cat: 'Maintenance',
-		type: 'text',
-		val: '',
-		placeholder: 'Userscripts Folder Path',
-		needsRestart: true,
-		html: function () {
-			return window.clientUtil.genCSettingsHTML(this);
+			return window._clientUtil.genCSettingsHTML(this);
 		}
 	}
+	// },
+	// enableUserscripts: {
+	// 	name: 'Enable Userscripts',
+	// 	id: 'enableUserscripts',
+	// 	cat: 'Maintenance',
+	// 	type: 'checkbox',
+	// 	val: false,
+	// 	needsRestart: true,
+	// 	html: function () {
+	// 		return window._clientUtil.genCSettingsHTML(this);
+	// 	}
+	// },
+	// userscriptsPath: {
+	// 	name: 'Userscripts Path',
+	// 	id: 'userscriptsPath',
+	// 	cat: 'Maintenance',
+	// 	type: 'text',
+	// 	val: '',
+	// 	placeholder: 'Userscripts Folder Path',
+	// 	needsRestart: true,
+	// 	html: function () {
+	// 		return window._clientUtil.genCSettingsHTML(this);
+	// 	}
+	// }
 };

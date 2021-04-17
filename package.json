@@ -1,6 +1,6 @@
 {
   "name": "idkr",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "idk, just a Krunker client",
   "main": "app/main.js",
   "scripts": {
@@ -26,17 +26,17 @@
   },
   "homepage": "https://github.com/Mixaz017/idkr#readme",
   "devDependencies": {
-    "electron": "^9.4.3",
+    "electron": "^9.4.4",
     "electron-builder": "^22.10.5",
-    "eslint": "^7.21.0"
+    "eslint": "^7.24.0"
   },
   "dependencies": {
     "discord-rpc": "^3.2.0",
     "electron-localshortcut": "^3.2.1",
-    "electron-log": "^4.3.2",
-    "electron-store": "^7.0.2",
+    "electron-log": "^4.3.4",
+    "electron-store": "^7.0.3",
     "electron-updater": "^4.3.8",
-    "v8-compile-cache": "^2.2.0",
+    "v8-compile-cache": "^2.3.0",
     "yargs": "^16.2.0"
   }
 }
