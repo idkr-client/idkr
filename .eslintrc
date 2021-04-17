@@ -1,0 +1,88 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "requireConfigFile": false,
+    "babelOptions": {
+      "plugins": ["@babel/plugin-proposal-class-properties", "@babel/plugin-proposal-private-methods"]
+    }
+  },
+  "parser": "@babel/eslint-parser",
+  "rules": {
+    "no-extra-bind": "error",
+    "no-multi-spaces": "error",
+    "no-multi-str": "error",
+    "array-bracket-spacing": "error",
+    "block-spacing": "error",
+    "brace-style": "error",
+    "camelcase": "error",
+    "comma-dangle": "error",
+    "comma-spacing": "error",
+    "comma-style": "error",
+    "computed-property-spacing": "error",
+    "eol-last": "error",
+    "func-call-spacing": "error",
+    "indent": [
+      "error",
+      "tab",
+      {
+        "SwitchCase": 1,
+        "ignoredNodes": [
+          "ObjectExpression"
+        ]
+      }
+    ],
+    "key-spacing": "error",
+    "keyword-spacing": "error",
+    "no-array-constructor": "error",
+    "no-mixed-spaces-and-tabs": "error",
+    "no-multiple-empty-lines": "error",
+    "no-new-object": "error",
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "one-var": [
+      "error",
+      "never"
+    ],
+    "operator-linebreak": "error",
+    "padded-blocks": [
+      "error",
+      "never"
+    ],
+    "quote-props": [
+      "error",
+      "as-needed"
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "semi": "error",
+    "semi-spacing": "error",
+    "space-before-blocks": "error",
+    "space-before-function-paren": [
+      "error",
+      {
+        "named": "never"
+      }
+    ],
+    "spaced-comment": "error",
+    "generator-star-spacing": [
+      "error",
+      "after"
+    ],
+    "rest-spread-spacing": "error"
+  }
+}
