@@ -21,7 +21,7 @@ Object.assign(window._clientUtil, {
 // Workaround to avoid getting client popup
 window.OffCliV = true;
 
-let accountManager = new AccountManager(window, document, localStorage);
+let accountManager = new AccountManager();
 
 document.addEventListener('DOMContentLoaded', () => {
 	let windowsObserver = new MutationObserver(() => {

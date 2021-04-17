@@ -132,19 +132,11 @@ if (windowType == 'game') {
 	window._clientUtil.initUtil();
 }
 
-// if (config.get('enableUserscripts', false)) {
-// 	window._clientUtil.loadScripts();
-// }
-
 switch (windowType) {
 	case 'game':
 		require('./game.js');
 		break;
 }
-
-// function isValidPath(pathstr = '') {
-// 	return Boolean(path.parse(pathstr).root);
-// }
 
 function locationType(url = '') {
 	if (!isValidURL(url)) {
