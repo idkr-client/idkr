@@ -10,6 +10,8 @@ const log = require('electron-log');
 const shortcuts = require('electron-localshortcut');
 const yargs = require('yargs');
 
+let Swapper = require('./utils/swapper');
+
 Object.assign(console, log.functions);
 
 const argv = yargs.argv;
@@ -25,9 +27,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
-// app.commandLine.appendSwitch('disable-gpu-vsync')
-// app.commandLine.appendSwitch('ignore-gpu-blacklist')
-// app.commandLine.appendSwitch('enable-zero-copy')
+
 if (!config.get('acceleratedCanvas', true)) {
 	app.commandLine.appendSwitch('disable-accelerated-2d-canvas', 'true');
 }
@@ -38,7 +38,6 @@ if (config.get('disableFrameRateLimit', false)) {
 if (config.get('inProcessGPU', false)) {
 	app.commandLine.appendSwitch('in-process-gpu');
 }
-// if (config.get('enablePointerLockOptions', false)) { app.commandLine.appendSwitch('enable-pointer-lock-options') }
 let angleBackend = config.get('angleBackend', 'default');
 let colorProfile = config.get('colorProfile', 'default');
 if (angleBackend != 'default') {
@@ -96,66 +95,6 @@ const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPa
 const userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts');
 
 ensureDirs(swapDir, userscriptsDir);
-
-function recursiveSwap(win) {
-	const urls = [];
-	switch (swapperMode) {
-		case 'normal': {
-			const recursiveSwapNormal = (win, prefix = '') => {
-				try {
-					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-						if (dirent.isDirectory()) {
-							recursiveSwapNormal(win, `${prefix}/${dirent.name}`);
-						} else {
-							let pathname = `${prefix}/${dirent.name}`;
-							let isAsset = /^\/(models|textures)($|\/)/.test(pathname);
-							if (isAsset) {
-								urls.push(`*://assets.krunker.io${pathname}`, `*://assets.krunker.io${pathname}?*`);
-							} else {
-								urls.push(`*://krunker.io${pathname}`, `*://krunker.io${pathname}?*`, `*://comp.krunker.io${pathname}`, `*://comp.krunker.io${pathname}?*`);
-							}
-						}
-					});
-				} catch (err) {
-					console.error('Failed to swap resources in normal mode', err, prefix);
-				}
-			};
-			recursiveSwapNormal(win);
-			if (urls.length) {
-				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, new URL(details.url).pathname) }));
-			}
-			break;
-		}
-
-		case 'advanced': {
-			const recursiveSwapHostname = (win, prefix = '', hostname = '') => {
-				try {
-					fs.readdirSync(path.join(swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-						if (dirent.isDirectory()) {
-							if (hostname) {
-								recursiveSwapHostname(win, `${prefix}/${dirent.name}`, hostname);
-							} else {
-								recursiveSwapHostname(win, prefix + dirent.name, dirent.name);
-							}
-						} else if (hostname) {
-							urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`);
-						}
-					});
-				} catch (err) {
-					console.error('Failed to swap resources in advanced mode', err, prefix, hostname);
-				}
-			};
-			recursiveSwapHostname(win);
-			if (urls.length) {
-				win.webContents.session.webRequest.onBeforeRequest({ urls: urls }, (details, callback) => {
-					let url = new URL(details.url);
-					callback({ redirectURL: 'idkr-swap:/' + path.join(swapDir, url.hostname, url.pathname) });
-				});
-			}
-			break;
-		}
-	}
-}
 
 if (process.platform == 'win32') {
 	app.setUserTasks([{
@@ -300,7 +239,8 @@ function setupWindow(win, isWeb) {
 		app.quit();
 	});
 
-	recursiveSwap(win);
+	let swapper = new Swapper(win, swapperMode, swapDir);
+	swapper.init();
 
 	return win;
 }
@@ -310,6 +250,7 @@ function initWindow(url, webContents) {
 		width: 1600,
 		height: 900,
 		show: false,
+		// @ts-ignore
 		webContents: webContents,
 		webPreferences: {
 			preload: path.join(__dirname, 'preload/global.js'),
@@ -470,7 +411,7 @@ app.once('ready', () => {
 	app.on('second-instance', (e, argv) => {
 		let instanceArgv = yargs.parse(argv);
 		console.log('Second instance: ' + argv);
-		if (!['unknown', 'external'].includes(locationType(instanceArgv['new-window']))) {
+		if (!['unknown', 'external'].includes(locationType(String(instanceArgv['new-window'])))) {
 			initWindow(instanceArgv['new-window']);
 		}
 	});
