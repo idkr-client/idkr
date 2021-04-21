@@ -103,18 +103,15 @@ window._clientUtil = {
 		window._clientUtil.loadCustomCss();
 	},
 	loadCustomCss: () => {
-		console.log('epiko');
 		let cssDirConfig = config.get('customCssDir', '');
 		let cssPath = isValidPath(cssDirConfig) ? cssDirConfig : path.join(documentsPath, 'idkr/css');
 		try {
 			let combinedCss = '';
 			fs.readdirSync(cssPath).filter(filename => path.extname(filename).toLowerCase() == '.css').forEach(filename => { // go through every file in CSS dir (if set) and append to the 'combined css' var
-				console.log(filename);
 				if (config.get('customCss__' + filename, true)) {
 					combinedCss += fs.readFileSync(path.join(cssPath, filename));
 				}
 			});
-			console.log('GEN IDKR CSS');
 			if (!document.getElementById('idkr-custom-css')) {
 				document.head.appendChild(Object.assign(document.createElement('style'), {
 					innerText: combinedCss,
