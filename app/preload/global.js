@@ -98,39 +98,38 @@ window._clientUtil = {
 		// 	console.error('[USH] Failed to load scripts:', err);
 		// }
 	},
-    setCSSVal: (name, val) => {
-        config.set(name, val);
-        window._clientUtil.loadCustomCss();
-    },
-    loadCustomCss: () => {
-        console.log('epiko');
-        let cssDirConfig = config.get('customCssDir', '');
-		    let cssPath = isValidPath(cssDirConfig) ? cssDirConfig : path.join(documentsPath, 'idkr/css');
-		    try {
-            let combinedCss = '';
-		    	  fs.readdirSync(cssPath).filter(filename => path.extname(filename).toLowerCase() == '.css').forEach(filename => { // go through every file in CSS dir (if set) and append to the 'combined css' var
-                console.log(filename);
-                if(config.get('customCss__'+filename, true)) { 
-                    combinedCss += fs.readFileSync(path.join(cssPath, filename)); 
-                }
-            });
-            console.log('GEN IDKR CSS');
-            if (!document.getElementById('idkr-custom-css')){
-                document.head.appendChild(Object.assign(document.createElement('style'), {
-                    innerText: combinedCss,
-                    id: 'idkr-custom-css'
-                }));
-            } else {
-                Object.assign(document.getElementById('idkr-custom-css'), {
-                    innerText: combinedCss
-                });
-            }
-        } catch (err) {
-            console.error('ERROR custom CSS was unable to be properly injected');
-            console.error(err);
-        }
-
-    },
+	setCSSVal: (name, val) => {
+		config.set(name, val);
+		window._clientUtil.loadCustomCss();
+	},
+	loadCustomCss: () => {
+		console.log('epiko');
+		let cssDirConfig = config.get('customCssDir', '');
+		let cssPath = isValidPath(cssDirConfig) ? cssDirConfig : path.join(documentsPath, 'idkr/css');
+		try {
+			let combinedCss = '';
+			fs.readdirSync(cssPath).filter(filename => path.extname(filename).toLowerCase() == '.css').forEach(filename => { // go through every file in CSS dir (if set) and append to the 'combined css' var
+				console.log(filename);
+				if (config.get('customCss__' + filename, true)) {
+					combinedCss += fs.readFileSync(path.join(cssPath, filename));
+				}
+			});
+			console.log('GEN IDKR CSS');
+			if (!document.getElementById('idkr-custom-css')) {
+				document.head.appendChild(Object.assign(document.createElement('style'), {
+					innerText: combinedCss,
+					id: 'idkr-custom-css'
+				}));
+			} else {
+				Object.assign(document.getElementById('idkr-custom-css'), {
+					innerText: combinedCss
+				});
+			}
+		} catch (err) {
+			console.error('ERROR custom CSS was unable to be properly injected');
+			console.error(err);
+		}
+	},
 	initUtil: function () {
 		for (let [key, entry] of Object.entries(this.settings)) {
 			if (!('name' in entry && 'id' in entry && 'cat' in entry && 'type' in entry && 'val' in entry && 'html' in entry)) {
@@ -160,12 +159,12 @@ window._clientUtil = {
 };
 
 if (windowType == 'game') {
-	  window._clientUtil.events.on('game-load', () => {
-        window._clientUtil.initUtil();
-        if (config.get('enableCSS', true)) {
-            window._clientUtil.loadCustomCss();
-        }
-    });
+	window._clientUtil.events.on('game-load', () => {
+		window._clientUtil.initUtil();
+		if (config.get('enableCSS', true)) {
+			window._clientUtil.loadCustomCss();
+		}
+	});
 } else {
 	window._clientUtil.initUtil();
 }
