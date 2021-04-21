@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-let fs = require('fs');
-let path = require('path');
+let fs = require("fs");
+let path = require("path");
 
 /**
  * Swapping Handler
@@ -11,12 +11,12 @@ let path = require('path');
 class Swapper {
 	/**
 	 * Creates an instance of Swapper.
-	 * @param {import('electron').BrowserWindow} win
+	 * @param {import("electron").BrowserWindow} win
 	 * @param {string} swapperMode
 	 * @param {string} swapDir
 	 * @memberof Swapper
 	 */
-	constructor(win, swapperMode, swapDir) {
+	constructor(win, swapperMode, swapDir){
 		this.win = win;
 		this.swapperMode = swapperMode;
 		this.swapDir = swapDir;
@@ -26,11 +26,11 @@ class Swapper {
 	/**
 	 * Advanced Swapper
 	 *
-	 * @param {import('electron').BrowserWindow} win
-	 * @param {string} [prefix='']
+	 * @param {import("electron").BrowserWindow} win
+	 * @param {string} [prefix=""]
 	 * @memberof Swapper
 	 */ // @ts-ignore
-	#recursiveSwapNormal(win, prefix = '') {
+	#recursiveSwapNormal(win, prefix = ""){
 		try {
 			fs.readdirSync(path.join(this.swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 				if (dirent.isDirectory()) this.#recursiveSwapNormal(win, `${prefix}/${dirent.name}`);
@@ -51,31 +51,35 @@ class Swapper {
 					);
 				}
 			});
-		} catch (err) {
-			console.error('Failed to swap resources in normal mode', err, prefix);
+		}
+		catch (err){
+			console.error("Failed to swap resources in normal mode", err, prefix);
 		}
 	}
 
 	/**
 	 * Advanced Swapper
 	 *
-	 * @param {import('electron').BrowserWindow} win
-	 * @param {string} [prefix='']
-	 * @param {string} [hostname='']
+	 * @param {import("electron").BrowserWindow} win
+	 * @param {string} [prefix=""]
+	 * @param {string} [hostname=""]
 	 * @memberof Swapper
 	 */ // @ts-ignore
-	#recursiveSwapHostname(win, prefix = '', hostname = '') {
+	#recursiveSwapHostname(win, prefix = "", hostname = ""){
 		try {
 			fs.readdirSync(path.join(this.swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-				if (dirent.isDirectory()) this.#recursiveSwapHostname(
-					win,
-					hostname ? `${prefix}/${dirent.name}` : prefix + dirent.name,
-					hostname || dirent.name
-				);
+				if (dirent.isDirectory()){
+					this.#recursiveSwapHostname(
+						win,
+						hostname ? `${prefix}/${dirent.name}` : prefix + dirent.name,
+						hostname || dirent.name
+					);
+				}
 				else if (hostname) this.urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`);
 			});
-		} catch (err) {
-			console.error('Failed to swap resources in advanced mode', err, prefix, hostname);
+		}
+		catch (err){
+			console.error("Failed to swap resources in advanced mode", err, prefix, hostname);
 		}
 	}
 
@@ -85,24 +89,25 @@ class Swapper {
 	 * @memberof Swapper
 	 */
 	init() {
-		switch (this.swapperMode) {
-			case 'normal': {
+		switch (this.swapperMode){
+			case "normal": {
 				this.#recursiveSwapNormal(this.win);
-				if (this.urls.length) {
-					this.win.webContents.session.webRequest.onBeforeRequest({ urls: this.urls }, (details, callback) => callback({ redirectURL: 'idkr-swap:/' + path.join(this.swapDir, new URL(details.url).pathname) }));
-				}
+				this.urls.length && this.win.webContents.session.webRequest.onBeforeRequest({
+					urls: this.urls
+				}, (details, callback) => callback({
+					redirectURL: "idkr-swap:/" + path.join(this.swapDir, new URL(details.url).pathname)
+				}));
 				break;
 			}
-			case 'advanced': {
+			case "advanced": {
 				this.#recursiveSwapHostname(this.win);
-				if (this.urls.length) {
-					this.win.webContents.session.webRequest.onBeforeRequest({ urls: this.urls }, (details, callback) => {
-						let url = new URL(details.url);
-						callback({ redirectURL: 'idkr-swap:/' + path.join(this.swapDir, url.hostname, url.pathname) });
-					});
-				}
+				this.urls.length && this.win.webContents.session.webRequest.onBeforeRequest({ urls: this.urls }, (details, callback) => {
+					let { hostname, pathname } = new URL(details.url);
+					callback({ redirectURL: "idkr-swap:/" + path.join(this.swapDir, hostname, pathname) });
+				});
 				break;
 			}
+			default: return;
 		}
 	}
 }
