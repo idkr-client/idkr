@@ -29,8 +29,8 @@ class Swapper {
 	 * @param {import("electron").BrowserWindow} win
 	 * @param {string} [prefix=""]
 	 * @memberof Swapper
-	 */ // @ts-ignore
-	#recursiveSwapNormal(win, prefix = ""){
+	 */
+	#recursiveSwapNormal = (win, prefix = "") => {
 		try {
 			fs.readdirSync(path.join(this.swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 				if (dirent.isDirectory()) this.#recursiveSwapNormal(win, `${prefix}/${dirent.name}`);
@@ -64,8 +64,8 @@ class Swapper {
 	 * @param {string} [prefix=""]
 	 * @param {string} [hostname=""]
 	 * @memberof Swapper
-	 */ // @ts-ignore
-	#recursiveSwapHostname(win, prefix = "", hostname = ""){
+	 */
+	#recursiveSwapHostname = (win, prefix = "", hostname = "") => {
 		try {
 			fs.readdirSync(path.join(this.swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
 				if (dirent.isDirectory()){

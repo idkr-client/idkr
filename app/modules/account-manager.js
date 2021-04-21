@@ -1,7 +1,8 @@
 "use strict";
 
 /**
- * @typedef {HTMLInputElement} input
+ * @typedef {HTMLInputElement} inputs
+ * @typedef {Window & any} window
  */
 
 /* eslint-disable no-alert */
@@ -38,7 +39,7 @@ class AccountManager {
 	 * @returns {void}
 	 * @memberof AccountManager
 	 */
-	addAccount(name, pass){
+	#addAccount = (name, pass) => {
 		if (name.replace(/\s/, "") === "" || pass.replace(/\s/, "") === "") return alert("Username and Password fields must not be empty.");
 		let users = JSON.parse(localStorage.getItem("altAccounts"));
 		if (users.find(e => e.username === name)) return alert("This Username has already been added.");
@@ -50,7 +51,7 @@ class AccountManager {
 			})
 		));
 		this.addWin.hide();
-		return this.openPopup();
+		return this.#openPopup();
 	}
 
 	/**
@@ -59,12 +60,12 @@ class AccountManager {
 	 * @param {string} name
 	 * @memberof AccountManager
 	 */
-	deleteAccount(name){
+	#deleteAccount = (name) => {
 		localStorage.setItem("altAccounts", JSON.stringify(
 			JSON.parse(localStorage.getItem("altAccounts")).filter(e => e.username !== name)
 		));
 		this.managerWin.hide();
-		this.openPopup();
+		this.#openPopup();
 	}
 
 	/**
@@ -74,17 +75,15 @@ class AccountManager {
 	 * @param {string} pass
 	 * @memberof AccountManager
 	 */
-	login(name, pass){
-		// @ts-ignore
-		window.logoutAcc();
-		/** @type {input} */ (document.getElementById("accName")).value = name;
-		/** @type {input} */ (document.getElementById("accPass")).value = pass;
-		// @ts-ignore
-		window.loginAcc();
-		/** @type {input} */ (document.getElementById("accName")).style.display = "none";
-		/** @type {input} */ (document.getElementById("accPass")).style.display = "none";
-		/** @type {input} */ (document.getElementsByClassName("accountButton")[0]).style.display = "none";
-		/** @type {input} */ (document.getElementsByClassName("accountButton")[1]).style.display = "none";
+	#login = (name, pass) => {
+		/** @type {window} */ (window).logoutAcc();
+		/** @type {inputs} */ (document.getElementById("accName")).value = name;
+		/** @type {inputs} */ (document.getElementById("accPass")).value = pass;
+		/** @type {window} */ (window).loginAcc();
+		/** @type {inputs} */ (document.getElementById("accName")).style.display = "none";
+		/** @type {inputs} */ (document.getElementById("accPass")).style.display = "none";
+		/** @type {inputs} */ (document.getElementsByClassName("accountButton")[0]).style.display = "none";
+		/** @type {inputs} */ (document.getElementsByClassName("accountButton")[1]).style.display = "none";
 	}
 
 	/**
@@ -92,10 +91,10 @@ class AccountManager {
 	 *
 	 * @memberof AccountManager
 	 */
-	openPopup(){
+	#openPopup = () => {
 		this.managerWin.setContent(HTML.ALT_MENU);
 		this.managerWin.toggle();
-		this.watcher();
+		this.#watcher();
 	}
 
 	/**
@@ -103,7 +102,7 @@ class AccountManager {
 	 *
 	 * @memberof AccountManager
 	 */
-	watcher(){
+	#watcher = () => {
 		let storage = JSON.parse(localStorage.getItem("altAccounts"));
 
 		document.getElementById("altAdd").addEventListener("click", () => {
@@ -111,9 +110,9 @@ class AccountManager {
 			this.addWin.setContent(HTML.FORM);
 			this.addWin.show();
 			document.getElementById("addAccountButtonB").addEventListener("click", () => (
-				this.addAccount(
-					/** @type {input} */ (document.getElementById("accName")).value,
-					/** @type {input} */ (document.getElementById("accPass")).value
+				this.#addAccount(
+					/** @type {inputs} */ (document.getElementById("accName")).value,
+					/** @type {inputs} */ (document.getElementById("accPass")).value
 				)
 			));
 		});
@@ -126,8 +125,8 @@ class AccountManager {
 		});
 
 		document.querySelectorAll(".altlistelement").forEach(i => i.addEventListener("click", (e) => {
-			let selected = storage.find(obj => obj.username === /** @type {input} */ (e.target).innerText);
-			this.login(
+			let selected = storage.find(obj => obj.username === /** @type {inputs} */ (e.target).innerText);
+			this.#login(
 				selected.username,
 				(!!selected.format && selected.format === "b64")
 					? Buffer.from(String(selected.password), "base64").toString("ascii")
@@ -139,7 +138,7 @@ class AccountManager {
 		document.querySelectorAll(".altdeletebtn").forEach(i => i.addEventListener("click", (e) => {
 			// @ts-ignore
 			let tar = e.target.previousElementSibling.innerText;
-			confirm(`Do you really want to remove the account "${tar}" from the Alt-Manager?`) && this.deleteAccount(tar);
+			confirm(`Do you really want to remove the account "${tar}" from the Alt-Manager?`) && this.#deleteAccount(tar);
 		}));
 	}
 
@@ -156,7 +155,7 @@ class AccountManager {
 		tmp.innerHTML = HTML.BTN_INNER.trim();
 
 		tar.parentNode.insertBefore(tmp.firstChild, tar.nextSibling);
-		document.getElementById("accManagerBtn").addEventListener("click", () => this.openPopup());
+		document.getElementById("accManagerBtn").addEventListener("click", () => this.#openPopup());
 	}
 }
 

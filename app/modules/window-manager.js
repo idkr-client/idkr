@@ -10,7 +10,7 @@ const STYLES = "#settingsTabLayout{grid-template-columns:repeat(7, 1fr)}#idkr-wi
 class WindowManager {
 	/**
 	 * Creates an instance of WindowManager.
-	 * @param {String} callerId - The ID of the Button element that called/triggered this Class
+	 * @param {string} callerId - The ID of the Button element that called/triggered this Class
 	 * @param {boolean} [hideKrunkerWindowsOnShow=true] - Should the created popup hide, when a krunker popup is opened? Default=Yes
 	 * @memberof WindowManager
 	 */
