@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-require('v8-compile-cache');
-const fs = require('fs');
-const path = require('path');
-const DiscordRPC = require('discord-rpc');
-const { BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require('electron');
-const Store = require('electron-store');
-const log = require('electron-log');
-const shortcuts = require('electron-localshortcut');
-const yargs = require('yargs');
+require("v8-compile-cache");
+let fs = require("fs");
+let path = require("path");
+let DiscordRPC = require("discord-rpc");
+let { BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require("electron");
+let Store = require("electron-store");
+let log = require("electron-log");
+let shortcuts = require("electron-localshortcut");
+let yargs = require("yargs");
 
-let Swapper = require('./utils/swapper');
+let Swapper = require("./modules/swapper");
 
 Object.assign(console, log.functions);
 
@@ -20,111 +20,112 @@ const config = new Store();
 console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`);
 
 const DEBUG = argv.debug;
-const AUTO_UPDATE = argv.update || config.get('autoUpdate', 'download');
+const AUTO_UPDATE = argv.update || config.get("autoUpdate", "download");
 
 if (!app.requestSingleInstanceLock()) {
 	app.quit();
 }
 
-app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
-if (!config.get('acceleratedCanvas', true)) {
-	app.commandLine.appendSwitch('disable-accelerated-2d-canvas', 'true');
+if (!config.get("acceleratedCanvas", true)) {
+	app.commandLine.appendSwitch("disable-accelerated-2d-canvas", "true");
 }
-if (config.get('disableFrameRateLimit', false)) {
-	app.commandLine.appendSwitch('disable-frame-rate-limit');
-	app.commandLine.appendSwitch('disable-gpu-vsync');
+if (config.get("disableFrameRateLimit", false)) {
+	app.commandLine.appendSwitch("disable-frame-rate-limit");
+	app.commandLine.appendSwitch("disable-gpu-vsync");
 }
-if (config.get('inProcessGPU', false)) {
-	app.commandLine.appendSwitch('in-process-gpu');
+if (config.get("inProcessGPU", false)) {
+	app.commandLine.appendSwitch("in-process-gpu");
 }
-let angleBackend = config.get('angleBackend', 'default');
-let colorProfile = config.get('colorProfile', 'default');
-if (angleBackend != 'default') {
-	app.commandLine.appendSwitch('use-angle', angleBackend);
+let angleBackend = config.get("angleBackend", "default");
+let colorProfile = config.get("colorProfile", "default");
+if (angleBackend !== "default") {
+	app.commandLine.appendSwitch("use-angle", angleBackend);
 }
-if (colorProfile != 'default') {
-	app.commandLine.appendSwitch('force-color-profile', colorProfile);
+if (colorProfile !== "default") {
+	app.commandLine.appendSwitch("force-color-profile", colorProfile);
 }
-yargs.parse(config.get('chromiumFlags', ''), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
+yargs.parse(config.get("chromiumFlags", ""), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
 
-ipcMain.handle('get-app-info', () => ({
+ipcMain.handle("get-app-info", () => ({
 	name: app.name,
 	version: app.getVersion()
 }));
 
-ipcMain.on('get-path', (event, name) => event.returnValue = app.getPath(name));
+ipcMain.on("get-path", (event, name) => event.returnValue = app.getPath(name));
 
-ipcMain.on('prompt', (event, message, defaultValue) => {
+ipcMain.on("prompt", (event, message, defaultValue) => {
 	let promptWin = initPromptWindow(message, defaultValue);
 	let returnValue = null;
 
-	ipcMain.on('prompt-return', (event, value) => returnValue = value);
+	ipcMain.on("prompt-return", (event, value) => returnValue = value);
 
-	promptWin.on('closed', () => {
+	promptWin.on("closed", () => {
 		event.returnValue = returnValue;
 	});
 });
 
-ipcMain.handle('set-bounds', (event, bounds) => {
+ipcMain.handle("set-bounds", (event, bounds) => {
 	BrowserWindow.fromWebContents(event.sender).setBounds(bounds);
 });
 
-const isRPCEnabled = config.get('discordRPC', true);
+const isRPCEnabled = config.get("discordRPC", true);
 
 let lastSender = null;
-ipcMain.handle('rpc-activity', (event, activity) => {
+ipcMain.handle("rpc-activity", (event, activity) => {
 	if (isRPCEnabled) {
-		if (lastSender != event.sender) {
+		if (lastSender !== event.sender) {
 			if (lastSender) {
-				lastSender.send('rpc-stop');
+				lastSender.send("rpc-stop");
 			}
 			lastSender = event.sender;
-			lastSender.on('destroyed', () => lastSender = null);
+			lastSender.on("destroyed", () => (lastSender = null));
 		}
 		rpc.setActivity(activity).catch(console.error);
 	}
 });
 
-let swapperMode = config.get('resourceSwapperMode', 'normal');
+let swapperMode = config.get("resourceSwapperMode", "normal");
 
-let swapDirConfig = config.get('resourceSwapperPath', '');
-let userscriptsDirConfig = config.get('userscriptsPath', '');
+let swapDirConfig = config.get("resourceSwapperPath", "");
+let userscriptsDirConfig = config.get("userscriptsPath", "");
 
-const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap');
-const userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts');
+const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath("documents"), "idkr/swap");
+const userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
 
 ensureDirs(swapDir, userscriptsDir);
 
-if (process.platform == 'win32') {
+if (process.platform === "win32") {
 	app.setUserTasks([{
 		program: process.execPath,
-		arguments: '--new-window=https://krunker.io/',
-		title: 'New game window',
-		description: 'Opens a new game window',
+		arguments: "--new-window=https://krunker.io/",
+		title: "New game window",
+		description: "Opens a new game window",
 		iconPath: process.execPath,
 		iconIndex: 0
 	}, {
 		program: process.execPath,
-		arguments: '--new-window=https://krunker.io/social.html',
-		title: 'New social window',
-		description: 'Opens a new social window',
+		arguments: "--new-window=https://krunker.io/social.html",
+		title: "New social window",
+		description: "Opens a new social window",
 		iconPath: process.execPath,
 		iconIndex: 0
 	}]);
 }
 
-function isValidPath(pathstr = '') {
+function isValidPath(pathstr = "") {
 	return Boolean(path.parse(pathstr).root);
 }
 
-function ensureDirs(...paths) {
+function ensureDirs(...paths){
 	paths.forEach(pathstr => {
 		try {
 			if (!fs.existsSync(pathstr)) {
 				fs.mkdirSync(pathstr, { recursive: true });
 			}
-		} catch (err) {
+		}
+		catch (err) {
 			console.error(err);
 		}
 	});
@@ -137,15 +138,15 @@ function setupWindow(win, isWeb) {
 		contents.openDevTools();
 	}
 	win.removeMenu();
-	win.once('ready-to-show', () => {
+	win.once("ready-to-show", () => {
 		let windowType = locationType(contents.getURL());
 
-		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true));
-		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false));
-		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true));
-		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false));
+		win.on("maximize", () => config.set(`windowState.${windowType}.maximized`, true));
+		win.on("unmaximize", () => config.set(`windowState.${windowType}.maximized`, false));
+		win.on("enter-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, true));
+		win.on("leave-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, false));
 
-		let windowStateConfig = config.get('windowState.' + windowType, {});
+		let windowStateConfig = config.get("windowState." + windowType, {});
 		if (windowStateConfig.maximized) {
 			win.maximize();
 		}
@@ -156,23 +157,23 @@ function setupWindow(win, isWeb) {
 		win.show();
 	});
 
-	let isMac = process.platform == 'darwin';
-	shortcuts.register(win, isMac ? 'Command+Option+I' : 'Control+Shift+I', () => contents.toggleDevTools());
-	shortcuts.register(win, isMac ? 'Command+Left' : 'Alt+Left', () => contents.canGoBack() && contents.goBack());
-	shortcuts.register(win, isMac ? 'Command+Right' : 'Alt+Right', () => contents.canGoForward() && contents.goForward());
-	shortcuts.register(win, 'CommandOrControl+Shift+Delete', () => {
+	let isMac = process.platform === "darwin";
+	shortcuts.register(win, isMac ? "Command+Option+I" : "Control+Shift+I", () => contents.toggleDevTools());
+	shortcuts.register(win, isMac ? "Command+Left" : "Alt+Left", () => contents.canGoBack() && contents.goBack());
+	shortcuts.register(win, isMac ? "Command+Right" : "Alt+Right", () => contents.canGoForward() && contents.goForward());
+	shortcuts.register(win, "CommandOrControl+Shift+Delete", () => {
 		contents.session.clearCache().then(() => {
 			app.relaunch();
 			app.quit();
 		});
 	});
-	shortcuts.register(win, 'Escape', () => contents.executeJavaScript('document.exitPointerLock()', true));
-	shortcuts.register(win, 'Control+F1', () => {
+	shortcuts.register(win, "Escape", () => contents.executeJavaScript("document.exitPointerLock()", true));
+	shortcuts.register(win, "Control+F1", () => {
 		config.clear();
 		app.relaunch();
 		app.quit();
 	});
-	shortcuts.register(win, 'Shift+F1', () => config.openInEditor());
+	shortcuts.register(win, "Shift+F1", () => config.openInEditor());
 
 	if (!isWeb) {
 		return win;
@@ -180,15 +181,15 @@ function setupWindow(win, isWeb) {
 
 	// Codes only runs on web windows
 
-	win.once('ready-to-show', () => {
+	win.once("ready-to-show", () => {
 		let windowType = locationType(contents.getURL());
 
-		win.on('maximize', () => config.set(`windowState.${windowType}.maximized`, true));
-		win.on('unmaximize', () => config.set(`windowState.${windowType}.maximized`, false));
-		win.on('enter-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, true));
-		win.on('leave-full-screen', () => config.set(`windowState.${windowType}.fullScreen`, false));
+		win.on("maximize", () => config.set(`windowState.${windowType}.maximized`, true));
+		win.on("unmaximize", () => config.set(`windowState.${windowType}.maximized`, false));
+		win.on("enter-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, true));
+		win.on("leave-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, false));
 
-		let windowStateConfig = config.get('windowState.' + windowType, {});
+		let windowStateConfig = config.get("windowState." + windowType, {});
 		if (windowStateConfig.maximized) {
 			win.maximize();
 		}
@@ -197,44 +198,44 @@ function setupWindow(win, isWeb) {
 		}
 	});
 
-	contents.on('dom-ready', () => {
-		if (locationType(contents.getURL()) == 'game') {
-			shortcuts.register(win, 'F6', () => win.loadURL('https://krunker.io/'));
+	contents.on("dom-ready", () => {
+		if (locationType(contents.getURL()) === "game") {
+			shortcuts.register(win, "F6", () => win.loadURL("https://krunker.io/"));
 		}
 	});
 
-	contents.on('new-window', (event, url, frameName, disposition, options) => {
+	contents.on("new-window", (event, url, frameName, disposition, options) => {
 		event.preventDefault();
-		if (locationType(url) == 'external') shell.openExternal(url);
-		else if (locationType(url) != 'unknown') {
-			if (frameName == '_self') contents.loadURL(url);
+		if (locationType(url) === "external") shell.openExternal(url);
+		else if (locationType(url) !== "unknown") {
+			if (frameName === "_self") contents.loadURL(url);
 			else initWindow(url, options.webContents);
 		}
 	});
-	contents.on('will-navigate', (event, url) => {
+	contents.on("will-navigate", (event, url) => {
 		event.preventDefault();
-		if (locationType(url) == 'external') shell.openExternal(url);
-		else if (locationType(url) != 'unknown') contents.loadURL(url);
+		if (locationType(url) === "external") shell.openExternal(url);
+		else if (locationType(url) !== "unknown") contents.loadURL(url);
 	});
 
-	contents.on('will-prevent-unload', event => {
+	contents.on("will-prevent-unload", event => {
 		if (!dialog.showMessageBoxSync({
-			buttons: ['Leave', 'Cancel'],
-			title: 'Leave site?',
-			message: 'Changes you made may not be saved.',
+			buttons: ["Leave", "Cancel"],
+			title: "Leave site?",
+			message: "Changes you made may not be saved.",
 			noLink: true
 		})) {
 			event.preventDefault();
 		}
 	});
 
-	shortcuts.register(win, 'F5', () => contents.reload());
-	shortcuts.register(win, 'Shift+F5', () => contents.reloadIgnoringCache());
-	shortcuts.register(win, 'F11', () => win.setFullScreen(!win.isFullScreen()));
-	shortcuts.register(win, 'CommandOrControl+L', () => clipboard.writeText(contents.getURL()));
-	shortcuts.register(win, 'CommandOrControl+N', () => initWindow('https://krunker.io/'));
-	shortcuts.register(win, 'CommandOrControl+Shift+N', () => initWindow(contents.getURL()));
-	shortcuts.register(win, 'CommandOrControl+Alt+R', () => {
+	shortcuts.register(win, "F5", () => contents.reload());
+	shortcuts.register(win, "Shift+F5", () => contents.reloadIgnoringCache());
+	shortcuts.register(win, "F11", () => win.setFullScreen(!win.isFullScreen()));
+	shortcuts.register(win, "CommandOrControl+L", () => clipboard.writeText(contents.getURL()));
+	shortcuts.register(win, "CommandOrControl+N", () => initWindow("https://krunker.io/"));
+	shortcuts.register(win, "CommandOrControl+Shift+N", () => initWindow(contents.getURL()));
+	shortcuts.register(win, "CommandOrControl+Alt+R", () => {
 		app.relaunch();
 		app.quit();
 	});
@@ -251,9 +252,9 @@ function initWindow(url, webContents) {
 		height: 900,
 		show: false,
 		// @ts-ignore
-		webContents: webContents,
+		webContents,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload/global.js'),
+			preload: path.join(__dirname, "preload/global.js"),
 			contextIsolation: false
 		}
 	});
@@ -277,7 +278,7 @@ function initSplashWindow() {
 		frame: false,
 		transparent: true,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload/splash.js')
+			preload: path.join(__dirname, "preload/splash.js")
 		}
 	});
 	let contents = win.webContents;
@@ -286,42 +287,42 @@ function initSplashWindow() {
 
 	async function autoUpdate() {
 		return new Promise((resolve, reject) => {
-			if (AUTO_UPDATE == 'skip') {
+			if (AUTO_UPDATE == "skip") {
 				resolve();
 			} else {
-				contents.on('dom-ready', () => {
-					contents.send('message', 'Initializing the auto updater...');
-					const { autoUpdater } = require('electron-updater');
+				contents.on("dom-ready", () => {
+					contents.send("message", "Initializing the auto updater...");
+					const { autoUpdater } = require("electron-updater");
 					autoUpdater.logger = log;
 
-					autoUpdater.on('error', err => {
+					autoUpdater.on("error", err => {
 						console.error(err);
-						contents.send('message', 'Error: ' + err.name);
+						contents.send("message", "Error: " + err.name);
 						reject(`Error occurred: ${err.name}`);
 					});
-					autoUpdater.on('checking-for-update', () => contents.send('message', 'Checking for update'));
-					autoUpdater.on('update-available', info => {
+					autoUpdater.on("checking-for-update", () => contents.send("message", "Checking for update"));
+					autoUpdater.on("update-available", info => {
 						console.log(info);
-						contents.send('message', `Update v${info.version} available`, info.releaseDate);
-						if (AUTO_UPDATE != 'download') {
+						contents.send("message", `Update v${info.version} available`, info.releaseDate);
+						if (AUTO_UPDATE != "download") {
 							resolve();
 						}
 					});
-					autoUpdater.on('update-not-available', info => {
+					autoUpdater.on("update-not-available", info => {
 						console.log(info);
-						contents.send('message', 'No update available');
+						contents.send("message", "No update available");
 						resolve();
 					});
-					autoUpdater.on('download-progress', info => {
-						contents.send('message', `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + 'kB/s');
+					autoUpdater.on("download-progress", info => {
+						contents.send("message", `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + "kB/s");
 						win.setProgressBar(info.percent / 100);
 					});
-					autoUpdater.on('update-downloaded', info => {
-						contents.send('message', null, `Installing v${info.version}...`);
+					autoUpdater.on("update-downloaded", info => {
+						contents.send("message", null, `Installing v${info.version}...`);
 						autoUpdater.quitAndInstall(true, true);
 					});
 
-					autoUpdater.autoDownload = AUTO_UPDATE == 'download';
+					autoUpdater.autoDownload = AUTO_UPDATE == "download";
 					autoUpdater.checkForUpdates();
 				});
 			}
@@ -329,11 +330,11 @@ function initSplashWindow() {
 	}
 
 	setupWindow(win);
-	win.loadFile('app/html/splash.html');
+	win.loadFile("app/html/splash.html");
 	return win;
 
 	function launchGame() {
-		initWindow('https://krunker.io/');
+		initWindow("https://krunker.io/");
 		setTimeout(() => win.destroy(), 2000);
 	}
 }
@@ -348,44 +349,45 @@ function initPromptWindow(message, defaultValue) {
 		resizable: false,
 		transparent: true,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload/prompt.js')
+			preload: path.join(__dirname, "preload/prompt.js")
 		}
 	});
 	let contents = win.webContents;
 
 	setupWindow(win);
-	win.once('ready-to-show', () => contents.send('prompt-data', message, defaultValue));
+	win.once("ready-to-show", () => contents.send("prompt-data", message, defaultValue));
 
-	win.loadFile('app/html/prompt.html');
+	win.loadFile("app/html/prompt.html");
 
 	return win;
 }
 
-function locationType(url = '') {
+function locationType(url = "") {
 	if (!isValidURL(url)) {
-		return 'unknown';
+		return "unknown";
 	}
 	const target = new URL(url);
 	if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
 		if (/^\/docs\/.+\.txt$/.test(target.pathname)) {
-			return 'docs';
+			return "docs";
 		}
 		switch (target.pathname) {
-			case '/': return 'game';
-			case '/social.html': return 'social';
-			case '/viewer.html': return 'viewer';
-			case '/editor.html': return 'editor';
-			default: return 'unknown';
+			case "/": return "game";
+			case "/social.html": return "social";
+			case "/viewer.html": return "viewer";
+			case "/editor.html": return "editor";
+			default: return "unknown";
 		}
 	} else {
-		return 'external';
+		return "external";
 	}
 
-	function isValidURL(url = '') {
+	function isValidURL(url = "") {
 		try {
 			new URL(url);
 			return true;
-		} catch (e) {
+		}
+		catch (e) {
 			return false;
 		}
 	}
@@ -393,26 +395,26 @@ function locationType(url = '') {
 
 // Workaround for Electron 8.x
 protocol.registerSchemesAsPrivileged([{
-	scheme: 'idkr-swap',
+	scheme: "idkr-swap",
 	privileges: { secure: true, corsEnabled: true }
 }]);
 
-const rpcClientId = '770954802443059220';
+const rpcClientId = "770954802443059220";
 
 DiscordRPC.register(rpcClientId);
-const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+const rpc = new DiscordRPC.Client({ transport: "ipc" });
 
-rpc.on('ready', () => {
-	console.log('Discord RPC ready');
+rpc.on("ready", () => {
+	console.log("Discord RPC ready");
 });
 
-app.once('ready', () => {
-	protocol.registerFileProtocol('idkr-swap', (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ''))));
-	app.on('second-instance', (e, argv) => {
+app.once("ready", () => {
+	protocol.registerFileProtocol("idkr-swap", (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ""))));
+	app.on("second-instance", (e, argv) => {
 		let instanceArgv = yargs.parse(argv);
-		console.log('Second instance: ' + argv);
-		if (!['unknown', 'external'].includes(locationType(String(instanceArgv['new-window'])))) {
-			initWindow(instanceArgv['new-window']);
+		console.log("Second instance: " + argv);
+		if (!["unknown", "external"].includes(locationType(String(instanceArgv["new-window"])))) {
+			initWindow(instanceArgv["new-window"]);
 		}
 	});
 
@@ -423,7 +425,7 @@ app.once('ready', () => {
 	initSplashWindow();
 });
 
-app.on('quit', async () => {
+app.on("quit", async() => {
 	if (isRPCEnabled) {
 		await rpc.clearActivity();
 		rpc.destroy();
