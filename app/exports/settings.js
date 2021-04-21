@@ -1,5 +1,14 @@
 'use strict';
 
+const path = require('path');
+const fs = require('fs');
+const { ipcRenderer } = require('electron');
+const Store = require('electron-store');
+
+const config = new Store();
+const documentsPath = ipcRenderer.sendSync('get-path', 'documents');
+
+
 module.exports = {
 	disableFrameRateLimit: {
 		name: 'Disable Frame Rate Limit',
@@ -177,7 +186,47 @@ module.exports = {
 		html: function () {
 			return window._clientUtil.genCSettingsHTML(this);
 		}
-	}
+	},
+    enableCss: {
+        name: 'Enable custom CSS',
+        id: 'enableCSS',
+        cat: 'CSS',
+        type: 'checkbox',
+        val: true,
+        needsRestart: true,
+		    html: function () {
+			      return window._clientUtil.genCSettingsHTML(this);
+		    }
+    },
+    cssPath: {
+        name: 'CSS Path',
+        id: 'customCssDir',
+        cat: 'CSS',
+        type: 'text',
+        val: '',
+        placeholder: 'Custom CSS Path',
+        needsRestart: true,
+		    html: function () {
+			      return window._clientUtil.genCSettingsHTML(this);
+		    }
+    },
+    forEachCSSVal: {
+        name: 'Invididual CSS Toggle',
+        id: 'customEachCSS',
+        cat: 'CSS',
+        type: 'checkbox',
+        val: true,
+        needsRestart: false,
+        html: () => { // where like 90% of the brain went into this section
+            let resultHTML = '';
+            const cssDirConfig = config.get('customSassDir', '');
+            const cssDir = isValidPath(cssDirConfig) ? cssDirConfig : path.join(documentsPath, 'idkr/css');
+            fs.readdirSync(cssDir).forEach((e) => {
+                resultHTML += `<br> - ${e} <label class='switch'><input type='checkbox' onclick='_clientUtil.setCSSVal("customCss__${e}", this.checked)' ${config.get('customCss__'+e, true) ? 'checked' : ''}><span class='slider'></span></label>`;
+            });
+            return resultHTML;
+        }
+    }
 	// },
 	// enableUserscripts: {
 	// 	name: 'Enable Userscripts',
@@ -203,3 +252,7 @@ module.exports = {
 	// 	}
 	// }
 };
+
+function isValidPath(pathstr = '') {
+    return Boolean(path.parse(pathstr).root);
+}

@@ -91,11 +91,13 @@ let swapperMode = config.get('resourceSwapperMode', 'normal');
 
 let swapDirConfig = config.get('resourceSwapperPath', '');
 let userscriptsDirConfig = config.get('userscriptsPath', '');
+let cssDirConfig = config.get('customCssDir', '');
 
 const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath('documents'), 'idkr/swap');
 const userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath('documents'), 'idkr/scripts');
+const cssPath = isValidPath(cssDirConfig) ? cssDirConfig : path.join(app.getPath('documents'), 'idkr/css');
 
-ensureDirs(swapDir, userscriptsDir);
+ensureDirs(swapDir, userscriptsDir, cssPath);
 
 function recursiveSwap(win) {
 	const urls = [];
