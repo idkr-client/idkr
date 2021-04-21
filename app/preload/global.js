@@ -108,7 +108,7 @@ window._clientUtil = {
 		try {
 			let combinedCss = '';
 			fs.readdirSync(cssPath).filter(filename => path.extname(filename).toLowerCase() == '.css').forEach(filename => { // go through every file in CSS dir (if set) and append to the 'combined css' var
-				if (config.get('customCss__' + filename, true)) {
+				if (config.get('customCss__' + filename, false)) {
 					combinedCss += fs.readFileSync(path.join(cssPath, filename));
 				}
 			});
