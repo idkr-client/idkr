@@ -6,13 +6,15 @@ let { ipcRenderer } = require("electron");
 let Store = require("electron-store");
 let log = require("electron-log");
 
+let UrlUtils = require("../utils/url-utils");
+
 const config = new Store();
 
 Object.assign(console, log.functions);
 
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", message, defaultValue);
 
-let windowType = locationType(location.href);
+let windowType = UrlUtils.locationType(location.href);
 
 window._clientUtil = {
 	events: new events(),
@@ -88,37 +90,6 @@ switch (windowType) {
 		break;
 }
 
-function locationType(url = "") {
-	if (!isValidURL(url)) {
-		return "unknown";
-	}
-	const target = new URL(url);
-	if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
-		if (/^\/docs\/.+\.txt$/.test(target.pathname)) {
-			return "docs";
-		}
-		switch (target.pathname) {
-			case "/": return "game";
-			case "/social.html": return "social";
-			case "/viewer.html": return "viewer";
-			case "/editor.html": return "editor";
-			default: return "unknown";
-		}
-	} else {
-		return "external";
-	}
-
-	function isValidURL(url = "") {
-		try {
-			new URL(url);
-			return true;
-		}
-		catch (e) {
-			return false;
-		}
-	}
-}
-
 let rpcIntervalId;
 
 function setFocusEvent() {
@@ -136,8 +107,8 @@ function setFocusEvent() {
 					rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1e3;
 				}
 				ipcRenderer.invoke("rpc-activity", rpcActivity);
-			} catch (error) {
-				// console.log(error)
+			}
+			catch (error) {
 				ipcRenderer.invoke("rpc-activity", Object.assign(rpcActivity, {
 					state: "Playing",
 					startTimestamp: Math.floor(Date.now() / 1e3)

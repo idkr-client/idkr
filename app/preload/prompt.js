@@ -7,7 +7,8 @@ let { ipcRenderer } = require("electron");
  */
 
 window.addEventListener("DOMContentLoaded", () => {
-	const promptInput = /** @type {HTMLInputElement} */ (document.getElementById("promptInput"));
+	/** @type {HTMLInputElement} */
+	const promptInput = (document.getElementById("promptInput"));
 
 	ipcRenderer.on("prompt-data", (event, ipcMessage = "", ipcDefault = "") => {
 		document.getElementById("message").innerText = ipcMessage;
@@ -18,12 +19,14 @@ window.addEventListener("DOMContentLoaded", () => {
 		promptInput.focus();
 	});
 
-	/** @type {window} */ (window).sendValue = value => {
+	/** @type {window} */
+	(window).sendValue = value => {
 		ipcRenderer.send("prompt-return", value);
 		window.close();
 	};
 
-	/** @type {window} */ (window).importFile = () => {
+	/** @type {window} */
+	(window).importFile = () => {
 		/**
 		 * @type {HTMLInputElement}
 		 */

@@ -1,7 +1,6 @@
 "use strict";
 
 require("v8-compile-cache");
-let fs = require("fs");
 let path = require("path");
 let DiscordRPC = require("discord-rpc");
 let { BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require("electron");
@@ -10,6 +9,8 @@ let log = require("electron-log");
 let shortcuts = require("electron-localshortcut");
 let yargs = require("yargs");
 
+let PathUtils = require("./utils/path-utils");
+let UrlUtils = require("./utils/url-utils");
 let Swapper = require("./modules/swapper");
 
 Object.assign(console, log.functions);
@@ -91,10 +92,10 @@ let swapperMode = config.get("resourceSwapperMode", "normal");
 let swapDirConfig = config.get("resourceSwapperPath", "");
 let userscriptsDirConfig = config.get("userscriptsPath", "");
 
-const swapDir = isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath("documents"), "idkr/swap");
-const userscriptsDir = isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
+const swapDir = PathUtils.isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath("documents"), "idkr/swap");
+const userscriptsDir = PathUtils.isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
 
-ensureDirs(swapDir, userscriptsDir);
+await PathUtils.ensureDirs(swapDir, userscriptsDir);
 
 if (process.platform === "win32") {
 	app.setUserTasks([{
@@ -114,23 +115,6 @@ if (process.platform === "win32") {
 	}]);
 }
 
-function isValidPath(pathstr = "") {
-	return Boolean(path.parse(pathstr).root);
-}
-
-function ensureDirs(...paths){
-	paths.forEach(pathstr => {
-		try {
-			if (!fs.existsSync(pathstr)) {
-				fs.mkdirSync(pathstr, { recursive: true });
-			}
-		}
-		catch (err) {
-			console.error(err);
-		}
-	});
-}
-
 function setupWindow(win, isWeb) {
 	let contents = win.webContents;
 
@@ -139,7 +123,7 @@ function setupWindow(win, isWeb) {
 	}
 	win.removeMenu();
 	win.once("ready-to-show", () => {
-		let windowType = locationType(contents.getURL());
+		let windowType = UrlUtils.locationType(contents.getURL());
 
 		win.on("maximize", () => config.set(`windowState.${windowType}.maximized`, true));
 		win.on("unmaximize", () => config.set(`windowState.${windowType}.maximized`, false));
@@ -182,7 +166,7 @@ function setupWindow(win, isWeb) {
 	// Codes only runs on web windows
 
 	win.once("ready-to-show", () => {
-		let windowType = locationType(contents.getURL());
+		let windowType = UrlUtils.locationType(contents.getURL());
 
 		win.on("maximize", () => config.set(`windowState.${windowType}.maximized`, true));
 		win.on("unmaximize", () => config.set(`windowState.${windowType}.maximized`, false));
@@ -199,23 +183,23 @@ function setupWindow(win, isWeb) {
 	});
 
 	contents.on("dom-ready", () => {
-		if (locationType(contents.getURL()) === "game") {
+		if (UrlUtils.locationType(contents.getURL()) === "game") {
 			shortcuts.register(win, "F6", () => win.loadURL("https://krunker.io/"));
 		}
 	});
 
 	contents.on("new-window", (event, url, frameName, disposition, options) => {
 		event.preventDefault();
-		if (locationType(url) === "external") shell.openExternal(url);
-		else if (locationType(url) !== "unknown") {
+		if (UrlUtils.locationType(url) === "external") shell.openExternal(url);
+		else if (UrlUtils.locationType(url) !== "unknown") {
 			if (frameName === "_self") contents.loadURL(url);
 			else initWindow(url, options.webContents);
 		}
 	});
 	contents.on("will-navigate", (event, url) => {
 		event.preventDefault();
-		if (locationType(url) === "external") shell.openExternal(url);
-		else if (locationType(url) !== "unknown") contents.loadURL(url);
+		if (UrlUtils.locationType(url) === "external") shell.openExternal(url);
+		else if (UrlUtils.locationType(url) !== "unknown") contents.loadURL(url);
 	});
 
 	contents.on("will-prevent-unload", event => {
@@ -360,37 +344,6 @@ function initPromptWindow(message, defaultValue) {
 	win.loadFile("app/html/prompt.html");
 
 	return win;
-}
-
-function locationType(url = "") {
-	if (!isValidURL(url)) {
-		return "unknown";
-	}
-	const target = new URL(url);
-	if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
-		if (/^\/docs\/.+\.txt$/.test(target.pathname)) {
-			return "docs";
-		}
-		switch (target.pathname) {
-			case "/": return "game";
-			case "/social.html": return "social";
-			case "/viewer.html": return "viewer";
-			case "/editor.html": return "editor";
-			default: return "unknown";
-		}
-	} else {
-		return "external";
-	}
-
-	function isValidURL(url = "") {
-		try {
-			new URL(url);
-			return true;
-		}
-		catch (e) {
-			return false;
-		}
-	}
 }
 
 // Workaround for Electron 8.x
