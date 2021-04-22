@@ -24,6 +24,11 @@ const HTML = {
  * @class AccountManager
  */
 class AccountManager {
+	/**
+	 * Creates an instance of AccountManager.
+	 *
+	 * @memberof AccountManager
+	 */
 	constructor(){
 		this.managerWin = new WindowManager("accManagerBtn");
 		this.addWin = new WindowManager("altAdd");
@@ -34,6 +39,7 @@ class AccountManager {
 	/**
 	 * Add account to local list
 	 *
+	 * @private
 	 * @param {string} name
 	 * @param {string} pass
 	 * @returns {void}
@@ -57,6 +63,7 @@ class AccountManager {
 	/**
 	 * Delete account from local list
 	 *
+	 * @private
 	 * @param {string} name
 	 * @memberof AccountManager
 	 */
@@ -71,6 +78,7 @@ class AccountManager {
 	/**
 	 * Simulate login
 	 *
+	 * @private
 	 * @param {string} name
 	 * @param {string} pass
 	 * @memberof AccountManager
@@ -89,6 +97,7 @@ class AccountManager {
 	/**
 	 * Open popup dialog
 	 *
+	 * @private
 	 * @memberof AccountManager
 	 */
 	#openPopup = () => {
@@ -100,6 +109,7 @@ class AccountManager {
 	/**
 	 * Watch for alt-manager button changes
 	 *
+	 * @private
 	 * @memberof AccountManager
 	 */
 	#watcher = () => {
@@ -145,6 +155,7 @@ class AccountManager {
 	/**
 	 * Initial injection of styles
 	 *
+	 * @public
 	 * @memberof AccountManager
 	 */
 	injectStyles(){

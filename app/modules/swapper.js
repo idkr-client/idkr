@@ -11,6 +11,7 @@ let path = require("path");
 class Swapper {
 	/**
 	 * Creates an instance of Swapper.
+	 *
 	 * @param {import("electron").BrowserWindow} win
 	 * @param {string} swapperMode
 	 * @param {string} swapDir
@@ -26,6 +27,7 @@ class Swapper {
 	/**
 	 * Advanced Swapper
 	 *
+	 * @private
 	 * @param {import("electron").BrowserWindow} win
 	 * @param {string} [prefix=""]
 	 * @memberof Swapper
@@ -60,6 +62,7 @@ class Swapper {
 	/**
 	 * Advanced Swapper
 	 *
+	 * @private
 	 * @param {import("electron").BrowserWindow} win
 	 * @param {string} [prefix=""]
 	 * @param {string} [hostname=""]
@@ -88,7 +91,7 @@ class Swapper {
 	 *
 	 * @memberof Swapper
 	 */
-	init() {
+	init(){
 		switch (this.swapperMode){
 			case "normal": {
 				this.#recursiveSwapNormal(this.win);
