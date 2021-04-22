@@ -87,8 +87,6 @@ ipcMain.handle("rpc-activity", (event, activity) => {
 	}
 });
 
-let swapperMode = config.get("resourceSwapperMode", "normal");
-
 let swapDirConfig = config.get("resourceSwapperPath", "");
 let userscriptsDirConfig = config.get("userscriptsPath", "");
 
@@ -224,7 +222,11 @@ function setupWindow(win, isWeb) {
 		app.quit();
 	});
 
-	let swapper = new Swapper(win, swapperMode, swapDir);
+	let swapper = new Swapper(
+		win,
+		/** @type {string} */ (config.get("resourceSwapperMode", "normal")),
+		/** @type {string} */ (swapDir)
+	);
 	swapper.init();
 
 	return win;
