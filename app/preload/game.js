@@ -44,7 +44,7 @@ window._clientUtil.events.on('game-load', () => {
 
 	// Patch getSettings to fix custom tab bug + settings not displaying issue
 	let origGetSettings = settingsWindow.getSettings;
-	settingsWindow.getSettings = (...args) => origGetSettings.call(settingsWindow, ...args).replace(/^<\/div>/, '') || settingsWindow.getCSettings();
+	settingsWindow.getSettings = (...args) => origGetSettings.call(settingsWindow, ...args).replace(/^<\/div>/, '') + settingsWindow.getCSettings();
 
 	let clientTabIndex = settingsWindow.tabs.push({ name: 'idkr', categories: [] });
 	settingsWindow.getCSettings = () => {
