@@ -15,7 +15,7 @@ let Swapper = require("./modules/swapper");
 
 Object.assign(console, log.functions);
 
-const argv = yargs.argv;
+const { argv } = yargs;
 const config = new Store();
 
 console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`);
@@ -42,11 +42,12 @@ if (config.get("inProcessGPU", false)) {
 let angleBackend = config.get("angleBackend", "default");
 let colorProfile = config.get("colorProfile", "default");
 if (angleBackend !== "default") {
-	app.commandLine.appendSwitch("use-angle", angleBackend);
+	app.commandLine.appendSwitch("use-angle", /** @type {string} */ (angleBackend));
 }
 if (colorProfile !== "default") {
-	app.commandLine.appendSwitch("force-color-profile", colorProfile);
+	app.commandLine.appendSwitch("force-color-profile", /** @type {string} */ (colorProfile));
 }
+
 yargs.parse(config.get("chromiumFlags", ""), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
 
 ipcMain.handle("get-app-info", () => ({
@@ -54,13 +55,13 @@ ipcMain.handle("get-app-info", () => ({
 	version: app.getVersion()
 }));
 
-ipcMain.on("get-path", (event, name) => event.returnValue = app.getPath(name));
+ipcMain.on("get-path", (event, name) => (event.returnValue = app.getPath(name)));
 
 ipcMain.on("prompt", (event, message, defaultValue) => {
 	let promptWin = initPromptWindow(message, defaultValue);
 	let returnValue = null;
 
-	ipcMain.on("prompt-return", (event, value) => returnValue = value);
+	ipcMain.on("prompt-return", (_, value) => (returnValue = value));
 
 	promptWin.on("closed", () => {
 		event.returnValue = returnValue;
@@ -87,13 +88,13 @@ ipcMain.handle("rpc-activity", (event, activity) => {
 	}
 });
 
-let swapDirConfig = config.get("resourceSwapperPath", "");
-let userscriptsDirConfig = config.get("userscriptsPath", "");
+/** @type {string} */
+let swapDirConfig = (config.get("resourceSwapperPath", ""));
+/** @type {string} */
+let userscriptsDirConfig = (config.get("userscriptsPath", ""));
 
 const swapDir = PathUtils.isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath("documents"), "idkr/swap");
 const userscriptsDir = PathUtils.isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
-
-await PathUtils.ensureDirs(swapDir, userscriptsDir);
 
 if (process.platform === "win32") {
 	app.setUserTasks([{
@@ -111,6 +112,29 @@ if (process.platform === "win32") {
 		iconPath: process.execPath,
 		iconIndex: 0
 	}]);
+}
+
+function initWindow(url, webContents) {
+	let win = new BrowserWindow({
+		width: 1600,
+		height: 900,
+		show: false,
+		// @ts-ignore
+		webContents,
+		webPreferences: {
+			preload: path.join(__dirname, "preload/global.js"),
+			contextIsolation: false
+		}
+	});
+	// let contents = win.webContents
+	// TODO: Fix co-dependency !!!
+	setupWindow(win, true);
+
+	if (!webContents) {
+		win.loadURL(url);
+	}
+
+	return win;
 }
 
 function setupWindow(win, isWeb) {
@@ -232,28 +256,6 @@ function setupWindow(win, isWeb) {
 	return win;
 }
 
-function initWindow(url, webContents) {
-	let win = new BrowserWindow({
-		width: 1600,
-		height: 900,
-		show: false,
-		// @ts-ignore
-		webContents,
-		webPreferences: {
-			preload: path.join(__dirname, "preload/global.js"),
-			contextIsolation: false
-		}
-	});
-	// let contents = win.webContents
-	setupWindow(win, true);
-
-	if (!webContents) {
-		win.loadURL(url);
-	}
-
-	return win;
-}
-
 function initSplashWindow() {
 	let win = new BrowserWindow({
 		width: 600,
@@ -273,45 +275,43 @@ function initSplashWindow() {
 
 	async function autoUpdate() {
 		return new Promise((resolve, reject) => {
-			if (AUTO_UPDATE == "skip") {
-				resolve();
-			} else {
-				contents.on("dom-ready", () => {
-					contents.send("message", "Initializing the auto updater...");
-					const { autoUpdater } = require("electron-updater");
-					autoUpdater.logger = log;
+			if (AUTO_UPDATE === "skip") return resolve();
 
-					autoUpdater.on("error", err => {
-						console.error(err);
-						contents.send("message", "Error: " + err.name);
-						reject(`Error occurred: ${err.name}`);
-					});
-					autoUpdater.on("checking-for-update", () => contents.send("message", "Checking for update"));
-					autoUpdater.on("update-available", info => {
-						console.log(info);
-						contents.send("message", `Update v${info.version} available`, info.releaseDate);
-						if (AUTO_UPDATE != "download") {
-							resolve();
-						}
-					});
-					autoUpdater.on("update-not-available", info => {
-						console.log(info);
-						contents.send("message", "No update available");
-						resolve();
-					});
-					autoUpdater.on("download-progress", info => {
-						contents.send("message", `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + "kB/s");
-						win.setProgressBar(info.percent / 100);
-					});
-					autoUpdater.on("update-downloaded", info => {
-						contents.send("message", null, `Installing v${info.version}...`);
-						autoUpdater.quitAndInstall(true, true);
-					});
+			contents.on("dom-ready", () => {
+				contents.send("message", "Initializing the auto updater...");
+				const { autoUpdater } = require("electron-updater");
+				autoUpdater.logger = log;
 
-					autoUpdater.autoDownload = AUTO_UPDATE == "download";
-					autoUpdater.checkForUpdates();
+				autoUpdater.on("error", err => {
+					console.error(err);
+					contents.send("message", "Error: " + err.name);
+					reject(`Error occurred: ${err.name}`);
 				});
-			}
+				autoUpdater.on("checking-for-update", () => contents.send("message", "Checking for update"));
+				autoUpdater.on("update-available", info => {
+					console.log(info);
+					contents.send("message", `Update v${info.version} available`, info.releaseDate);
+					if (AUTO_UPDATE !== "download") {
+						resolve();
+					}
+				});
+				autoUpdater.on("update-not-available", info => {
+					console.log(info);
+					contents.send("message", "No update available");
+					resolve();
+				});
+				autoUpdater.on("download-progress", info => {
+					contents.send("message", `Downloaded ${Math.floor(info.percent)}%`, Math.floor(info.bytesPerSecond / 1000) + "kB/s");
+					win.setProgressBar(info.percent / 100);
+				});
+				autoUpdater.on("update-downloaded", info => {
+					contents.send("message", null, `Installing v${info.version}...`);
+					autoUpdater.quitAndInstall(true, true);
+				});
+
+				autoUpdater.autoDownload = AUTO_UPDATE === "download";
+				autoUpdater.checkForUpdates();
+			});
 		});
 	}
 
@@ -348,41 +348,48 @@ function initPromptWindow(message, defaultValue) {
 	return win;
 }
 
-// Workaround for Electron 8.x
-protocol.registerSchemesAsPrivileged([{
-	scheme: "idkr-swap",
-	privileges: { secure: true, corsEnabled: true }
-}]);
+let init = async function(){
+	await PathUtils.ensureDirs(swapDir, userscriptsDir);
 
-const rpcClientId = "770954802443059220";
+	// Workaround for Electron 8.x
+	protocol.registerSchemesAsPrivileged([{
+		scheme: "idkr-swap",
+		privileges: { secure: true, corsEnabled: true }
+	}]);
 
-DiscordRPC.register(rpcClientId);
-const rpc = new DiscordRPC.Client({ transport: "ipc" });
+	const rpcClientId = "770954802443059220";
 
-rpc.on("ready", () => {
-	console.log("Discord RPC ready");
-});
+	DiscordRPC.register(rpcClientId);
+	const rpc = new DiscordRPC.Client({ transport: "ipc" });
 
-app.once("ready", () => {
-	protocol.registerFileProtocol("idkr-swap", (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ""))));
-	app.on("second-instance", (e, argv) => {
-		let instanceArgv = yargs.parse(argv);
-		console.log("Second instance: " + argv);
-		if (!["unknown", "external"].includes(locationType(String(instanceArgv["new-window"])))) {
-			initWindow(instanceArgv["new-window"]);
-		}
+	rpc.on("ready", () => {
+		console.log("Discord RPC ready");
 	});
 
-	if (isRPCEnabled) {
-		rpc.login({ clientId: rpcClientId }).catch(console.error);
-	}
+	app.once("ready", () => {
+		protocol.registerFileProtocol("idkr-swap", (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ""))));
+		// eslint-disable-next-line no-shadow
+		app.on("second-instance", (e, argv) => {
+			let instanceArgv = yargs.parse(argv);
+			console.log("Second instance: " + argv);
+			if (!["unknown", "external"].includes(locationType(String(instanceArgv["new-window"])))) {
+				initWindow(instanceArgv["new-window"]);
+			}
+		});
 
-	initSplashWindow();
-});
+		if (isRPCEnabled) {
+			rpc.login({ clientId: rpcClientId }).catch(console.error);
+		}
 
-app.on("quit", async() => {
-	if (isRPCEnabled) {
-		await rpc.clearActivity();
-		rpc.destroy();
-	}
-});
+		initSplashWindow();
+	});
+
+	app.on("quit", async() => {
+		if (isRPCEnabled) {
+			await rpc.clearActivity();
+			rpc.destroy();
+		}
+	});
+};
+
+init();
