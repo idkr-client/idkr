@@ -1,12 +1,15 @@
 "use strict";
 
+let path = require("path");
+
 require("v8-compile-cache");
 let events = require("events");
-let { ipcRenderer } = require("electron");
+let { ipcRenderer, app } = require("electron");
 let Store = require("electron-store");
 let log = require("electron-log");
 
 let UrlUtils = require("../utils/url-utils");
+let UserscriptInitiator = require("../modules/userscript-manager/userscript-initiator");
 
 const config = new Store();
 
@@ -15,6 +18,10 @@ Object.assign(console, log.functions);
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", message, defaultValue);
 
 let windowType = UrlUtils.locationType(location.href);
+
+// For some reason app is undefined on the next line
+let usi = new UserscriptInitiator(config, path.join(app.getPath("documents"), "idkr/scripts"), {});
+usi.inject(windowType);
 
 window._clientUtil = {
 	events: new events(),
@@ -48,9 +55,9 @@ window._clientUtil = {
 			delete this.delayIDs[name];
 		}, delay);
 	},
-	loadScripts() {
+	loadScripts(){
 	},
-	initUtil() {
+	initUtil(){
 		for (let [key, entry] of Object.entries(this.settings)) {
 			if (!("name" in entry && "id" in entry && "cat" in entry && "type" in entry && "val" in entry && "html" in entry)) {
 				console.log(`Ignored a setting entry ${entry.id ? `"${entry.id}"` : "with no ID"}, missing a required property`);
@@ -78,16 +85,15 @@ window._clientUtil = {
 	}
 };
 
-if (windowType === "game") {
-	window._clientUtil.events.on("game-load", () => window._clientUtil.initUtil());
-} else {
-	window._clientUtil.initUtil();
-}
+(windowType === "game")
+	? window._clientUtil.events.on("game-load", () => window._clientUtil.initUtil())
+	: window._clientUtil.initUtil();
 
 switch (windowType) {
 	case "game":
 		require("./game.js");
 		break;
+	default: () => {};
 }
 
 let rpcIntervalId;
