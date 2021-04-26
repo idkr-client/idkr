@@ -52,7 +52,8 @@ yargs.parse(config.get("chromiumFlags", ""), (err, argv) => Object.entries(argv)
 
 ipcMain.handle("get-app-info", () => ({
 	name: app.name,
-	version: app.getVersion()
+	version: app.getVersion(),
+	documentsDir: app.getPath("documents")
 }));
 
 ipcMain.on("get-path", (event, name) => (event.returnValue = app.getPath(name)));

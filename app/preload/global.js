@@ -4,7 +4,7 @@ let path = require("path");
 
 require("v8-compile-cache");
 let events = require("events");
-let { ipcRenderer, app } = require("electron");
+let { ipcRenderer } = require("electron");
 let Store = require("electron-store");
 let log = require("electron-log");
 
@@ -18,10 +18,6 @@ Object.assign(console, log.functions);
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", message, defaultValue);
 
 let windowType = UrlUtils.locationType(location.href);
-
-// For some reason app is undefined on the next line
-let usi = new UserscriptInitiator(config, path.join(app.getPath("documents"), "idkr/scripts"), {});
-usi.inject(windowType);
 
 window._clientUtil = {
 	events: new events(),
@@ -167,6 +163,10 @@ ipcRenderer.on("rpc-stop", () => {
 		clearInterval(rpcIntervalId);
 	}
 });
+
+ipcRenderer
+	.invoke("get-app-info")
+	.then(info => ((new UserscriptInitiator(config, path.join(info.documentsDir, "idkr", "scripts"), {})).inject(windowType)));
 
 setFocusEvent();
 
