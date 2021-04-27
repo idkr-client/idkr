@@ -3,6 +3,7 @@
 let path = require("path");
 
 require("v8-compile-cache");
+
 let events = require("events");
 let { ipcRenderer } = require("electron");
 let Store = require("electron-store");
@@ -24,34 +25,25 @@ window._clientUtil = {
 	settings: require("../exports/settings"),
 	setCSetting(name, value) {
 		let entry = Object.values(this.settings).find(entry => entry.id === name);
-		if (entry.min && entry.max){
-			value = Math.max(entry.min, Math.min(value, entry.max));
-		}
+		if (entry.min && entry.max) value = Math.max(entry.min, Math.min(value, entry.max));
+
 		config.set(name, value);
 		entry.val = value;
-		if (entry.set) {
-			entry.set(value);
-		}
+		if (entry.set) entry.set(value);
+
 		let element = document.getElementById("c_slid_" + entry.id);
-		if (element) {
-			element.value = value;
-		}
+
+		if (element) element.value = value;
 		element = document.getElementById("c_slid_input_" + entry.id);
-		if (element) {
-			element.value = value;
-		}
+		if (element) element.value = value;
 	},
 	delayIDs: {},
 	delaySetCSetting(name, target, delay = 600) {
-		if (this.delayIDs[name]) {
-			clearTimeout(this.delayIDs[name]);
-		}
+		if (this.delayIDs[name]) clearTimeout(this.delayIDs[name]);
 		this.delayIDs[name] = setTimeout(() => {
 			this.setCSetting(name, target.value);
 			delete this.delayIDs[name];
 		}, delay);
-	},
-	loadScripts(){
 	},
 	initUtil(){
 		for (let [key, entry] of Object.entries(this.settings)) {
@@ -64,19 +56,13 @@ window._clientUtil = {
 				delete this.settings[key];
 				continue;
 			}
-			if (entry.dontInit) {
-				continue;
-			}
+			if (entry.dontInit) continue;
+
 			let savedVal = config.get(entry.id);
-			if (savedVal !== null) {
-				entry.val = savedVal;
-			}
-			if (entry.min && entry.max) {
-				entry.val = Math.max(entry.min, Math.min(entry.val, entry.max));
-			}
-			if (entry.set) {
-				entry.set(entry.val, true);
-			}
+
+			if (savedVal !== null) entry.val = savedVal;
+			if (entry.min && entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max));
+			if (entry.set) entry.set(entry.val, true);
 		}
 	}
 };
@@ -94,9 +80,9 @@ switch (windowType) {
 
 let rpcIntervalId;
 
-function setFocusEvent() {
+function setFocusEvent(){
 	window.addEventListener("focus", () => {
-		function sendRPCGamePresence() {
+		function sendRPCGamePresence(){
 			try {
 				let gameActivity = window.getGameActivity();
 
@@ -105,9 +91,7 @@ function setFocusEvent() {
 					details: gameActivity.mode
 				});
 
-				if (gameActivity.time) {
-					rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1e3;
-				}
+				if (gameActivity.time) rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1e3;
 				ipcRenderer.invoke("rpc-activity", rpcActivity);
 			}
 			catch (error) {
@@ -124,14 +108,13 @@ function setFocusEvent() {
 		};
 		let isIntervalSet = false;
 		switch (windowType) {
-			case "game":
+			case "game": {
 				sendRPCGamePresence();
-				if (rpcIntervalId) {
-					clearInterval(rpcIntervalId);
-				}
+				if (rpcIntervalId) clearInterval(rpcIntervalId);
 				rpcIntervalId = setInterval(sendRPCGamePresence, 5e3);
 				isIntervalSet = true;
 				break;
+			}
 			case "docs":
 				rpcActivity.state = "Reading Docs";
 				break;
@@ -159,9 +142,7 @@ function setFocusEvent() {
 
 ipcRenderer.on("rpc-stop", () => {
 	setFocusEvent();
-	if (rpcIntervalId) {
-		clearInterval(rpcIntervalId);
-	}
+	if (rpcIntervalId) clearInterval(rpcIntervalId);
 });
 
 ipcRenderer

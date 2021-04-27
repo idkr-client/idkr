@@ -2,10 +2,6 @@
 
 let { ipcRenderer } = require("electron");
 
-/**
- * @typedef {Window & any} window
- */
-
 window.addEventListener("DOMContentLoaded", () => {
 	/** @type {HTMLInputElement} */
 	const promptInput = (document.getElementById("promptInput"));
@@ -19,17 +15,12 @@ window.addEventListener("DOMContentLoaded", () => {
 		promptInput.focus();
 	});
 
-	/** @type {window} */
+	/** @type {Window & any} */
 	(window).sendValue = value => {
 		ipcRenderer.send("prompt-return", value);
 		window.close();
 	};
 
-	/** @type {window} */
-	(window).importFile = () => {
-		/**
-		 * @type {HTMLInputElement}
-		 */
-		(document.getElementById("fileSelect")).files[0].text().then(text => (promptInput.value = text));
-	};
+	// @ts-ignore
+	window.importFile = () => (document.getElementById("fileSelect").files[0].text().then(text => (promptInput.value = text)));
 });
