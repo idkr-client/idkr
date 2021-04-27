@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ELECTRON_ENABLE_STACK_DUMPING=1 ELECTRON_ENABLE_LOGGING=true electron .",
-    "startd": "npm start -- --debug",
+    "start": "electron .",
+    "startd": "ELECTRON_ENABLE_STACK_DUMPING=1 ELECTRON_ENABLE_LOGGING=true npm start -- --debug",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "release": "electron-builder",
