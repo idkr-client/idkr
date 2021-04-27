@@ -11,6 +11,7 @@ let log = require("electron-log");
 
 let UrlUtils = require("../utils/url-utils");
 let UserscriptInitiator = require("../modules/userscript-manager/userscript-initiator");
+let UtilManager = require("../modules/util-manager");
 
 const config = new Store();
 
@@ -20,7 +21,7 @@ window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", messag
 
 let windowType = UrlUtils.locationType(location.href);
 
-window._clientUtil = {
+UtilManager.instance.clientUtils = {
 	events: new events(),
 	settings: require("../exports/settings"),
 	setCSetting(name, value) {
@@ -68,8 +69,8 @@ window._clientUtil = {
 };
 
 (windowType === "game")
-	? window._clientUtil.events.on("game-load", () => window._clientUtil.initUtil())
-	: window._clientUtil.initUtil();
+	? UtilManager.instance.clientUtils.events.on("game-load", () => UtilManager.instance.clientUtils.initUtil())
+	: UtilManager.instance.clientUtils.initUtil();
 
 switch (windowType) {
 	case "game":
@@ -147,7 +148,7 @@ ipcRenderer.on("rpc-stop", () => {
 
 ipcRenderer
 	.invoke("get-app-info")
-	.then(info => ((new UserscriptInitiator(config, path.join(info.documentsDir, "idkr", "scripts"), {})).inject(windowType)));
+	.then(info => ((new UserscriptInitiator(config, path.join(info.documentsDir, "idkr", "scripts"), UtilManager.instance.clientUtils)).inject(windowType)));
 
 setFocusEvent();
 
