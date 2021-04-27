@@ -339,7 +339,11 @@ let init = async function(){
 		privileges: { secure: true, corsEnabled: true }
 	}]);
 
-	let rpcHandler = new RPCHandler("770954802443059220", config.get("discordRPC", true));
+	let rpcHandler = new RPCHandler(
+		"770954802443059220",
+		/** @type {boolean} */
+		(config.get("discordRPC", true))
+	);
 
 	// @TODO: This might deadlock!!!
 	let lastSender = null;

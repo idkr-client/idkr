@@ -22,7 +22,8 @@ Object.assign(window[UtilManager.instance._utilKey], {
 });
 
 // Workaround to avoid getting client popup
-window.OffCliV = true;
+/** @type {object} */
+(window).OffCliV = true;
 
 let accountManager = new AccountManager();
 
@@ -37,12 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 UtilManager.instance.clientUtils.events.on("game-load", () => {
-	window.closeClient = close;
-	settingsWindow = window.windows[0];
+	/** @type {object} */
+	(window).closeClient = close;
+	settingsWindow = /** @type {object} */ (window).windows[0];
 
 	// Patch getSettings to fix custom tab bug + settings not displaying issue
 	let origGetSettings = settingsWindow.getSettings;
-	settingsWindow.getSettings = (...args) => origGetSettings.call(settingsWindow, ...args).replace(/^<\/div>/, '') + settingsWindow.getCSettings();
+	settingsWindow.getSettings = (...args) => origGetSettings.call(settingsWindow, ...args).replace(/^<\/div>/, "") + settingsWindow.getCSettings();
 
 	let clientTabIndex = settingsWindow.tabs.push({ name: "idkr", categories: [] });
 	settingsWindow.getCSettings = () => {
@@ -53,14 +55,24 @@ UtilManager.instance.clientUtils.events.on("game-load", () => {
 			if (settingsWindow.settingSearch && !UtilManager.instance.clientUtils.searchMatches(entry) || entry.hide) {
 				return;
 			}
-			if (previousCategory !== entry.cat) {
-				if (previousCategory) {
-					tempHTML += "</div>";
-				}
+			if (previousCategory !== entry.cat){
+				if (previousCategory) tempHTML += "</div>";
 				previousCategory = entry.cat;
 				tempHTML += `<div class='setHed' id='setHed_${btoa(entry.cat)}' onclick='window.windows[0].collapseFolder(this)'><span class='material-icons plusOrMinus'>keyboard_arrow_down</span> ${entry.cat}</div><div id='setBod_${btoa(entry.cat)}'>`;
 			}
-			tempHTML += `<div class='settName'${entry.needsRestart ? ' title="Requires Restart"' : ""}${entry.hide ? ` id='c_${entry.id}_div' style='display: none'` : ""}>${entry.name}${entry.needsRestart ? ' <span style="color: #eb5656">*</span>' : ""} ${entry.html()}</div>`;
+			tempHTML += `<div class='settName'${
+				entry.needsRestart
+					? ' title="Requires Restart"'
+					: ""
+			}${
+				entry.hide
+					? ` id='c_${entry.id}_div' style='display: none'`
+					: ""
+			}>${entry.name}${
+				entry.needsRestart
+					? ' <span style="color: #eb5656">*</span>'
+					: ""
+			} ${entry.html()}</div>`;
 		});
 		return tempHTML ? tempHTML + "</div>" : "";
 	};
