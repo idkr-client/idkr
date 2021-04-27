@@ -22,20 +22,25 @@ window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", messag
 let windowType = UrlUtils.locationType(location.href);
 
 UtilManager.instance.clientUtils = {
+	// eslint-disable-next-line new-cap
 	events: new events(),
 	settings: require("../exports/settings"),
 	setCSetting(name, value) {
-		let entry = Object.values(this.settings).find(entry => entry.id === name);
+		let entry = Object.values(this.settings).find(_entry => _entry.id === name);
+		// eslint-disable-next-line no-param-reassign
 		if (entry.min && entry.max) value = Math.max(entry.min, Math.min(value, entry.max));
 
 		config.set(name, value);
 		entry.val = value;
 		if (entry.set) entry.set(value);
 
-		let element = document.getElementById("c_slid_" + entry.id);
+		/** @type {HTMLInputElement} */
+		let element = (document.getElementById("c_slid_" + entry.id));
 
 		if (element) element.value = value;
-		element = document.getElementById("c_slid_input_" + entry.id);
+
+		/** @type {HTMLInputElement} */
+		element = (document.getElementById("c_slid_input_" + entry.id));
 		if (element) element.value = value;
 	},
 	delayIDs: {},
@@ -83,30 +88,31 @@ let rpcIntervalId;
 
 function setFocusEvent(){
 	window.addEventListener("focus", () => {
+		let rpcActivity = {
+			largeImageKey: "idkr-logo",
+			largeImageText: "idkr client"
+		};
+
 		function sendRPCGamePresence(){
 			try {
-				let gameActivity = window.getGameActivity();
+				let gameActivity = /** @type {object} */ (window).getGameActivity();
 
 				Object.assign(rpcActivity, {
 					state: gameActivity.map,
 					details: gameActivity.mode
 				});
 
-				if (gameActivity.time) rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1e3;
+				if (gameActivity.time) rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1000;
 				ipcRenderer.invoke("rpc-activity", rpcActivity);
 			}
 			catch (error) {
 				ipcRenderer.invoke("rpc-activity", Object.assign(rpcActivity, {
 					state: "Playing",
-					startTimestamp: Math.floor(Date.now() / 1e3)
+					startTimestamp: Math.floor(Date.now() / 1000)
 				}));
 			}
 		}
 
-		let rpcActivity = {
-			largeImageKey: "idkr-logo",
-			largeImageText: "idkr client"
-		};
 		let isIntervalSet = false;
 		switch (windowType) {
 			case "game": {
@@ -135,7 +141,7 @@ function setFocusEvent(){
 
 		if (!isIntervalSet) {
 			ipcRenderer.invoke("rpc-activity", Object.assign(rpcActivity, {
-				startTimestamp: Math.floor(performance.timeOrigin / 1e3)
+				startTimestamp: Math.floor(performance.timeOrigin / 1000)
 			}));
 		}
 	}, { once: true });
@@ -146,16 +152,19 @@ ipcRenderer.on("rpc-stop", () => {
 	if (rpcIntervalId) clearInterval(rpcIntervalId);
 });
 
-ipcRenderer
-	.invoke("get-app-info")
-	.then(info => ((new UserscriptInitiator(config, path.join(info.documentsDir, "idkr", "scripts"), UtilManager.instance.clientUtils)).inject(windowType)));
+ipcRenderer.invoke("get-app-info")
+	.then(info => ((new UserscriptInitiator(
+		config,
+		path.join(info.documentsDir, "idkr", "scripts"),
+		UtilManager.instance.clientUtils)
+	).inject(windowType)));
 
 setFocusEvent();
 
 window.addEventListener("unload", () => {
 	ipcRenderer.invoke("rpc-activity", {
 		state: "Idle",
-		startTimestamp: Math.floor(Date.now() / 1e3),
+		startTimestamp: Math.floor(Date.now() / 1000),
 		largeImageKey: "idkr-logo",
 		largeImageText: "idkr client"
 	});
