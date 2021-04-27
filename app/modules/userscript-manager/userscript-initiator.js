@@ -32,7 +32,12 @@ class UserscriptInitiator {
 	}
 
 	/**
+	 * Execute the sandboxed code
+	 *
+	 * @private
 	 * @param {Userscript} script
+	 * @returns {any}
+	 * @memberof UserscriptInitiator
 	 */
 	#executeScript = (script) => {
 		const context = {
@@ -44,7 +49,7 @@ class UserscriptInitiator {
 			}
 		};
 
-		Function(`(${script.run})();`).bind(context)();
+		return Function(`(${script.run})();`).bind(context)();
 	}
 
 	/**
@@ -52,25 +57,31 @@ class UserscriptInitiator {
 	 *
 	 * @public
 	 * @param {string} windowType
+	 * @returns {any}
 	 * @memberof UserscriptInitiator
 	 */
 	inject(windowType){
-		console.log("injecting...");
 		try {
-			fs.readdirSync(this.scriptsPath).filter(filename => path.extname(filename).toLowerCase() === ".js").forEach(filename => {
-				let plugin = fs.readFileSync(path.join(this.scriptsPath, filename));
-				let script = new Userscript(Function(`return (function() {${plugin}})();`)(), windowType);
-				if (!script.isLocationMatching()) return console.log(`[idkr] Ignored, location not matching: ${script.name}`);
-				else if (!script.isPlatformMatching()) return console.log(`[idkr] Ignored, platform not matching: ${script.name}`);
+			return fs.promises
+				.readdir(this.scriptsPath)
+				.then(arr => arr.filter(filename => path.extname(filename).toLowerCase() === ".js")
+					.forEach(filename => {
+						let script = new Userscript(Function(
+							`return (function() {${fs.readFileSync(path.join(this.scriptsPath, filename))}})();`
+						)(), windowType);
 
-				// if (script.settings) Object.assign(window._clientUtil.settings, script.settings);
-				this.#executeScript(script);
+						if (!script.isLocationMatching()) return console.log(`[idkr] Ignored, location not matching: ${script.name}`);
+						else if (!script.isPlatformMatching()) return console.log(`[idkr] Ignored, platform not matching: ${script.name}`);
 
-				return console.log(`[idkr] Loaded userscript: ${script.name} by ${script.author}`);
-			});
+						// if (script.settings) Object.assign(window._clientUtil.settings, script.settings);
+						this.#executeScript(script);
+
+						return console.log(`[idkr] Loaded userscript: ${script.name} by ${script.author}`);
+					})
+				);
 		}
 		catch (err){
-			console.error("[idkr] Failed to load scripts:", err);
+			return console.error("[idkr] Failed to load scripts:", err);
 		}
 	}
 }
