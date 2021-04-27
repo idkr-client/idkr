@@ -16,7 +16,7 @@ class UserscriptInitiator {
 	/**
 	 * Creates an instance of UserscriptInitiator.
 	 *
-	 * @param {object} config
+	 * @param {import("electron-store")} config
 	 * @param {string} dest
 	 * @param {object} clientUtils
 	 * @memberof UserscriptInitiator
@@ -30,31 +30,20 @@ class UserscriptInitiator {
 	}
 
 	/**
-	 * Execution context for the scripts
-	 *
-	 * @private
-	 * @memberof UserscriptInitiator
+	 * @param {Userscript} script
 	 */
-	#context = {
-		window,                         // Current Global Window
-		document,                       // Current Global Document
-		clientUtils: this.clientUtils,  // Client Utilities API
-		console: {                      // Re-bind console outside of VM
-			log: (...args) => console.log(...args)
-		}
-	}
+	#executeScript = (script) => {
+		const context = {
+			window,                         // Current Global Window
+			document,                       // Current Global Document
+			clientUtils: this.clientUtils,  // Client Utilities API
+			console: {                      // Re-bind console outside of VM
+				log: (...args) => console.log(...args)
+			},
+			setTimeout
+		};
 
-	/**
-	 * Create a VM instance per userscript
-	 *
-	 * @private
-	 * @param {string} code
-	 * @memberof UserscriptInitiator
-	 */
-	#createVm = (code) => {
-		let script = new vm.Script(code);
-		vm.createContext(this.#context);
-		script.runInContext(this.#context);
+		Function(`(${script.run})();`).bind(context)();
 	}
 
 	/**
@@ -73,8 +62,7 @@ class UserscriptInitiator {
 				else if (!script.isPlatformMatching()) return console.log(`[idkr] Ignored, platform not matching: ${script.name}`);
 
 				// if (script.settings) Object.assign(window._clientUtil.settings, script.settings);
-				let executor = script.run;
-				executor && this.#createVm(String(executor));
+				this.#executeScript(script);
 
 				return console.log(`[idkr] Loaded userscript: ${script.name} by ${script.author}`);
 			});

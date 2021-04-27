@@ -148,7 +148,7 @@ ipcRenderer.on("rpc-stop", () => {
 
 ipcRenderer
 	.invoke("get-app-info")
-	.then(info => ((new UserscriptInitiator(config, path.join(info.documentsDir, "idkr", "scripts"), {})).inject(windowType)));
+	.then(info => ((new UserscriptInitiator(config, path.join(info.documentsDir, "idkr", "scripts"), UtilManager.instance.clientUtils)).inject(windowType)));
 
 setFocusEvent();
 
