@@ -2,7 +2,19 @@
 
 let DiscordRPC = require("discord-rpc");
 
+/**
+ * Handles RPC start, stop and changes
+ *
+ * @class RPCHandler
+ */
 class RPCHandler {
+	/**
+	 * Creates an instance of RPCHandler.
+	 *
+	 * @param {string} rpcClientId
+	 * @param {boolean} isEnabled
+	 * @memberof RPCHandler
+	 */
 	constructor(rpcClientId, isEnabled){
 		DiscordRPC.register(rpcClientId);
 		this.rpcClientId = rpcClientId;
@@ -10,20 +22,44 @@ class RPCHandler {
 		this.isEnabled = isEnabled;
 	}
 
+	/**
+	 * Current RPC status
+	 *
+	 * @returns {boolean}
+	 * @memberof RPCHandler
+	 */
 	rpcEnabled(){
 		return this.isEnabled;
 	}
 
+	/**
+	 * Update RPC activity
+	 *
+	 * @param {import("discord-rpc").Presence} activity
+	 * @memberof RPCHandler
+	 */
 	async update(activity){
 		await this.rpc.setActivity(activity).catch(console.error);
 	}
 
+	/**
+	 * Start the RPC handler
+	 *
+	 * @returns {Promise<void>}
+	 * @memberof RPCHandler
+	 */
 	async start(){
 		if (!this.isEnabled) return;
 		await this.rpc.login({ clientId: this.rpcClientId }).catch(console.error);
 		this.rpc.on("ready", () => console.log("Discord RPC ready"));
 	}
 
+	/**
+	 * Ends the RPC handler
+	 *
+	 * @returns {Promise<void>}
+	 * @memberof RPCHandler
+	 */
 	async end(){
 		await this.rpc.clearActivity();
 		return this.rpc.destroy();
