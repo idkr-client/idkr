@@ -57,7 +57,8 @@ class UserscriptInitiator {
 		console.log("injecting...");
 		try {
 			fs.readdirSync(this.scriptsPath).filter(filename => path.extname(filename).toLowerCase() === ".js").forEach(filename => {
-				let script = new Userscript(require(path.join(this.scriptsPath, filename)), windowType);
+				let plugin = fs.readFileSync(path.join(this.scriptsPath, filename));
+				let script = new Userscript(Function(`return (function() {${plugin}})();`)(), windowType);
 				if (!script.isLocationMatching()) return console.log(`[idkr] Ignored, location not matching: ${script.name}`);
 				else if (!script.isPlatformMatching()) return console.log(`[idkr] Ignored, platform not matching: ${script.name}`);
 
