@@ -29,6 +29,7 @@ if (!app.requestSingleInstanceLock()) {
 
 app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
+// @TODO: Refactor in CLI handler
 if (!config.get("acceleratedCanvas", true)) {
 	app.commandLine.appendSwitch("disable-accelerated-2d-canvas", "true");
 }
@@ -48,7 +49,10 @@ if (colorProfile !== "default") {
 	app.commandLine.appendSwitch("force-color-profile", /** @type {string} */ (colorProfile));
 }
 
-yargs.parse(config.get("chromiumFlags", ""), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
+yargs.parse(
+	/** @type {string} */
+	(config.get("chromiumFlags", "")), (err, _argv) => Object.entries(_argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1]))
+);
 
 ipcMain.handle("get-app-info", () => ({
 	name: app.name,
@@ -59,6 +63,8 @@ ipcMain.handle("get-app-info", () => ({
 ipcMain.on("get-path", (event, name) => (event.returnValue = app.getPath(name)));
 
 ipcMain.on("prompt", (event, message, defaultValue) => {
+	// @TODO: Fix semantic function order
+	// eslint-disable-next-line no-use-before-define
 	let promptWin = initPromptWindow(message, defaultValue);
 	let returnValue = null;
 
@@ -74,20 +80,6 @@ ipcMain.handle("set-bounds", (event, bounds) => {
 });
 
 const isRPCEnabled = config.get("discordRPC", true);
-
-let lastSender = null;
-ipcMain.handle("rpc-activity", (event, activity) => {
-	if (isRPCEnabled) {
-		if (lastSender !== event.sender) {
-			if (lastSender) {
-				lastSender.send("rpc-stop");
-			}
-			lastSender = event.sender;
-			lastSender.on("destroyed", () => (lastSender = null));
-		}
-		rpc.setActivity(activity).catch(console.error);
-	}
-});
 
 /** @type {string} */
 let swapDirConfig = (config.get("resourceSwapperPath", ""));
@@ -128,12 +120,11 @@ function initWindow(url, webContents) {
 		}
 	});
 	// let contents = win.webContents
-	// TODO: Fix co-dependency !!!
+	// @TODO: Fix co-dependency !!!
+	// eslint-disable-next-line no-use-before-define
 	setupWindow(win, true);
 
-	if (!webContents) {
-		win.loadURL(url);
-	}
+	if (!webContents) win.loadURL(url);
 
 	return win;
 }
@@ -141,9 +132,8 @@ function initWindow(url, webContents) {
 function setupWindow(win, isWeb) {
 	let contents = win.webContents;
 
-	if (DEBUG) {
-		contents.openDevTools();
-	}
+	if (DEBUG) contents.openDevTools();
+
 	win.removeMenu();
 	win.once("ready-to-show", () => {
 		let windowType = UrlUtils.locationType(contents.getURL());
@@ -153,13 +143,10 @@ function setupWindow(win, isWeb) {
 		win.on("enter-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, true));
 		win.on("leave-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, false));
 
-		let windowStateConfig = config.get("windowState." + windowType, {});
-		if (windowStateConfig.maximized) {
-			win.maximize();
-		}
-		if (windowStateConfig.fullScreen) {
-			win.setFullScreen(true);
-		}
+		/** @type {object} */
+		let windowStateConfig = (config.get("windowState." + windowType, {}));
+		if (windowStateConfig.maximized) win.maximize();
+		if (windowStateConfig.fullScreen) win.setFullScreen(true);
 
 		win.show();
 	});
@@ -182,9 +169,7 @@ function setupWindow(win, isWeb) {
 	});
 	shortcuts.register(win, "Shift+F1", () => config.openInEditor());
 
-	if (!isWeb) {
-		return win;
-	}
+	if (!isWeb) return win;
 
 	// Codes only runs on web windows
 
@@ -196,13 +181,10 @@ function setupWindow(win, isWeb) {
 		win.on("enter-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, true));
 		win.on("leave-full-screen", () => config.set(`windowState.${windowType}.fullScreen`, false));
 
-		let windowStateConfig = config.get("windowState." + windowType, {});
-		if (windowStateConfig.maximized) {
-			win.maximize();
-		}
-		if (windowStateConfig.fullScreen) {
-			win.setFullScreen(true);
-		}
+		/** @type {object} */
+		let windowStateConfig = (config.get("windowState." + windowType, {}));
+		if (windowStateConfig.maximized) win.maximize();
+		if (windowStateConfig.fullScreen) win.setFullScreen(true);
 	});
 
 	contents.on("dom-ready", () => {
@@ -272,13 +254,14 @@ function initSplashWindow() {
 	});
 	let contents = win.webContents;
 
-	autoUpdate().finally(() => launchGame());
-
 	async function autoUpdate() {
+		// @TODO: See comment below
+		// eslint-disable-next-line consistent-return
 		return new Promise((resolve, reject) => {
 			if (AUTO_UPDATE === "skip") return resolve();
 
-			contents.on("dom-ready", () => {
+			// @TODO: This might orphan, need to test
+			/* return */contents.on("dom-ready", () => {
 				contents.send("message", "Initializing the auto updater...");
 				const { autoUpdater } = require("electron-updater");
 				autoUpdater.logger = log;
@@ -292,9 +275,7 @@ function initSplashWindow() {
 				autoUpdater.on("update-available", info => {
 					console.log(info);
 					contents.send("message", `Update v${info.version} available`, info.releaseDate);
-					if (AUTO_UPDATE !== "download") {
-						resolve();
-					}
+					if (AUTO_UPDATE !== "download") resolve();
 				});
 				autoUpdater.on("update-not-available", info => {
 					console.log(info);
@@ -316,14 +297,16 @@ function initSplashWindow() {
 		});
 	}
 
-	setupWindow(win);
-	win.loadFile("app/html/splash.html");
-	return win;
-
 	function launchGame() {
 		initWindow("https://krunker.io/");
 		setTimeout(() => win.destroy(), 2000);
 	}
+
+	autoUpdate().finally(() => launchGame());
+
+	setupWindow(win);
+	win.loadFile("app/html/splash.html");
+	return win;
 }
 
 function initPromptWindow(message, defaultValue) {
@@ -363,6 +346,19 @@ let init = async function(){
 	DiscordRPC.register(rpcClientId);
 	const rpc = new DiscordRPC.Client({ transport: "ipc" });
 
+	// @TODO: This might deadlock!!!
+	let lastSender = null;
+	ipcMain.handle("rpc-activity", (event, activity) => {
+		if (isRPCEnabled) {
+			if (lastSender !== event.sender) {
+				if (lastSender) lastSender.send("rpc-stop");
+				lastSender = event.sender;
+				lastSender.on("destroyed", () => (lastSender = null));
+			}
+			rpc.setActivity(activity).catch(console.error);
+		}
+	});
+
 	rpc.on("ready", () => {
 		console.log("Discord RPC ready");
 	});
@@ -373,7 +369,7 @@ let init = async function(){
 		app.on("second-instance", (e, argv) => {
 			let instanceArgv = yargs.parse(argv);
 			console.log("Second instance: " + argv);
-			if (!["unknown", "external"].includes(locationType(String(instanceArgv["new-window"])))) {
+			if (!["unknown", "external"].includes(UrlUtils.locationType(String(instanceArgv["new-window"])))) {
 				initWindow(instanceArgv["new-window"]);
 			}
 		});
