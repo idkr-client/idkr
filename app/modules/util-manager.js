@@ -28,7 +28,7 @@ class UtilManager {
 	/**
 	 * @memberof UtilManager
 	 */
-	get clientUtils() {
+	get clientUtils(){
 		return window[this._utilKey];
 	}
 

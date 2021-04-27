@@ -2,7 +2,6 @@
 
 require("v8-compile-cache");
 let path = require("path");
-let DiscordRPC = require("discord-rpc");
 let { BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require("electron");
 let Store = require("electron-store");
 let log = require("electron-log");
@@ -12,6 +11,7 @@ let yargs = require("yargs");
 let PathUtils = require("./utils/path-utils");
 let UrlUtils = require("./utils/url-utils");
 let Swapper = require("./modules/swapper");
+let RPCHandler = require("./modules/rpc-handler");
 
 Object.assign(console, log.functions);
 
@@ -78,8 +78,6 @@ ipcMain.on("prompt", (event, message, defaultValue) => {
 ipcMain.handle("set-bounds", (event, bounds) => {
 	BrowserWindow.fromWebContents(event.sender).setBounds(bounds);
 });
-
-const isRPCEnabled = config.get("discordRPC", true);
 
 /** @type {string} */
 let swapDirConfig = (config.get("resourceSwapperPath", ""));
@@ -341,52 +339,37 @@ let init = async function(){
 		privileges: { secure: true, corsEnabled: true }
 	}]);
 
-	const rpcClientId = "770954802443059220";
-
-	DiscordRPC.register(rpcClientId);
-	const rpc = new DiscordRPC.Client({ transport: "ipc" });
+	let rpcHandler = new RPCHandler("770954802443059220", config.get("discordRPC", true));
 
 	// @TODO: This might deadlock!!!
 	let lastSender = null;
-	ipcMain.handle("rpc-activity", (event, activity) => {
-		if (isRPCEnabled) {
-			if (lastSender !== event.sender) {
+	ipcMain.handle("rpc-activity", async(event, activity) => {
+		if (rpcHandler.rpcEnabled()){
+			if (lastSender !== event.sender){
 				if (lastSender) lastSender.send("rpc-stop");
 				lastSender = event.sender;
 				lastSender.on("destroyed", () => (lastSender = null));
 			}
-			rpc.setActivity(activity).catch(console.error);
+			await rpcHandler.update(activity);
 		}
 	});
 
-	rpc.on("ready", () => {
-		console.log("Discord RPC ready");
-	});
-
-	app.once("ready", () => {
+	app.once("ready", async() => {
 		protocol.registerFileProtocol("idkr-swap", (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ""))));
-		// eslint-disable-next-line no-shadow
-		app.on("second-instance", (e, argv) => {
-			let instanceArgv = yargs.parse(argv);
-			console.log("Second instance: " + argv);
-			if (!["unknown", "external"].includes(UrlUtils.locationType(String(instanceArgv["new-window"])))) {
+		app.on("second-instance", (e, _argv) => {
+			let instanceArgv = yargs.parse(_argv);
+			console.log("Second instance: " + _argv);
+			if (!["unknown", "external"].includes(UrlUtils.locationType(String(instanceArgv["new-window"])))){
 				initWindow(instanceArgv["new-window"]);
 			}
 		});
 
-		if (isRPCEnabled) {
-			rpc.login({ clientId: rpcClientId }).catch(console.error);
-		}
+		await rpcHandler.start();
 
 		initSplashWindow();
 	});
 
-	app.on("quit", async() => {
-		if (isRPCEnabled) {
-			await rpc.clearActivity();
-			rpc.destroy();
-		}
-	});
+	app.on("quit", async() => await rpcHandler.end());
 };
 
 init();
