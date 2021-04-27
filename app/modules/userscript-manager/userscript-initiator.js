@@ -39,8 +39,7 @@ class UserscriptInitiator {
 			clientUtils: this.clientUtils,  // Client Utilities API
 			console: {                      // Re-bind console outside of VM
 				log: (...args) => console.log(...args)
-			},
-			setTimeout
+			}
 		};
 
 		Function(`(${script.run})();`).bind(context)();
