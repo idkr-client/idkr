@@ -1,8 +1,9 @@
 "use strict";
 
+/* eslint-disable no-new-func */
+
 let fs = require("fs");
 let path = require("path");
-let vm = require("vm");
 
 let Userscript = require("./userscript-constructor");
 let PathUtils = require("../../utils/path-utils");
@@ -22,7 +23,8 @@ class UserscriptInitiator {
 	 * @memberof UserscriptInitiator
 	 */
 	constructor(config, dest, clientUtils){
-		let userscriptsDirConfig = config.get("userscriptsPath", "");
+		/** @type {string} */
+		let userscriptsDirConfig = (config.get("userscriptsPath", ""));
 		this.scriptsPath = PathUtils.isValidPath(userscriptsDirConfig)
 			? userscriptsDirConfig
 			: dest;
