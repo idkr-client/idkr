@@ -1,6 +1,7 @@
 "use strict";
 
 require("v8-compile-cache");
+
 let path = require("path");
 let { BrowserWindow, app, clipboard, dialog, ipcMain, protocol, shell } = require("electron");
 let Store = require("electron-store");
@@ -12,6 +13,7 @@ let PathUtils = require("./utils/path-utils");
 let UrlUtils = require("./utils/url-utils");
 let Swapper = require("./modules/swapper");
 let RPCHandler = require("./modules/rpc-handler");
+let cliSwitches = require("./modules/cli-switches");
 
 Object.assign(console, log.functions);
 
@@ -23,36 +25,9 @@ console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, 
 const DEBUG = argv.debug;
 const AUTO_UPDATE = argv.update || config.get("autoUpdate", "download");
 
-if (!app.requestSingleInstanceLock()) {
-	app.quit();
-}
+if (!app.requestSingleInstanceLock()) app.quit();
 
-app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
-
-// @TODO: Refactor in CLI handler
-if (!config.get("acceleratedCanvas", true)) {
-	app.commandLine.appendSwitch("disable-accelerated-2d-canvas", "true");
-}
-if (config.get("disableFrameRateLimit", false)) {
-	app.commandLine.appendSwitch("disable-frame-rate-limit");
-	app.commandLine.appendSwitch("disable-gpu-vsync");
-}
-if (config.get("inProcessGPU", false)) {
-	app.commandLine.appendSwitch("in-process-gpu");
-}
-let angleBackend = config.get("angleBackend", "default");
-let colorProfile = config.get("colorProfile", "default");
-if (angleBackend !== "default") {
-	app.commandLine.appendSwitch("use-angle", /** @type {string} */ (angleBackend));
-}
-if (colorProfile !== "default") {
-	app.commandLine.appendSwitch("force-color-profile", /** @type {string} */ (colorProfile));
-}
-
-yargs.parse(
-	/** @type {string} */
-	(config.get("chromiumFlags", "")), (err, _argv) => Object.entries(_argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1]))
-);
+cliSwitches(app, config);
 
 ipcMain.handle("get-app-info", () => ({
 	name: app.name,
@@ -87,7 +62,7 @@ let userscriptsDirConfig = (config.get("userscriptsPath", ""));
 const swapDir = PathUtils.isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath("documents"), "idkr/swap");
 const userscriptsDir = PathUtils.isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
 
-if (process.platform === "win32") {
+if (process.platform === "win32"){
 	app.setUserTasks([{
 		program: process.execPath,
 		arguments: "--new-window=https://krunker.io/",
@@ -105,7 +80,7 @@ if (process.platform === "win32") {
 	}]);
 }
 
-function initWindow(url, webContents) {
+function initWindow(url, webContents){
 	let win = new BrowserWindow({
 		width: 1600,
 		height: 900,
@@ -127,7 +102,7 @@ function initWindow(url, webContents) {
 	return win;
 }
 
-function setupWindow(win, isWeb) {
+function setupWindow(win, isWeb){
 	let contents = win.webContents;
 
 	if (DEBUG) contents.openDevTools();
@@ -185,16 +160,15 @@ function setupWindow(win, isWeb) {
 		if (windowStateConfig.fullScreen) win.setFullScreen(true);
 	});
 
-	contents.on("dom-ready", () => {
-		if (UrlUtils.locationType(contents.getURL()) === "game") {
-			shortcuts.register(win, "F6", () => win.loadURL("https://krunker.io/"));
-		}
-	});
+	contents.on("dom-ready", () => (
+		(UrlUtils.locationType(contents.getURL()) === "game")
+		&& (shortcuts.register(win, "F6", () => win.loadURL("https://krunker.io/"))))
+	);
 
 	contents.on("new-window", (event, url, frameName, disposition, options) => {
 		event.preventDefault();
 		if (UrlUtils.locationType(url) === "external") shell.openExternal(url);
-		else if (UrlUtils.locationType(url) !== "unknown") {
+		else if (UrlUtils.locationType(url) !== "unknown"){
 			if (frameName === "_self") contents.loadURL(url);
 			else initWindow(url, options.webContents);
 		}
@@ -211,9 +185,7 @@ function setupWindow(win, isWeb) {
 			title: "Leave site?",
 			message: "Changes you made may not be saved.",
 			noLink: true
-		})) {
-			event.preventDefault();
-		}
+		})) event.preventDefault();
 	});
 
 	shortcuts.register(win, "F5", () => contents.reload());
@@ -237,7 +209,7 @@ function setupWindow(win, isWeb) {
 	return win;
 }
 
-function initSplashWindow() {
+function initSplashWindow(){
 	let win = new BrowserWindow({
 		width: 600,
 		height: 300,
@@ -252,7 +224,7 @@ function initSplashWindow() {
 	});
 	let contents = win.webContents;
 
-	async function autoUpdate() {
+	async function autoUpdate(){
 		// @TODO: See comment below
 		// eslint-disable-next-line consistent-return
 		return new Promise((resolve, reject) => {
@@ -295,7 +267,7 @@ function initSplashWindow() {
 		});
 	}
 
-	function launchGame() {
+	function launchGame(){
 		initWindow("https://krunker.io/");
 		setTimeout(() => win.destroy(), 2000);
 	}
@@ -307,7 +279,7 @@ function initSplashWindow() {
 	return win;
 }
 
-function initPromptWindow(message, defaultValue) {
+function initPromptWindow(message, defaultValue){
 	let win = new BrowserWindow({
 		width: 480,
 		height: 240,
@@ -336,7 +308,10 @@ let init = async function(){
 	// Workaround for Electron 8.x
 	protocol.registerSchemesAsPrivileged([{
 		scheme: "idkr-swap",
-		privileges: { secure: true, corsEnabled: true }
+		privileges: {
+			secure: true,
+			corsEnabled: true
+		}
 	}]);
 
 	let rpcHandler = new RPCHandler(
