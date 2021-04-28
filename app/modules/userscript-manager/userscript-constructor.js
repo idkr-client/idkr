@@ -14,14 +14,16 @@ class Userscript {
 	 * @memberof Userscript
 	 */
 	constructor(initiator, windowType){
-		this.name = initiator.name || "Unnamed userscript";
-		this.version = initiator.version || "Version unknown";
-		this.author = initiator.author || "Unknown author";
-		this.description = initiator.discription || "No description provided";
-		this.locations = initiator.locations || ["all"];
-		this.platforms = initiator.platforms || ["all"];
-		this.settings = initiator.settings || null;
-		this.run = initiator.run || null;
+		this.initiator = initiator;
+		this.name = initiator.meta.name || "Unnamed userscript";
+		this.version = initiator.meta.version || "Version unknown";
+		this.author = initiator.meta.author || "Unknown author";
+		this.description = initiator.meta.discription || "No description provided";
+
+		this.apiversion = initiator.config.apiversion || "1.0";
+		this.locations = initiator.config.locations || ["all"];
+		this.platforms = initiator.config.platforms || ["all"];
+		this.settings = initiator.config.settings || null;
 
 		this.windowType = windowType;
 	}

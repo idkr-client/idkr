@@ -73,10 +73,6 @@ UtilManager.instance.clientUtils = {
 	}
 };
 
-(windowType === "game")
-	? UtilManager.instance.clientUtils.events.on("game-load", () => UtilManager.instance.clientUtils.initUtil())
-	: UtilManager.instance.clientUtils.initUtil();
-
 switch (windowType) {
 	case "game":
 		require("./game.js");
@@ -153,11 +149,27 @@ ipcRenderer.on("rpc-stop", () => {
 });
 
 ipcRenderer.invoke("get-app-info")
-	.then(info => ((new UserscriptInitiator(
-		config,
-		path.join(info.documentsDir, "idkr", "scripts"),
-		UtilManager.instance.clientUtils)
-	).inject(windowType)));
+	.then(info => {
+		const initalize = async() => {
+			const initiator = new UserscriptInitiator(
+				config,
+				path.join(info.documentsDir, "idkr", "scripts"),
+				UtilManager.instance.clientUtils);
+
+			await initiator.loadScripts(windowType);
+			UtilManager.instance.clientUtils.initUtil();
+			initiator.executeScripts();
+		};
+
+		if(windowType === "game") {
+			UtilManager.instance.clientUtils.events.on("game-load", () => {
+				initalize();
+			});
+		}
+		else {
+			initalize();
+		}
+	});
 
 setFocusEvent();
 

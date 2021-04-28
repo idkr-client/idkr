@@ -7,6 +7,7 @@ let path = require("path");
 
 let Userscript = require("./userscript-constructor");
 let PathUtils = require("../../utils/path-utils");
+const { Object } = require("globalthis/implementation");
 
 /**
  * Initiate and inject usescripts
@@ -29,38 +30,27 @@ class UserscriptInitiator {
 			? userscriptsDirConfig
 			: dest;
 		this.clientUtils = clientUtils;
+
+		/** @type {Userscript[]} */
+		this.scripts = [];
 	}
 
 	/**
-	 * Execute the sandboxed code
-	 *
-	 * @private
-	 * @param {Userscript} script
-	 * @returns {any}
-	 * @memberof UserscriptInitiator
+	 * Executes all loaded scripts
 	 */
-	#executeScript = (script) => {
-		const context = {
-			window,                         // Current Global Window
-			document,                       // Current Global Document
-			clientUtils: this.clientUtils,  // Client Utilities API
-			console: {                      // Re-bind console outside of VM
-				log: (...args) => console.log(...args)
-			}
-		};
-
-		return Function(`(${script.run})();`).bind(context)();
+	executeScripts() {
+		this.scripts.forEach(script => this.#executeScript(script));
 	}
 
 	/**
-	 * Inject all scripts
+	 * Loads all scripts
 	 *
 	 * @public
 	 * @param {string} windowType
-	 * @returns {any}
+	 * @returns {Promise|any}
 	 * @memberof UserscriptInitiator
 	 */
-	inject(windowType){
+	 loadScripts(windowType){
 		try {
 			return fs.promises
 				.readdir(this.scriptsPath)
@@ -73,16 +63,77 @@ class UserscriptInitiator {
 						if (!script.isLocationMatching()) return console.log(`[idkr] Ignored, location not matching: ${script.name}`);
 						else if (!script.isPlatformMatching()) return console.log(`[idkr] Ignored, platform not matching: ${script.name}`);
 
-						// if (script.settings) Object.assign(window._clientUtil.settings, script.settings);
-						this.#executeScript(script);
+						this.#addScript(script);
+						this.#preloadScript(script);
 
-						return console.log(`[idkr] Loaded userscript: ${script.name} by ${script.author}`);
+						return console.log(`[idkr] Initialized userscript: ${script.name} by ${script.author}`);
 					})
 				);
 		}
 		catch (err){
 			return console.error("[idkr] Failed to load scripts:", err);
 		}
+	}
+
+	/**
+	 * Adds a script to the scriptlist
+	 *
+	 * @param {Userscript} script
+	 */
+	#addScript = (script) => {
+		this.scripts.push(script);
+	}
+
+	/**
+	 * Removes a script from the script list
+	 *
+	 * @param {Userscript} script
+	 */
+	#removeScript = (script) => {
+		this.scripts.splice(this.scripts.indexOf(script), 1);
+	}
+
+	/**
+	 * Preloads a script
+	 * Used to preload settings before the actual load
+	 * function gets called
+	 *
+	 * @param {Userscript} script
+	 */
+	#preloadScript = (script) => {
+		Object.assign(this.clientUtils.settings, script.settings);
+	}
+
+	/**
+	 * Unloads a given Userscript
+	 *
+	 * @param {Userscript} script
+	 */
+	#unloadScript = (script) => {
+		script.initiator.unload && script.initiator.unload();
+	}
+
+	/**
+	 * Execute the given userscript
+	 *
+	 * @private
+	 * @param {Userscript} script
+	 * @returns {any}
+	 * @memberof UserscriptInitiator
+	 */
+	#executeScript = (script) => {
+		console.log(`[idkr] Executing userscript: ${script.name} by ${script.author}`);
+		const context = {
+			window,                         // Current Global Window
+			document,                       // Current Global Document
+			clientUtils: this.clientUtils,  // Client Utilities API
+			console: {                      // Re-bind console outside of VM
+				log: (...args) => console.log(...args)
+			}
+		};
+
+		Object.assign(script.initiator, context);
+		return script.initiator.load && script.initiator.load();
 	}
 }
 
