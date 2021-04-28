@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "startd": "ELECTRON_ENABLE_STACK_DUMPING=1 ELECTRON_ENABLE_LOGGING=true npm start -- --debug",
+    "startd": "npm start -- --debug",
+    "startd-linux": "ELECTRON_ENABLE_STACK_DUMPING=1 ELECTRON_ENABLE_LOGGING=true npm start -- --debug",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "release": "electron-builder",
@@ -27,6 +28,7 @@
   },
   "homepage": "https://idkr.dev",
   "devDependencies": {
+    "@babel/core": "^7.13.16",
     "@babel/eslint-parser": "^7.13.14",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-private-methods": "^7.13.0",
