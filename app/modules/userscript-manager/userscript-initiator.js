@@ -7,6 +7,7 @@ let path = require("path");
 
 let PathUtils = require("../../utils/path-utils");
 let ScriptExecutor10 = require("./userscript-executors/1_0/1-0-script-executor");
+let OldScriptExecutor = require("./userscript-executors/old/old-script-executor");
 
 /**
  * @typedef {import("./userscript-executors/script-executor.interface")} IScriptExecutor
@@ -33,6 +34,7 @@ class UserscriptInitiator {
 			? userscriptsDirConfig
 			: dest;
 		this.clientUtils = clientUtils;
+		this.config = config;
 
 		/** @type {IScriptExecutor[]} */
 		this.scripts = [];
@@ -61,17 +63,24 @@ class UserscriptInitiator {
 				.map(filename => {
 					try {
 						let data = fs.readFileSync(path.join(this.scriptsPath, filename));
-						let executor = new ScriptExecutor10(data, this.clientUtils, windowType);
-						if(executor.isValidScript()) {
-							this.#addScript(executor);
-							return executor.preloadScript();
+						let executor10 = new ScriptExecutor10(data, this.clientUtils, windowType);
+						if(executor10.isValidScript()) {
+							this.#addScript(executor10);
+							return executor10.preloadScript();
+						}
+
+						let executorOld = new OldScriptExecutor(data, this.clientUtils, windowType, this.config);
+						if(executorOld.isValidScript()) {
+							this.#addScript(executorOld);
+							return executorOld.preloadScript();
 						}
 					}
 					catch(err) {
-						console.error(`[idkr] Failed to load script [${filename}]`);
+						console.error(`[idkr] Failed to load script-file [${filename}]`);
 						console.error(err);
 					}
 
+					console.warn(`[idkr] No valid Userscript executor found for file [${filename}]`);
 					return null;
 				})
 		);

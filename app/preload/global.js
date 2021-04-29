@@ -150,7 +150,10 @@ ipcRenderer.on("rpc-stop", () => {
 
 ipcRenderer.invoke("get-app-info")
 	.then(info => {
+		let oldConsole = {};
+		Object.assign(oldConsole, console);
 		const initalize = async() => {
+			Object.assign(console, oldConsole);
 			const initiator = new UserscriptInitiator(
 				config,
 				path.join(info.documentsDir, "idkr", "scripts"),

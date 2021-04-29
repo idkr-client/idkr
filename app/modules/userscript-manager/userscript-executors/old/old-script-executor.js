@@ -1,35 +1,36 @@
 "use strict";
 
-/* eslint-disable no-new-func */
-
 let IScriptExecutor = require("../script-executor.interface");
+
+/* eslint-disable no-new-func */
 
 /**
  * @typedef {import("./types").IUserscript} IUserscript
  * @typedef {import("./types").IClientUtil} IClientUtil
  */
 
-// TODO: Maybe find a better file-/ and classname for this
-
-class ScriptExecutor10 extends IScriptExecutor {
+class OldScriptExecutor extends IScriptExecutor {
 	#data;
 	#clientUtils;
 	#windowType;
 	/** @type {IUserscript} */
 	#script;
+	#config;
 	isLoaded = false;
 
 	/**
 	 * @param {Buffer} data
 	 * @param {IClientUtil} clientUtils
 	 * @param {String} windowType
+	 * @param {import("electron-store")} config
 	 * @memberof Userscript
 	 */
-	constructor(data, clientUtils, windowType) {
+	constructor(data, clientUtils, windowType, config) {
 		super();
 		this.#data = data;
 		this.#clientUtils = clientUtils;
 		this.#windowType = windowType;
+		this.#config = config;
 		this.#loadScript();
 	}
 
@@ -43,21 +44,16 @@ class ScriptExecutor10 extends IScriptExecutor {
 		try {
 			this.#script = null;
 			this.#script = Function(
-				`return (function(){${this.#data.toString()}})();`
+				`return (function(){let module = {exports: {}}; ${this.#data.toString()}; return module.exports;})();`
 			)();
-			this.#script.meta = this.#script.meta || {};
-			this.#script.config = this.#script.config || {};
 
-			const {meta, config} = this.#script;
-			meta.name = meta.name || "Unnamed userscript";
-			meta.version = meta.version || "Version unknown";
-			meta.author = meta.author || "Unknown author";
-			meta.description = meta.description || "No description provided";
-
-			config.apiversion = config.apiversion || "1.0";
-			config.locations = config.locations || ["all"];
-			config.platforms = config.platforms || ["all"];
-			config.settings = config.settings || {};
+			this.#script.name = this.#script.name || "Unnamed userscript";
+			this.#script.version = this.#script.version || "Version unknown";
+			this.#script.author = this.#script.author || "Unknown author";
+			this.#script.description = this.#script.description || "No description provided";
+			this.#script.locations = this.#script.locations || ["all"];
+			this.#script.platforms = this.#script.platforms || ["all"];
+			this.#script.settings = this.#script.settings || {};
 
 			const context = this.createContext();
 			Object.assign(this.#script, context);
@@ -78,11 +74,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 */
 	isValidScript() {
 		return Boolean(this.#script)
-			&& Boolean(this.#script.load)
-			&& Boolean(this.#script.unload)
-			&& Boolean(this.#script.config)
-			&& Boolean(this.#script.meta)
-			&& this.#script.config.apiversion === "1.0";
+			&& Boolean(this.#script.run);
 	}
 
 	/**
@@ -103,7 +95,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	async preloadScript() {
-		Object.assign(this.#clientUtils.settings, this.#script.config.settings);
+		Object.assign(this.#clientUtils.settings, this.#script.settings);
 	}
 
 	/**
@@ -124,30 +116,25 @@ class ScriptExecutor10 extends IScriptExecutor {
 				"Location is invalid",
 				"Platform is invalid"
 			];
-			console.error(`[idkr] Blocked Script: ${this.#script.meta.name} by ${this.#script.meta.author}. Reason: ${[reasonMapping[blockReason - 1]]}`);
+			console.error(`[idkr] Blocked Script: ${this.#script.name} by ${this.#script.author}. Reason: ${[reasonMapping[blockReason - 1]]}`);
 			return false;
 		}
 
-		console.log(`[idkr] Executing userscript: ${this.#script.meta.name} by ${this.#script.meta.author}`);
-		this.#script.load();
+		console.log(`[idkr] Executing userscript: ${this.#script.name} by ${this.#script.author}`);
+		this.#script.run(this.#config);
 		this.isLoaded = true;
 		return true;
 	}
 
 	/**
 	 * Unloads a loaded script
+	 * Warning: You can't unload old script files
 	 *
 	 * @returns {Promise<Boolean>}
 	 * @memberof Userscript
 	 */
 	async unloadScript() {
-		if(!this.isLoaded) {
-			return false;
-		}
-		console.log(`[idkr] Unloading userscript: ${this.#script.meta.name} by ${this.#script.meta.author}`);
-		this.#script.unload();
-		this.isLoaded = false;
-		return true;
+		return false;
 	}
 
 	/**
@@ -160,7 +147,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 		return {
 			window,                         // Current Global Window
 			document,                       // Current Global Document
-			clientUtils: this.#clientUtils,  // Client Utilities API
+			clientUtil: this.#clientUtils,  // Client Utilities API
 			console: {                      // Re-bind console outside of VM
 				log: (...args) => console.log(...args)
 			}
@@ -174,7 +161,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	isLocationMatching(){
-		return this.#script.config.locations.some(location => ["all", this.#windowType].includes(location));
+		return this.#script.locations.some(location => ["all", this.#windowType].includes(location));
 	}
 
 	/**
@@ -184,8 +171,8 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	isPlatformMatching(){
-		return this.#script.config.platforms.some(platform => ["all", process.platform].includes(platform));
+		return this.#script.platforms.some(platform => ["all", process.platform].includes(platform));
 	}
 }
 
-module.exports = ScriptExecutor10;
+module.exports = OldScriptExecutor;
