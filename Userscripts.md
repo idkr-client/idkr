@@ -111,8 +111,8 @@ Example:
 
 ...
 
-load() {
-        let setting = this.config.settings["outputType"];
+load(config) {
+        let setting = config.get("outputType", "alert");
 
 ...
 ```
@@ -187,8 +187,8 @@ export interface IInjectedContext {
 export interface IUserscript extends IInjectedContext {
     config: IUserscriptConfig;
     meta: IUserscriptMeta;
-    load(): void;
-	unload(): void;
+    load(config: import("electron-store")): void;
+    unload(): void;
 };
 
 export interface ISetting {
@@ -269,7 +269,7 @@ class Userscript {
                     type: "select",
                     options: {
                         alert: "Alert",
-                        console: "Console"
+                        document: "Document"
                     },
                     val: "alert",
                     html: () => {
@@ -286,12 +286,11 @@ class Userscript {
         this.clientUtils = null;
     }
 
-    load() {
-        let setting = this.config.settings["outputType"];
-        console.log(setting.val);
-        switch(setting.val) {
-            case "console":
-                console.log("Hello World!");
+    load(config) {
+        let setting = config.get("outputType");
+        switch(setting) {
+            case "document":
+                document.write("Hello World!");
                 break;
             case "alert":
             default:
