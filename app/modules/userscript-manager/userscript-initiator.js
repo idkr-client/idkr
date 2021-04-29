@@ -38,7 +38,7 @@ class UserscriptInitiator {
 	/**
 	 * Executes all loaded scripts
 	 */
-	executeScripts() {
+	executeScripts(){
 		this.scripts.forEach(script => this.#executeScript(script));
 	}
 
@@ -57,7 +57,7 @@ class UserscriptInitiator {
 				.then(arr => arr.filter(filename => path.extname(filename).toLowerCase() === ".js")
 					.forEach(filename => {
 						let script = new Userscript(Function(
-							`return (function() {${fs.readFileSync(path.join(this.scriptsPath, filename))}})();`
+							`return (function(){${fs.readFileSync(path.join(this.scriptsPath, filename))}})();`
 						)(), windowType);
 
 						if (!script.isLocationMatching()) return console.log(`[idkr] Ignored, location not matching: ${script.name}`);

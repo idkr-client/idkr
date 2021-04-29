@@ -25,7 +25,7 @@ UtilManager.instance.clientUtils = {
 	// eslint-disable-next-line new-cap
 	events: new events(),
 	settings: require("../exports/settings"),
-	setCSetting(name, value) {
+	setCSetting(name, value){
 		let entry = Object.values(this.settings).find(_entry => _entry.id === name);
 		// eslint-disable-next-line no-param-reassign
 		if (entry.min && entry.max) value = Math.max(entry.min, Math.min(value, entry.max));
@@ -44,7 +44,7 @@ UtilManager.instance.clientUtils = {
 		if (element) element.value = value;
 	},
 	delayIDs: {},
-	delaySetCSetting(name, target, delay = 600) {
+	delaySetCSetting(name, target, delay = 600){
 		if (this.delayIDs[name]) clearTimeout(this.delayIDs[name]);
 		this.delayIDs[name] = setTimeout(() => {
 			this.setCSetting(name, target.value);
@@ -53,12 +53,12 @@ UtilManager.instance.clientUtils = {
 	},
 	initUtil(){
 		for (let [key, entry] of Object.entries(this.settings)) {
-			if (!("name" in entry && "id" in entry && "cat" in entry && "type" in entry && "val" in entry && "html" in entry)) {
+			if (!("name" in entry && "id" in entry && "cat" in entry && "type" in entry && "val" in entry && "html" in entry)){
 				console.log(`Ignored a setting entry ${entry.id ? `"${entry.id}"` : "with no ID"}, missing a required property`);
 				delete this.settings[key];
 				continue;
 			}
-			if (entry.platforms && !entry.platforms.includes(process.platform)) {
+			if (entry.platforms && !entry.platforms.includes(process.platform)){
 				delete this.settings[key];
 				continue;
 			}
@@ -73,7 +73,7 @@ UtilManager.instance.clientUtils = {
 	}
 };
 
-switch (windowType) {
+switch (windowType){
 	case "game":
 		require("./game.js");
 		break;
@@ -101,7 +101,7 @@ function setFocusEvent(){
 				if (gameActivity.time) rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1000;
 				ipcRenderer.invoke("rpc-activity", rpcActivity);
 			}
-			catch (error) {
+			catch (error){
 				ipcRenderer.invoke("rpc-activity", Object.assign(rpcActivity, {
 					state: "Playing",
 					startTimestamp: Math.floor(Date.now() / 1000)
@@ -110,7 +110,7 @@ function setFocusEvent(){
 		}
 
 		let isIntervalSet = false;
-		switch (windowType) {
+		switch (windowType){
 			case "game": {
 				sendRPCGamePresence();
 				if (rpcIntervalId) clearInterval(rpcIntervalId);
@@ -135,7 +135,7 @@ function setFocusEvent(){
 				break;
 		}
 
-		if (!isIntervalSet) {
+		if (!isIntervalSet){
 			ipcRenderer.invoke("rpc-activity", Object.assign(rpcActivity, {
 				startTimestamp: Math.floor(performance.timeOrigin / 1000)
 			}));
@@ -154,21 +154,17 @@ ipcRenderer.invoke("get-app-info")
 			const initiator = new UserscriptInitiator(
 				config,
 				path.join(info.documentsDir, "idkr", "scripts"),
-				UtilManager.instance.clientUtils);
+				UtilManager.instance.clientUtils
+			);
 
 			await initiator.loadScripts(windowType);
 			UtilManager.instance.clientUtils.initUtil();
 			initiator.executeScripts();
 		};
 
-		if(windowType === "game") {
-			UtilManager.instance.clientUtils.events.on("game-load", () => {
-				initalize();
-			});
-		}
-		else {
-			initalize();
-		}
+		(windowType === "game")
+			? UtilManager.instance.clientUtils.events.on("game-load", () => initalize())
+			: initalize();
 	});
 
 setFocusEvent();

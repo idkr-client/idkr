@@ -159,12 +159,6 @@ class Userscript {
 return new Userscript();
 ```
 
-
-
-
-
-
-
 ### Typedefs
 For the example below I used following typescript defs.
 This should also give you some information how stuff works.
@@ -201,7 +195,7 @@ export interface ISetting {
     name: String;
     info?: String;
     cat: String;
-    platforms?: NodeJS.Platform;
+    platforms?: NodeJS.Platform[];
     type: "checkbox"|"select"|"text"|"slider"|String;
     needsRestart?: Boolean;
     html(): String;
@@ -241,7 +235,6 @@ export interface IClientUtil {
 	initUtil();
 };
 ```
-
 
 ### Complete example
 The complete example script I used to write this small documentation is this one:
@@ -313,7 +306,6 @@ class Userscript {
 
 return new Userscript();
 ```
-
 
 ## Glossary
 ### API-Versions

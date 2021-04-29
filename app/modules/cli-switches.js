@@ -27,7 +27,7 @@ let cliSwitchHandler = function(app, config){
 	yargs.parse(
 		/** @type {string} */
 		(config.get("chromiumFlags", "")),
-		(_, _argv) => Object.entries(_argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1]))
+		(_, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1]))
 	);
 };
 
