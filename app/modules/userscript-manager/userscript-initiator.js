@@ -5,9 +5,12 @@
 let fs = require("fs");
 let path = require("path");
 
-let Userscript = require("./userscript-constructor");
 let PathUtils = require("../../utils/path-utils");
-const { Object } = require("globalthis/implementation");
+let ScriptExecutor10 = require("./userscript-executors/1_0/1-0-script-executor");
+
+/**
+ * @typedef {import("./userscript-executors/script-executor.interface")} IScriptExecutor
+ */
 
 /**
  * Initiate and inject usescripts
@@ -31,15 +34,16 @@ class UserscriptInitiator {
 			: dest;
 		this.clientUtils = clientUtils;
 
-		/** @type {Userscript[]} */
+		/** @type {IScriptExecutor[]} */
 		this.scripts = [];
 	}
 
 	/**
 	 * Executes all loaded scripts
+	 * @returns {Promise<Boolean>[]}
 	 */
 	executeScripts(){
-		this.scripts.forEach(script => this.#executeScript(script));
+		return this.scripts.map(script => script.executeScript());
 	}
 
 	/**
@@ -47,38 +51,36 @@ class UserscriptInitiator {
 	 *
 	 * @public
 	 * @param {string} windowType
-	 * @returns {Promise|any}
+	 * @returns {Promise<void>}
 	 * @memberof UserscriptInitiator
 	 */
-	 loadScripts(windowType){
-		try {
-			return fs.promises
-				.readdir(this.scriptsPath)
-				.then(arr => arr.filter(filename => path.extname(filename).toLowerCase() === ".js")
-					.forEach(filename => {
-						let script = new Userscript(Function(
-							`return (function(){${fs.readFileSync(path.join(this.scriptsPath, filename))}})();`
-						)(), windowType);
+	async loadScripts(windowType){
+		console.log("loading scripts");
+		await Promise.all(
+			(await fs.promises.readdir(this.scriptsPath)).filter(filename => path.extname(filename).toLowerCase() === ".js")
+				.map(filename => {
+					try {
+						let data = fs.readFileSync(path.join(this.scriptsPath, filename));
+						let executor = new ScriptExecutor10(data, this.clientUtils, windowType);
+						if(executor.isValidScript()) {
+							this.#addScript(executor);
+							return executor.preloadScript();
+						}
+					}
+					catch(err) {
+						console.error(`[idkr] Failed to load script [${filename}]`);
+						console.error(err);
+					}
 
-						if (!script.isLocationMatching()) return console.log(`[idkr] Ignored, location not matching: ${script.name}`);
-						else if (!script.isPlatformMatching()) return console.log(`[idkr] Ignored, platform not matching: ${script.name}`);
-
-						this.#addScript(script);
-						this.#preloadScript(script);
-
-						return console.log(`[idkr] Initialized userscript: ${script.name} by ${script.author}`);
-					})
-				);
-		}
-		catch (err){
-			return console.error("[idkr] Failed to load scripts:", err);
-		}
+					return null;
+				})
+		);
 	}
 
 	/**
 	 * Adds a script to the scriptlist
 	 *
-	 * @param {Userscript} script
+	 * @param {IScriptExecutor} script
 	 */
 	#addScript = (script) => {
 		this.scripts.push(script);
@@ -87,53 +89,10 @@ class UserscriptInitiator {
 	/**
 	 * Removes a script from the script list
 	 *
-	 * @param {Userscript} script
+	 * @param {IScriptExecutor} script
 	 */
 	#removeScript = (script) => {
 		this.scripts.splice(this.scripts.indexOf(script), 1);
-	}
-
-	/**
-	 * Preloads a script
-	 * Used to preload settings before the actual load
-	 * function gets called
-	 *
-	 * @param {Userscript} script
-	 */
-	#preloadScript = (script) => {
-		Object.assign(this.clientUtils.settings, script.settings);
-	}
-
-	/**
-	 * Unloads a given Userscript
-	 *
-	 * @param {Userscript} script
-	 */
-	#unloadScript = (script) => {
-		script.initiator.unload && script.initiator.unload();
-	}
-
-	/**
-	 * Execute the given userscript
-	 *
-	 * @private
-	 * @param {Userscript} script
-	 * @returns {any}
-	 * @memberof UserscriptInitiator
-	 */
-	#executeScript = (script) => {
-		console.log(`[idkr] Executing userscript: ${script.name} by ${script.author}`);
-		const context = {
-			window,                         // Current Global Window
-			document,                       // Current Global Document
-			clientUtils: this.clientUtils,  // Client Utilities API
-			console: {                      // Re-bind console outside of VM
-				log: (...args) => console.log(...args)
-			}
-		};
-
-		Object.assign(script.initiator, context);
-		return script.initiator.load && script.initiator.load();
 	}
 }
 
