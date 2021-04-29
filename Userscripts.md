@@ -187,7 +187,8 @@ export interface IInjectedContext {
 export interface IUserscript extends IInjectedContext {
     config: IUserscriptConfig;
     meta: IUserscriptMeta;
-    run(): void;
+    load(): void;
+	unload(): void;
 };
 
 export interface ISetting {
