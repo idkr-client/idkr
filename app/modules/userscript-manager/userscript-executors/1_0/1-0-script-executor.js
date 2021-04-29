@@ -132,7 +132,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 		}
 
 		console.log(`[idkr] Executing userscript: ${this.#script.meta.name} by ${this.#script.meta.author}`);
-		this.#script.load();
+		this.#script.load(this.#config);
 		this.isLoaded = true;
 		return true;
 	}
@@ -164,7 +164,6 @@ class ScriptExecutor10 extends IScriptExecutor {
 			window,                          // Current Global Window
 			document,                        // Current Global Document
 			clientUtils: this.#clientUtils,  // Client Utilities API
-			config: this.#config,            // Settings Store
 			console: {                       // Re-bind console outside of VM
 				log: (...args) => console.log(...args)
 			}

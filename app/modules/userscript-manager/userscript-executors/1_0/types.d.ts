@@ -26,7 +26,7 @@ export interface IInjectedContext {
 export interface IUserscript extends IInjectedContext {
     config: IUserscriptConfig;
     meta: IUserscriptMeta;
-    load(): void;
+    load(config: import("electron-store")): void;
     unload(): void;
 };
 

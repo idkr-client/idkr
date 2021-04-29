@@ -57,7 +57,6 @@ class UserscriptInitiator {
 	 * @memberof UserscriptInitiator
 	 */
 	async loadScripts(windowType){
-		console.log("loading scripts");
 		await Promise.all(
 			(await fs.promises.readdir(this.scriptsPath)).filter(filename => path.extname(filename).toLowerCase() === ".js")
 				.map(filename => {
@@ -80,7 +79,7 @@ class UserscriptInitiator {
 						console.error(err);
 					}
 
-					console.warn(`[idkr] No valid Userscript executor found for file [${filename}]`);
+					console.error(`[idkr] No valid Userscript executor found for file [${filename}]`);
 					return null;
 				})
 		);

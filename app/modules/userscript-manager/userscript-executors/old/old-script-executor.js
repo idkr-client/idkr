@@ -44,8 +44,10 @@ class OldScriptExecutor extends IScriptExecutor {
 		try {
 			this.#script = null;
 			this.#script = Function(
+				"clientUtil",
+				"config",
 				`return (function(){let module = {exports: {}}; ${this.#data.toString()}; return module.exports;})();`
-			)();
+			)(this.#clientUtils, this.#config);
 
 			this.#script.name = this.#script.name || "Unnamed userscript";
 			this.#script.version = this.#script.version || "Version unknown";
@@ -54,9 +56,6 @@ class OldScriptExecutor extends IScriptExecutor {
 			this.#script.locations = this.#script.locations || ["all"];
 			this.#script.platforms = this.#script.platforms || ["all"];
 			this.#script.settings = this.#script.settings || {};
-
-			const context = this.createContext();
-			Object.assign(this.#script, context);
 		}
 		catch {
 			// We don't need to process anything here because
@@ -105,10 +104,6 @@ class OldScriptExecutor extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	async executeScript() {
-		if(this.isLoaded) {
-			await this.unloadScript();
-		}
-
 		let blockReason = this.shouldExecute();
 		if(blockReason > 0) {
 			const reasonMapping = [
@@ -121,7 +116,9 @@ class OldScriptExecutor extends IScriptExecutor {
 		}
 
 		console.log(`[idkr] Executing userscript: ${this.#script.name} by ${this.#script.author}`);
-		this.#script.run(this.#config);
+		const context = this.createContext();
+		Object.assign(this.#script, context);
+		this.#script.run.bind(context)(this.#config);
 		this.isLoaded = true;
 		return true;
 	}
