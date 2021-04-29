@@ -17,19 +17,22 @@ class ScriptExecutor10 extends IScriptExecutor {
 	#windowType;
 	/** @type {IUserscript} */
 	#script;
+	#config;
 	isLoaded = false;
 
 	/**
 	 * @param {Buffer} data
 	 * @param {IClientUtil} clientUtils
 	 * @param {String} windowType
+	 * @param {import("electron-store")} config
 	 * @memberof Userscript
 	 */
-	constructor(data, clientUtils, windowType) {
+	constructor(data, clientUtils, windowType, config) {
 		super();
 		this.#data = data;
 		this.#clientUtils = clientUtils;
 		this.#windowType = windowType;
+		this.#config = config;
 		this.#loadScript();
 	}
 
@@ -158,10 +161,11 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 */
 	createContext() {
 		return {
-			window,                         // Current Global Window
-			document,                       // Current Global Document
+			window,                          // Current Global Window
+			document,                        // Current Global Document
 			clientUtils: this.#clientUtils,  // Client Utilities API
-			console: {                      // Re-bind console outside of VM
+			config: this.#config,            // Settings Store
+			console: {                       // Re-bind console outside of VM
 				log: (...args) => console.log(...args)
 			}
 		};

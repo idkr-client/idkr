@@ -63,7 +63,7 @@ class UserscriptInitiator {
 				.map(filename => {
 					try {
 						let data = fs.readFileSync(path.join(this.scriptsPath, filename));
-						let executor10 = new ScriptExecutor10(data, this.clientUtils, windowType);
+						let executor10 = new ScriptExecutor10(data, this.clientUtils, windowType, this.config);
 						if(executor10.isValidScript()) {
 							this.#addScript(executor10);
 							return executor10.preloadScript();
