@@ -192,7 +192,7 @@ class BrowserLoader {
 			frame: false,
 			transparent: true,
 			webPreferences: {
-				preload: path.join(__dirname, "preload/splash.js")
+				preload: path.join(__dirname, "../preload/splash.js")
 			}
 		});
 		let contents = win.webContents;
