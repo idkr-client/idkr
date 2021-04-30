@@ -47,6 +47,6 @@ class CssManager {
 
 module.exports = CssManager;
 
-function isValidPath(pathstr = '') {
+function isValidPath(pathstr = '') { // @TODO fix after refactoring
 	  return Boolean(path.parse(pathstr).root);
 }
