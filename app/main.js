@@ -44,7 +44,7 @@ if (process.platform === "win32"){
 	}]);
 }
 
-let init = async function(){
+let init = function(){
 	// Workaround for Electron 8.x
 	protocol.registerSchemesAsPrivileged([{
 		scheme: "idkr-swap",
@@ -61,9 +61,8 @@ let init = async function(){
 	IpcLoader.load();
 	IpcLoader.initRpc(config);
 
-	await PathUtils.ensureDirs(BrowserLoader.swapDir, userscriptsDir);
-
 	app.once("ready", async() => {
+		await PathUtils.ensureDirs(BrowserLoader.swapDir, userscriptsDir);
 		protocol.registerFileProtocol("idkr-swap", (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ""))));
 		app.on("second-instance", (e, _argv) => {
 			let instanceArgv = yargs.parse(_argv);
