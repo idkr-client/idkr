@@ -23,7 +23,7 @@ class CssManager {
 		const cssDirConfig = config.get('customSassDir', '');
 		const cssDir = isValidPath(cssDirConfig) ? cssDirConfig : path.join(documentsPath, 'idkr/css');
 		fs.readdirSync(cssDir).forEach((e) => {
-			resultHTML += `<br><br> - ${e} <label class='switch'><input type='checkbox' onclick='_clientUtil.setCSSVal("customCss__${e}", this.checked)' ${config.get('customCss__' + e, false) ? 'checked' : ''}><span class='slider'></span></label>`;
+			resultHTML += `- ${e} <label class='switch'><input type='checkbox' onclick='_clientUtil.setCSSVal("customCss__${e}", this.checked)' ${config.get('customCss__' + e, false) ? 'checked' : ''}><span class='slider'></span></label><br><br>`;
 		});
 
 		this.managerWin.setContent(resultHTML);
