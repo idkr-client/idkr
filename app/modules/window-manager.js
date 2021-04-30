@@ -64,6 +64,8 @@ class WindowManager {
 	 * @memberof WindowManager
 	 */
 	show() {
+		let w = document.getElementById('idkr-windowHolder');
+
 		if (this.hideOnShow) {
 			document
 				.getElementById('windowHolder')
@@ -73,6 +75,8 @@ class WindowManager {
 			.getElementById('idkr-menuWindow_' + this.callerId)
 			.setAttribute('style', 'display: block;');
 		this.shown = true;
+
+		w.style.display == 'none' && w.setAttribute('style', 'display: block;');
 	}
 
 	/**
@@ -81,10 +85,13 @@ class WindowManager {
 	 * @memberof WindowManager
 	 */
 	hide() {
+		let w = document.getElementById('idkr-windowHolder');
+
 		document
 			.getElementById('idkr-menuWindow_' + this.callerId)
 			.setAttribute('style', 'display: none;');
 		this.shown = false;
+		w.style.display == 'block' && w.setAttribute('style', 'display: none;');
 	}
 
 	/**
