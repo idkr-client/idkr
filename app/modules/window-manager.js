@@ -76,7 +76,7 @@ class WindowManager {
 			.setAttribute('style', 'display: block;');
 		this.shown = true;
 
-		w.style.display == 'none' && w.setAttribute('style', 'display: block;');
+		  w.style.display == 'none' && w.setAttribute('style', 'display: block;');
 	}
 
 	/**
@@ -91,7 +91,7 @@ class WindowManager {
 			.getElementById('idkr-menuWindow_' + this.callerId)
 			.setAttribute('style', 'display: none;');
 		this.shown = false;
-		w.style.display == 'block' && w.setAttribute('style', 'display: none;');
+		  w.style.display == 'block' && ![...w.children].some((e) => e.style.display == 'block')&& w.setAttribute('style', 'display: none;');
 	}
 
 	/**
