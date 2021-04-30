@@ -11,30 +11,20 @@ let yargs = require("yargs");
 let PathUtils = require("./utils/path-utils");
 let UrlUtils = require("./utils/url-utils");
 let cliSwitches = require("./modules/cli-switches");
-
 let BrowserLoader = require("./loaders/browser-loader");
 let IpcLoader = require("./loaders/ipc-loader");
 
 Object.assign(console, log.functions);
 
-const { argv } = yargs;
-const config = new Store();
-
 console.log(`idkr@${app.getVersion()} { Electron: ${process.versions.electron}, Node: ${process.versions.node}, Chromium: ${process.versions.chrome} }`);
-
-/** @type {any} */
-const DEBUG = argv.debug;
-
-const AUTO_UPDATE = argv.update || config.get("autoUpdate", "download");
-
 if (!app.requestSingleInstanceLock()) app.quit();
 
-cliSwitches(app, config);
-
+const { argv } = yargs;
+const config = new Store();
 /** @type {string} */
 let userscriptsDirConfig = (config.get("userscriptsPath", ""));
-
 const userscriptsDir = PathUtils.isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
+cliSwitches(app, config);
 
 if (process.platform === "win32"){
 	app.setUserTasks([{
@@ -55,6 +45,9 @@ if (process.platform === "win32"){
 }
 
 let init = async function(){
+	/** @type {any} */
+	const DEBUG = argv.debug;
+	const AUTO_UPDATE = argv.update || config.get("autoUpdate", "download");
 	BrowserLoader.load(DEBUG, config);
 	IpcLoader.load();
 	IpcLoader.initRpc(config);
@@ -76,6 +69,7 @@ let init = async function(){
 			let instanceArgv = yargs.parse(_argv);
 			console.log("Second instance: " + _argv);
 			if (!["unknown", "external"].includes(UrlUtils.locationType(String(instanceArgv["new-window"])))){
+				// @ts-ignore
 				BrowserLoader.initWindow(instanceArgv["new-window"], config);
 			}
 		});

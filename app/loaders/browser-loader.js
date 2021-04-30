@@ -2,6 +2,7 @@
 let path = require("path");
 
 let { BrowserWindow, app, shell, dialog, clipboard } = require("electron");
+let log = require("electron-log");
 let shortcuts = require("electron-localshortcut");
 
 let UrlUtils = require("../utils/url-utils");
@@ -16,6 +17,12 @@ class BrowserLoader {
 		this.swapDir = PathUtils.isValidPath(swapDirConfig) ? swapDirConfig : path.join(app.getPath("documents"), "idkr/swap");
 	}
 
+	/**
+	 * @param {string} url
+	 * @param {import("electron-store")} config
+	 * @param {*} webContents
+	 * @returns
+	 */
 	static initWindow(url, config, webContents) {
 		let win = new BrowserWindow({
 			width: 1600,

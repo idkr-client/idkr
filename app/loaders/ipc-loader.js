@@ -15,8 +15,6 @@ class IpcLoader {
 		ipcMain.on("get-path", (event, name) => (event.returnValue = app.getPath(name)));
 
 		ipcMain.on("prompt", (event, message, defaultValue) => {
-			// @TODO: Fix semantic function order
-			// eslint-disable-next-line no-use-before-define
 			let promptWin = BrowserLoader.initPromptWindow(message, defaultValue);
 			let returnValue = null;
 
