@@ -1,7 +1,5 @@
 'use strict';
 
-const STYLES = '#settingsTabLayout{grid-template-columns:repeat(8, 1fr)}#settingsTabLayout > div:nth-child(7){display:none}#idkr-windowHolder{width:100%;height:100%;position:absolute}#idkr-menuWindow{position:absolute;left:50%;top:50%;border-radius:6px;max-height:calc(100% - 480px);transform:translate(-50%,-50%);z-index:2;overflow-y:auto;display:inline-block;text-align:left;pointer-events:auto;padding:20px;width:705px;font-size:20px;background-color:#fff;-webkit-box-shadow:0 9px 0 0 #a6a6a6;-moz-box-shadow:0 9px 0 0 #a6a6a6;box-shadow:0 9px 0 0 #a6a6a6}';
-
 /**
  * Creates a new controllable PopUp Element
  *
@@ -10,7 +8,8 @@ const STYLES = '#settingsTabLayout{grid-template-columns:repeat(8, 1fr)}#setting
 class WindowManager {
 	/**
 	 * Creates an instance of WindowManager.
-	 * @param {String} callerId - The ID of the Button element that called/triggered this Class
+	 *
+	 * @param {string} callerId - The ID of the Button element that called/triggered this Class
 	 * @param {boolean} [hideKrunkerWindowsOnShow=true] - Should the created popup hide, when a krunker popup is opened? Default=Yes
 	 * @memberof WindowManager
 	 */
@@ -20,33 +19,43 @@ class WindowManager {
 		this.shown = false;
 
 		document.addEventListener('DOMContentLoaded', () => {
+			const STYLES = `#settingsTabLayout{grid-template-columns:repeat(8, 1fr)}#settingsTabLayout > div:nth-child(7){display:none}#idkr-windowHolder{width:100%;height:100%;position:absolute}#idkr-menuWindow_${this.callerId}{position:absolute;left:50%;top:50%;border-radius:6px;max-height:calc(100% - 480px);transform:translate(-50%,-50%);z-index:2;overflow-y:auto;display:inline-block;text-align:left;pointer-events:auto;padding:20px;width:705px;font-size:20px;background-color:#fff;-webkit-box-shadow:0 9px 0 0 #a6a6a6;-moz-box-shadow:0 9px 0 0 #a6a6a6;box-shadow:0 9px 0 0 #a6a6a6}`;
+
+			let w;
 			if (!document.getElementById('idkr-windowHolder')) {
-				let w = document.createElement('div');
+				w = document.createElement('div');
 				w.setAttribute('id', 'idkr-windowHolder');
-				w.setAttribute('style', 'display: none;');
-				w.innerHTML = '<div id="idkr-menuWindow"></div>';
+				w.setAttribute('style', 'display: block;');
 				document.getElementsByTagName('body')[0].appendChild(w);
-
-				let s = document.createElement('style');
-				s.innerHTML = STYLES;
-				document.getElementsByTagName('body')[0].appendChild(s);
-
-				document.getElementsByTagName('body')[0].addEventListener('click', e => {
-					// @ts-ignore
-					(!e.path.find(p => p.id === 'idkr-menuWindow' || p.id === this.callerId)) && this.hide();
-				});
+			} else {
+				w = document.getElementById('idkr-windowHolder');
 			}
+			w.innerHTML += `<div id="idkr-menuWindow_${this.callerId}" style="display:none"></div>`;
+
+			let s = document.createElement('style');
+			s.innerHTML = STYLES;
+			document.getElementsByTagName('body')[0].appendChild(s);
+
+			document
+				.getElementsByTagName('body')[0]
+				.addEventListener('click', (e) => {
+					// @ts-ignore
+					!e.path.find(
+						(p) =>
+							p.id === 'idkr-menuWindow_' + this.callerId || p.id === this.callerId
+					) && this.hide();
+				});
 		});
 	}
 
 	/**
 	 * Set the innder HTML of the new PopUp
 	 *
-	 * @param {String} content
+	 * @param {string} content
 	 * @memberof WindowManager
 	 */
 	setContent(content) {
-		document.getElementById('idkr-menuWindow').innerHTML = content;
+		document.getElementById('idkr-menuWindow_' + this.callerId).innerHTML = content;
 	}
 
 	/**
@@ -55,8 +64,14 @@ class WindowManager {
 	 * @memberof WindowManager
 	 */
 	show() {
-		if (this.hideOnShow) document.getElementById('windowHolder').setAttribute('style', 'display: none;');
-		document.getElementById('idkr-windowHolder').setAttribute('style', 'display: block;');
+		if (this.hideOnShow) {
+			document
+				.getElementById('windowHolder')
+				.setAttribute('style', 'display: none;');
+		}
+		document
+			.getElementById('idkr-menuWindow_' + this.callerId)
+			.setAttribute('style', 'display: block;');
 		this.shown = true;
 	}
 
@@ -66,7 +81,9 @@ class WindowManager {
 	 * @memberof WindowManager
 	 */
 	hide() {
-		document.getElementById('idkr-windowHolder').setAttribute('style', 'display: none;');
+		document
+			.getElementById('idkr-menuWindow_' + this.callerId)
+			.setAttribute('style', 'display: none;');
 		this.shown = false;
 	}
 
@@ -83,7 +100,7 @@ class WindowManager {
 	/**
 	 * Returns true if the PopUp is currenty open, otherwise false.
 	 *
-	 * @returns {Boolean} shown
+	 * @returns {boolean} shown
 	 * @memberof WindowManager
 	 */
 	isShown() {

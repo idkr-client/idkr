@@ -47,7 +47,7 @@ if (angleBackend != 'default') {
 if (colorProfile != 'default') {
 	app.commandLine.appendSwitch('force-color-profile', colorProfile);
 }
-yargs.parse(config.get('chromiumFlags', ''), (err, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
+yargs.parse(config.get('chromiumFlags', ''), (_, argv) => Object.entries(argv).slice(1, -1).forEach(entry => app.commandLine.appendSwitch(entry[0], entry[1])));
 
 ipcMain.handle('get-app-info', () => ({
 	name: app.name,

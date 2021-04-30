@@ -1,6 +1,7 @@
 'use strict';
 
 let AccountManager = require('../modules/account-manager');
+let CssManager = require('../modules/css-manager');
 let settingsWindow = null;
 
 Object.assign(window._clientUtil, {
@@ -22,6 +23,7 @@ Object.assign(window._clientUtil, {
 window.OffCliV = true;
 
 let accountManager = new AccountManager(window, document, localStorage);
+let cssManager = new CssManager();
 
 document.addEventListener('DOMContentLoaded', () => {
 	let windowsObserver = new MutationObserver(() => {
@@ -31,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	windowsObserver.observe(document.getElementById('instructions'), { childList: true });
 
 	accountManager.injectStyles();
+	cssManager.injectStyles();
 
 	// const gameCSS = Object.assign(document.createElement('link'), {
 	// 	rel: 'stylesheet', href: 'idkr-swap:' + path.join(__dirname, '../css/game.css')
