@@ -45,15 +45,6 @@ if (process.platform === "win32"){
 }
 
 let init = async function(){
-	/** @type {any} */
-	const DEBUG = argv.debug;
-	const AUTO_UPDATE = argv.update || config.get("autoUpdate", "download");
-	BrowserLoader.load(DEBUG, config);
-	IpcLoader.load();
-	IpcLoader.initRpc(config);
-
-	await PathUtils.ensureDirs(BrowserLoader.swapDir, userscriptsDir);
-
 	// Workaround for Electron 8.x
 	protocol.registerSchemesAsPrivileged([{
 		scheme: "idkr-swap",
@@ -62,6 +53,15 @@ let init = async function(){
 			corsEnabled: true
 		}
 	}]);
+
+	/** @type {any} */
+	const DEBUG = argv.debug;
+	const AUTO_UPDATE = argv.update || config.get("autoUpdate", "download");
+	BrowserLoader.load(DEBUG, config);
+	IpcLoader.load();
+	IpcLoader.initRpc(config);
+
+	await PathUtils.ensureDirs(BrowserLoader.swapDir, userscriptsDir);
 
 	app.once("ready", async() => {
 		protocol.registerFileProtocol("idkr-swap", (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ""))));
