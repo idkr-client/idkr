@@ -41,7 +41,7 @@ class CssManager {
 		tmp.innerHTML = HTML.BTN;
 		tar.parentNode.insertBefore(tmp.firstChild, tar.nextSibling);
 
-		document.getElementById('cssMgrBtn').addEventListener('click', () => this.openPopup());
+		  document.getElementById('cssMgrBtn').addEventListener('click', () => window._clientUtil.openCSS());
 	}
 }
 

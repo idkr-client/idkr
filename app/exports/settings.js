@@ -200,8 +200,20 @@ module.exports = {
 		html: function () {
 			return window._clientUtil.genCSettingsHTML(this);
 		}
-	}
-	// },
+	},
+    launchCss: {
+      name: 'Launch CSS',
+      id: 'cssLaunch',
+      cat: 'CSS',
+      type: 'button',
+      click: function () {
+          window._clientUtil.openCSS();
+    },
+    html: function () {
+        return window._clientUtil.genCSettingsHTML(this);
+    }
+  }
+  // },
 	// enableUserscripts: {
 	// 	name: 'Enable Userscripts',
 	// 	id: 'enableUserscripts',
