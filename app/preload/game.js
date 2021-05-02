@@ -14,12 +14,7 @@ Object.assign(window._clientUtil, {
 			case 'checkbox': return `<label class='switch'><input type='checkbox' onclick='_clientUtil.setCSetting("${options.id}", this.checked)'${options.val ? ' checked' : ''}><span class='slider'></span></label>`;
 			case 'slider': return `<input type='number' class='sliderVal' id='c_slid_input_${options.id}' min='${options.min}' max='${options.max}' value='${options.val}' onkeypress='_clientUtil.delaySetCSetting("${options.id}", this)' style='border-width:0px'/><div class='slidecontainer'><input type='range' id='c_slid_${options.id}' min='${options.min}' max='${options.max}' step='${options.step}' value='${options.val}' class='sliderM' oninput='_clientUtil.setCSetting("${options.id}", this.value)'></div>`;
 			case 'select': return `<select onchange='_clientUtil.setCSetting("${options.id}", this.value)' class='inputGrey2'>${Object.entries(options.options).map(entry => `<option value='${entry[0]}'${entry[0] == options.val ? ' selected' : ''}>${entry[1]}</option>`).join('')}</select>`;
-			case 'button': {
-				let btn = document.createElement('button');
-				btn.addEventListener('click', options.click);
-				btn.classList.add('settingsBtn');
-				return btn.outerHTML;
-			}
+			case 'button': return `<button id=${options.id} class='settingsBtn' onclick='${options.click}' style='width:auto;'>${options.name}</button>`;
 			default: return `<input type='${options.type}' name='${options.id}' id='c_slid_${options.id}' ${options.type == 'color' ? 'style="float:right;margin-top:5px;"' : `class='inputGrey2' ${options.placeholder ? `placeholder='${options.placeholder}'` : ''}`} value='${options.val.replace(/'/g, '')}' oninput='_clientUtil.setCSetting("${options.id}", this.value)'/>`;
 		}
 	},
@@ -66,7 +61,6 @@ window._clientUtil.events.on('game-load', () => {
 		let tempHTML = '';
 		let previousCategory = null;
 		Object.values(window._clientUtil.settings).forEach(entry => {
-        alert(entry.name)
 			if (settingsWindow.settingSearch && !window._clientUtil.searchMatches(entry) || entry.hide) {
 				return;
 			}

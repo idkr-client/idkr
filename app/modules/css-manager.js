@@ -31,17 +31,17 @@ class CssManager {
 	}
 
 	injectStyles() {
-		document.head.appendChild(Object.assign(document.createElement('style'), {
-            innerText: HTML.STYLE
-        }));
+		// document.head.appendChild(Object.assign(document.createElement('style'), {
+		//         innerText: HTML.STYLE
+		//     }));
 
-		let tar = document.getElementById('customizeButton');
+		// let tar = document.getElementById('customizeButton');
 
-		let tmp = document.createElement('div');
-		tmp.innerHTML = HTML.BTN;
-		tar.parentNode.insertBefore(tmp.firstChild, tar.nextSibling);
+		// let tmp = document.createElement('div');
+		// tmp.innerHTML = HTML.BTN;
+		// tar.parentNode.insertBefore(tmp.firstChild, tar.nextSibling);
 
-		  document.getElementById('cssMgrBtn').addEventListener('click', () => window._clientUtil.openCSS());
+		//   document.getElementById('cssMgrBtn').addEventListener('click', () => window._clientUtil.openCSS());
 	}
 }
 
