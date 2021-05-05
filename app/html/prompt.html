@@ -1,84 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>prompt</title>
+		<style>
+			@font-face {
+				font-family: "FFF Forward";
+				src: url("../fonts/FFF-Forward.ttf");
+			}
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>prompt</title>
-	<style>
-		@font-face {
-			font-family: 'FFF Forward';
-			src: url("../fonts/FFF-Forward.ttf");
-		}
+			* {
+				outline: none;
+				font-family: "FFF Forward";
+				color: #353535;
+				user-select: none;
+			}
 
-		* {
-			outline: none;
-			font-family: 'FFF Forward';
-			color: #353535;
-			user-select: none;
-		}
+			body {
+				overflow: hidden;
+				margin: 0px;
+			}
 
-		body {
-			overflow: hidden;
-			margin: 0px;
-		}
+			#promptBody {
+				text-align: center;
+				padding: 5px;
+				left: 0;
+				right: 0;
+				border-radius: 6px;
+				border: 7px solid #A6A6A6;
+				background-color: #FFF;
+			}
 
-		#promptBody {
-			text-align: center;
-			padding: 5px;
-			left: 0;
-			right: 0;
-			border-radius: 6px;
-			border: 7px solid #a6a6a6;
-			background-color: #fff;
-		}
+			#message {
+				word-wrap: break-word;
+			}
 
-		#message {
-			word-wrap: break-word;
-		}
+			#fileSelect {
+				display: none;
+			}
 
-		#fileSelect {
-			display: none;
-		}
+			#promptInput {
+				background-color: #EEE;
+				border: none;
+				font-size: 16px;
+				padding: 5px;
+				width: 90%;
+			}
 
-		#promptInput {
-			background-color: #eee;
-			border: none;
-			font-size: 16px;
-			padding: 5px;
-			width: 90%;
-		}
+			.returnButton {
+				color: #FFF;
+				margin: 5px;
+				background-color: #2196F3;
+				padding: 6px;
+				font-size: 12px;
+				display: inline-block;
+				cursor: pointer;
+				border-radius: 4px;
+			}
 
-		.returnButton {
-			color: #fff;
-			margin: 5px;
-			background-color: #2196F3;
-			padding: 6px;
-			font-size: 12px;
-			display: inline-block;
-			cursor: pointer;
-			border-radius: 4px;
-		}
+			.returnButton:active {
+				background-color: #666;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="promptBody">
+			<p id="message"></p>
+			<input id="promptInput" placeholder="Input"><br>
 
-		.returnButton:active {
-			background-color: #666;
-		}
-	</style>
-</head>
+			<div id="buttons">
+				<label for="fileSelect" class="returnButton">Load File</label>
+				<input type="file" id="fileSelect" onchange="importFile()">
+				<div class="returnButton" onclick="sendValue(promptInput.value)">OK</div>
+				<div class="returnButton" onclick="sendValue(null)">Cancel</div>
+			</div>
 
-<body>
-	<div id="promptBody">
-		<p id="message"></p>
-		<input id="promptInput" placeholder="Input"><br>
-
-		<div id="buttons">
-			<label for="fileSelect" class="returnButton">Load File</label>
-			<input type="file" id="fileSelect" onchange="importFile()">
-			<div class="returnButton" onclick="sendValue(promptInput.value)">OK</div>
-			<div class="returnButton" onclick="sendValue(null)">Cancel</div>
 		</div>
-
-	</div>
-</body>
-
+	</body>
 </html>

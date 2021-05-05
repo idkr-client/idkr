@@ -1,12 +1,14 @@
 {
   "name": "idkr",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "idk, just a Krunker client",
-  "main": "app/main.js",
+  "main": "./app/main.js",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
     "startd": "npm start -- --debug",
+    "startd-linux": "ELECTRON_ENABLE_STACK_DUMPING=1 ELECTRON_ENABLE_LOGGING=true npm start -- --debug",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "release": "electron-builder",
@@ -24,13 +26,16 @@
   "bugs": {
     "url": "https://github.com/Mixaz017/idkr/issues"
   },
-  "homepage": "https://github.com/Mixaz017/idkr#readme",
+  "homepage": "https://idkr.dev",
   "devDependencies": {
+    "@babel/core": "^7.13.16",
     "@babel/eslint-parser": "^7.13.14",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-private-methods": "^7.13.0",
+    "@types/node": "^12.20.10",
     "electron": "^9.4.4",
-    "electron-builder": "^22.10.5"
+    "electron-builder": "^22.10.5",
+    "eslint": "^7.25.0"
   },
   "dependencies": {
     "discord-rpc": "^3.2.0",

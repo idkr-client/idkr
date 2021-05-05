@@ -1,26 +1,26 @@
-'use strict';
+"use strict";
 
-const { ipcRenderer } = require('electron');
+let { ipcRenderer } = require("electron");
 
-window.addEventListener('DOMContentLoaded', () => {
-	const message = document.getElementById('message');
-	const promptInput = document.getElementById('promptInput');
-	const promptBody = document.getElementById('promptBody');
-	const fileSelect = document.getElementById('fileSelect');
+window.addEventListener("DOMContentLoaded", () => {
+	/** @type {HTMLInputElement} */
+	const promptInput = (document.getElementById("promptInput"));
 
-	ipcRenderer.on('prompt-data', (event, ipcMessage = '', ipcDefault = '') => {
-		message.innerText = ipcMessage;
+	ipcRenderer.on("prompt-data", (event, ipcMessage = "", ipcDefault = "") => {
+		document.getElementById("message").innerText = ipcMessage;
 		promptInput.value = ipcDefault;
-		ipcRenderer.invoke('set-bounds', { height: promptBody.getBoundingClientRect().height });
+		ipcRenderer.invoke("set-bounds", {
+			height: document.getElementById("promptBody").getBoundingClientRect().height
+		});
 		promptInput.focus();
 	});
 
-	window.sendValue = value => {
-		ipcRenderer.send('prompt-return', value);
+	/** @type {Window & any} */
+	(window).sendValue = value => {
+		ipcRenderer.send("prompt-return", value);
 		window.close();
 	};
 
-	window.importFile = () => {
-		fileSelect.files[0].text().then(text => promptInput.value = text);
-	};
+	// @ts-ignore
+	window.importFile = () => (document.getElementById("fileSelect").files[0].text().then(text => (promptInput.value = text)));
 });
