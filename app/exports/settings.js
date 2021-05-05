@@ -37,7 +37,8 @@ module.exports = {
 			gl: "OpenGL",
 			d3d11: "D3D11",
 			d3d9: "D3D9",
-			d3d11on12: "D3D11on12"
+			d3d11on12: "D3D11on12",
+			vulkan: "Vulkan"
 		},
 		val: "default",
 		needsRestart: true,
