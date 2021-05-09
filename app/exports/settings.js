@@ -30,15 +30,17 @@ module.exports = {
 		name: "ANGLE Graphics Backend",
 		id: "angleBackend",
 		cat: "Performance",
-		platforms: ["win32", "linux"],
+		platforms: ["win32", "linux", "darwin"],
 		type: "select",
+		// https://chromium.googlesource.com/angle/angle#platform-support-via-backing-renderers
 		options: {
 			"default": "Default",
-			gl: "OpenGL",
-			d3d11: "D3D11",
-			d3d9: "D3D9",
-			d3d11on12: "D3D11on12",
-			vulkan: "Vulkan"
+			gl: "OpenGL (Windows, Linux, MacOS)",
+			d3d11: "D3D11 (Windows-Only)",
+			d3d9: "D3D9 (Windows-Only)",
+			d3d11on12: "D3D11on12 (Windows, Linux)",
+			vulkan: "Vulkan (Windows, Linux)",
+			metal: "Metal (MacOS-Only)"
 		},
 		val: "default",
 		needsRestart: true,
