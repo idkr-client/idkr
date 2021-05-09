@@ -1,4 +1,5 @@
 "use strict";
+
 let { BrowserWindow, ipcMain, app } = require("electron");
 
 let BrowserLoader = require("./browser-loader");
@@ -20,14 +21,12 @@ class IpcLoader {
 
 			ipcMain.on("prompt-return", (_, value) => (returnValue = value));
 
-			promptWin.on("closed", () => {
-				event.returnValue = returnValue;
-			});
+			promptWin.on("closed", () => (event.returnValue = returnValue));
 		});
 
-		ipcMain.handle("set-bounds", (event, bounds) => {
-			BrowserWindow.fromWebContents(event.sender).setBounds(bounds);
-		});
+		ipcMain.handle("set-bounds", (event, bounds) => BrowserWindow
+			.fromWebContents(event.sender)
+			.setBounds(bounds));
 	}
 
 	/**

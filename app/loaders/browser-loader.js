@@ -10,7 +10,7 @@ let PathUtils = require("../utils/path-utils");
 let Swapper = require("../modules/swapper");
 
 class BrowserLoader {
-	static load(isDebug = false, config) {
+	static load(isDebug = false, config){
 		this.DEBUG = isDebug;
 		/** @type {string} */
 		let swapDirConfig = (config.get("resourceSwapperPath", ""));
@@ -18,12 +18,14 @@ class BrowserLoader {
 	}
 
 	/**
+	 * Initialize the browser window
+	 *
 	 * @param {string} url
 	 * @param {import("electron-store")} config
-	 * @param {*} webContents
+	 * @param {object} webContents
 	 * @returns
 	 */
-	static initWindow(url, config, webContents) {
+	static initWindow(url, config, webContents){
 		let win = new BrowserWindow({
 			width: 1600,
 			height: 900,
@@ -46,13 +48,14 @@ class BrowserLoader {
 	}
 
 	/**
+	 * Set window defaults
 	 *
 	 * @param {BrowserWindow} win
 	 * @param {import("electron-store")} config
 	 * @param {Boolean} [isWeb=false]
-	 * @returns
+	 * @returns {any}
 	 */
-	static setupWindow(win, config, isWeb = false) {
+	static setupWindow(win, config, isWeb = false){
 		let contents = win.webContents;
 
 		if (this.DEBUG) contents.openDevTools();
@@ -120,9 +123,10 @@ class BrowserLoader {
 			if (UrlUtils.locationType(url) === "external") shell.openExternal(url);
 			else if (UrlUtils.locationType(url) !== "unknown"){
 				if (frameName === "_self") contents.loadURL(url);
-				else this.initWindow(url, config, options.webContents);
+				else this.initWindow(url, config, /** @type {object} */ (options).webContents);
 			}
 		});
+
 		contents.on("will-navigate", (event, url) => {
 			event.preventDefault();
 			if (UrlUtils.locationType(url) === "external") shell.openExternal(url);
@@ -159,7 +163,17 @@ class BrowserLoader {
 		return win;
 	}
 
-	static initPromptWindow(message, defaultValue, config) {
+	/**
+	 * Default promt window configuration
+	 *
+	 * @static
+	 * @param {string} message
+	 * @param {object} defaultValue
+	 * @param {import("electron-store")} config
+	 * @returns {any}
+	 * @memberof BrowserLoader
+	 */
+	static initPromptWindow(message, defaultValue, config = null){
 		let win = new BrowserWindow({
 			width: 480,
 			height: 240,
@@ -182,7 +196,16 @@ class BrowserLoader {
 		return win;
 	}
 
-	static initSplashWindow(shouldAutoupdate, config) {
+	/**
+	 * Default splash window configuration
+	 *
+	 * @static
+	 * @param {string} shouldAutoupdate
+	 * @param {import("electron-store")} config
+	 * @returns {any}
+	 * @memberof BrowserLoader
+	 */
+	static initSplashWindow(shouldAutoupdate, config){
 		let win = new BrowserWindow({
 			width: 600,
 			height: 300,
@@ -198,13 +221,10 @@ class BrowserLoader {
 		let contents = win.webContents;
 
 		async function autoUpdate(){
-			// @TODO: See comment below
-			// eslint-disable-next-line consistent-return
 			return new Promise((resolve, reject) => {
 				if (shouldAutoupdate === "skip") return resolve();
 
-				// @TODO: This might orphan, need to test
-				/* return */contents.on("dom-ready", () => {
+				return contents.on("dom-ready", () => {
 					contents.send("message", "Initializing the auto updater...");
 					const { autoUpdater } = require("electron-updater");
 					autoUpdater.logger = log;

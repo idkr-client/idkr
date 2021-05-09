@@ -21,6 +21,7 @@ if (!app.requestSingleInstanceLock()) app.quit();
 
 const { argv } = yargs;
 const config = new Store();
+
 /** @type {string} */
 let userscriptsDirConfig = (config.get("userscriptsPath", ""));
 const userscriptsDir = PathUtils.isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
@@ -55,9 +56,7 @@ let init = function(){
 	}]);
 
 	/** @type {any} */
-	const DEBUG = argv.debug;
-	const AUTO_UPDATE = argv.update || config.get("autoUpdate", "download");
-	BrowserLoader.load(DEBUG, config);
+	BrowserLoader.load(Boolean(argv.debug), config);
 	IpcLoader.load();
 	IpcLoader.initRpc(config);
 
@@ -73,7 +72,7 @@ let init = function(){
 			}
 		});
 
-		BrowserLoader.initSplashWindow(AUTO_UPDATE, config);
+		BrowserLoader.initSplashWindow(String(argv.update || config.get("autoUpdate", "download")), config);
 	});
 };
 
