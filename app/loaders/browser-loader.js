@@ -34,13 +34,11 @@ class BrowserLoader {
 			webContents,
 			webPreferences: {
 				preload: path.join(__dirname, "../preload/global.js"),
-				contextIsolation: false,
-				nodeIntegrationInWorker: true
+				contextIsolation: false
+				// nodeIntegrationInWorker: true
 			}
 		});
-		// let contents = win.webContents
-		// @TODO: Fix co-dependency !!!
-		// eslint-disable-next-line no-use-before-define
+
 		this.setupWindow(win, config, true);
 
 		if (!webContents) win.loadURL(url);
