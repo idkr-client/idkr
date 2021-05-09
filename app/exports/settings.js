@@ -8,7 +8,7 @@ module.exports = {
 		id: "disableFrameRateLimit",
 		cat: "Performance",
 		type: "checkbox",
-		val: false,
+		val: true,
 		needsRestart: true,
 		html(){
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
