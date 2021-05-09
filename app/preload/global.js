@@ -74,9 +74,16 @@ UtilManager.instance.clientUtils = {
 };
 
 switch (windowType){
-	case "game":
+	case "game": {
+		// @ts-ignore
+		process.dlopen = () => {
+			throw new Error("Load native module is not safe");
+		};
+		// let worker = new Worker("./game.js");
+		// worker.addEventListener("error", console.log);
 		require("./game.js");
 		break;
+	}
 	default: () => {};
 }
 

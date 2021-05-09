@@ -34,7 +34,8 @@ class BrowserLoader {
 			webContents,
 			webPreferences: {
 				preload: path.join(__dirname, "../preload/global.js"),
-				contextIsolation: false
+				contextIsolation: false,
+				nodeIntegrationInWorker: true
 			}
 		});
 		// let contents = win.webContents
