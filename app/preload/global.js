@@ -1,3 +1,5 @@
+'use strict';
+
 require('v8-compile-cache');
 const events = require('events');
 // const fs = require('fs');
@@ -54,7 +56,7 @@ window._clientUtil = {
 		// 		this.name = initiator.name || 'Unnamed userscript';
 		// 		this.version = initiator.version || 'Version unknown';
 		// 		this.author = initiator.author || 'Unknown author';
-		// 		this.description = initiator.discription || 'No description provided';
+		// 		this.description = initiator.description || 'No description provided';
 		// 		this.locations = initiator.locations || ['all'];
 		// 		this.platforms = initiator.platforms || ['all'];
 		// 		this.settings = initiator.settings || null;
