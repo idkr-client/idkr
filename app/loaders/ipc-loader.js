@@ -6,6 +6,11 @@ let BrowserLoader = require("./browser-loader");
 let RPCHandler = require("../modules/rpc-handler");
 
 class IpcLoader {
+	/**
+	 * Initializes IPC event handlers
+	 *
+	 * @param {import("electron-store")} config
+	 */
 	static load(config) {
 		ipcMain.handle("get-app-info", () => ({
 			name: app.name,
