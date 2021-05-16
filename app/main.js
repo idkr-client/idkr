@@ -57,7 +57,7 @@ let init = function(){
 
 	/** @type {any} */
 	BrowserLoader.load(Boolean(argv.debug), config);
-	IpcLoader.load();
+	IpcLoader.load(config);
 	IpcLoader.initRpc(config);
 
 	app.once("ready", async() => {

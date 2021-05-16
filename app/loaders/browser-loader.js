@@ -182,7 +182,7 @@ class BrowserLoader {
 			resizable: false,
 			transparent: true,
 			webPreferences: {
-				preload: path.join(__dirname, "preload/prompt.js")
+				preload: path.join(__dirname, "../preload/prompt.js")
 			}
 		});
 		let contents = win.webContents;

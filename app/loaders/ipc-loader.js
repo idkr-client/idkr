@@ -6,7 +6,7 @@ let BrowserLoader = require("./browser-loader");
 let RPCHandler = require("../modules/rpc-handler");
 
 class IpcLoader {
-	static load() {
+	static load(config) {
 		ipcMain.handle("get-app-info", () => ({
 			name: app.name,
 			version: app.getVersion(),
@@ -16,7 +16,7 @@ class IpcLoader {
 		ipcMain.on("get-path", (event, name) => (event.returnValue = app.getPath(name)));
 
 		ipcMain.on("prompt", (event, message, defaultValue) => {
-			let promptWin = BrowserLoader.initPromptWindow(message, defaultValue);
+			let promptWin = BrowserLoader.initPromptWindow(message, defaultValue, config);
 			let returnValue = null;
 
 			ipcMain.on("prompt-return", (_, value) => (returnValue = value));
