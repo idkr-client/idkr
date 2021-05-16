@@ -35,8 +35,6 @@ https://github.com/Mixaz017/idkr/wiki
 
 - Prompt window (used when importing settings) has a "Load File" button.
 	- This button lets you select a file and load its contents directly without opening the file in an external editor and copy-pasting it.
-- Even secure than the official client
-	- The official client disables `webSecurity`, which is a bad thing to do, to get the resource swapper work. However, idkr uses a method that makes resource swapper work without having to disable `webSecurity`.
 
 Other features that have its settings are listed below.
 
