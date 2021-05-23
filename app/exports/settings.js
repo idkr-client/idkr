@@ -67,6 +67,7 @@ module.exports = {
 		id: 'inProcessGPU',
 		cat: 'Chromium',
 		type: 'checkbox',
+		platforms: ['win32'],
 		val: false,
 		needsRestart: true,
 		html: function () {
