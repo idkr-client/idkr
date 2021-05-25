@@ -40,19 +40,19 @@ const baseStyles = `
 `;
 
 const menuTimerStyles = `
-#aHolder {
-	display:none !important;
-}
-
-#spectateUI {
+#uiBase.onMenu #spectateUI {
 	display: block !important;
 }
 
-#specNames, #specGameInfo, #spec0, #spectateInfo, #spec1, #specStats, #specSUS, #specContr, #specKPDContr {
+#uiBase.onMenu #spectateUI > :not(#spectateHUD) {
 	display: none !important;
 }
 
-#specTimer {
+#uiBase.onMenu #spectateHUD > :not(.spectateInfo, #specGMessage) {
+	display: none !important;
+}
+
+#uiBase.onMenu #specTimer {
 	font-size: 28px;
 	text-align: center;
 	position: fixed;
@@ -69,21 +69,10 @@ const menuTimerStyles = `
 	text-shadow: 2px 2px 3px rgba(30, 30, 30, .5);
 }
 
-#spectateHUD {
+#uiBase.onMenu #spectateHUD {
 	transform:translate(-50%,-50%);
 	position:fixed;
 	top:55%;
-}
-
-#uiBase.onMenu #specTimer {
-	display:block !important;
-	color:red;
-	background-color:transparent;
-	opacity: 1;
-}
-
-#instructionHolder {
-	z-index: -2;
 }
 `;
 
