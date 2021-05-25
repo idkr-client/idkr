@@ -161,15 +161,17 @@ ipcRenderer.invoke("get-app-info")
 		Object.assign(oldConsole, console);
 		const initalize = async() => {
 			Object.assign(console, oldConsole);
-			const initiator = new UserscriptInitiator(
-				config,
-				path.join(info.documentsDir, "idkr", "scripts"),
-				UtilManager.instance.clientUtils
-			);
-
-			await initiator.loadScripts(windowType);
 			UtilManager.instance.clientUtils.initUtil();
-			initiator.executeScripts();
+			if (config.get("enableUserscripts", true)){
+				const initiator = new UserscriptInitiator(
+					config,
+					String(config.get("userscriptsPath", "") ?? path.join(info.documentsDir, "idkr", "scripts")),
+					UtilManager.instance.clientUtils
+				);
+
+				await initiator.loadScripts(windowType);
+				initiator.executeScripts();
+			}
 		};
 
 		(windowType === "game")
