@@ -1,6 +1,10 @@
 "use strict";
 
-const STYLES = require("./styles-injection");
+let Store = require("electron-store");
+
+let { baseStyles } = require("./styles-injection");
+
+const config = new Store();
 
 /**
  * Creates a new controllable PopUp Element
@@ -29,7 +33,8 @@ class WindowManager {
 				document.getElementsByTagName("body")[0].appendChild(w);
 
 				let s = document.createElement("style");
-				s.innerHTML = STYLES;
+				s.innerHTML = baseStyles;
+				if (config.get("enableMenuTimer", true)) s.innerHTML += require("./styles-injection").menuTimerStyles;
 				document.getElementsByTagName("body")[0].appendChild(s);
 
 				document.getElementsByTagName("body")[0].addEventListener("click", e => {

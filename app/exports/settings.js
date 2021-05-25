@@ -157,6 +157,17 @@ module.exports = {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
+	enableMenuTimer: {
+		name: "Always show Menu-Timer",
+		id: "enableMenuTimer",
+		cat: "Maintenance",
+		type: "checkbox",
+		val: true,
+		needsRestart: false,
+		html(){
+			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
+		}
+	},
 	userscriptsPath: {
 		name: "Userscripts Path",
 		id: "userscriptsPath",

@@ -2,7 +2,7 @@
 
 /* 200IQ */
 
-module.exports = `
+const baseStyles = `
 #settingsTabLayout {
 	grid-template-columns: repeat(8, 1fr)
 }
@@ -37,7 +37,9 @@ module.exports = `
 	-moz-box-shadow: 0 9px 0 0 #a6a6a6;
 	box-shadow: 0 9px 0 0 #a6a6a6
 }
+`;
 
+const menuTimerStyles = `
 #aHolder {
 	display:none !important;
 }
@@ -84,3 +86,8 @@ module.exports = `
 	z-index: -2;
 }
 `;
+
+module.exports = {
+	baseStyles,
+	menuTimerStyles
+};
