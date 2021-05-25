@@ -146,6 +146,29 @@ module.exports = {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
+	enableUserscripts: {
+		name: "Enable Userscripts",
+		id: "enableUserscripts",
+		cat: "Maintenance",
+		type: "checkbox",
+		val: false,
+		needsRestart: true,
+		html(){
+			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
+		}
+	},
+	userscriptsPath: {
+		name: "Userscripts Path",
+		id: "userscriptsPath",
+		cat: "Maintenance",
+		type: "text",
+		val: "",
+		placeholder: "Userscripts Folder Path",
+		needsRestart: true,
+		html(){
+			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
+		}
+	},
 	resourceSwapperMode: {
 		name: "Resource Swapper Mode",
 		id: "resourceSwapperMode",
