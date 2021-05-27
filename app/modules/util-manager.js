@@ -36,6 +36,9 @@ class UtilManager {
 	 * @memberof UtilManager
 	 */
 	set clientUtils(value){
+		Object.assign(value, {
+			key: this._utilKey
+		});
 		window[this._utilKey] = value;
 	}
 
