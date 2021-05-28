@@ -61,8 +61,8 @@ class RPCHandler {
 	 * @memberof RPCHandler
 	 */
 	async end(){
-		await this.rpc.clearActivity();
-		return this.rpc.destroy();
+		await this.rpc.clearActivity().catch(e => console.log(e));
+		return await this.rpc.destroy().catch(e => console.log(e));
 	}
 }
 
