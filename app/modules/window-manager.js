@@ -33,6 +33,8 @@ class WindowManager {
 				document.getElementsByTagName("body")[0].appendChild(w);
 
 				let s = document.createElement("style");
+				s.setAttribute("class", this.#randomStr(10));
+				s.setAttribute("id", this.#randomStr(10));
 				s.innerHTML = baseStyles;
 				if (config.get("enableMenuTimer", true)) s.innerHTML += require("./styles-injection").menuTimerStyles;
 				document.getElementsByTagName("body")[0].appendChild(s);
@@ -44,6 +46,16 @@ class WindowManager {
 			}
 		});
 	}
+
+	/**
+	 * Generate a random string with custom length
+	 *
+	 * @param {number} length
+	 * @returns {string}
+	 */
+	#randomStr = (length) => {
+		return [...Array(length)].map(() => Math.random().toString(36)[2]).join("");
+	};
 
 	/**
 	 * Set the innder HTML of the new PopUp
