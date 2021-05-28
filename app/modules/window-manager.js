@@ -51,6 +51,7 @@ class WindowManager {
 	 * Generate a random string with custom length
 	 *
 	 * @param {number} length
+	 * @private
 	 * @returns {string}
 	 */
 	#randomStr = (length) => {
