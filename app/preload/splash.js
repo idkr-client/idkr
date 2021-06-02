@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		.invoke("get-app-info")
 		.then(info => (document.getElementById("version").innerText = `${info.name}@${info.version}`));
 
-	ipcRenderer.on("message", (event, messageText = "", detailsText = "") => {
+	ipcRenderer.on("message", (_, messageText = "", detailsText = "") => {
 		!!messageText && (document.getElementById("message").innerText = messageText);
 		!!detailsText && (document.getElementById("details").innerText = detailsText);
 	});

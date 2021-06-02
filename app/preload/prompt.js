@@ -6,7 +6,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	/** @type {HTMLInputElement} */
 	const promptInput = (document.getElementById("promptInput"));
 
-	ipcRenderer.on("prompt-data", (event, ipcMessage = "", ipcDefault = "") => {
+	ipcRenderer.on("prompt-data", (_, ipcMessage = "", ipcDefault = "") => {
 		document.getElementById("message").innerText = ipcMessage;
 		promptInput.value = ipcDefault;
 		ipcRenderer.invoke("set-bounds", {
