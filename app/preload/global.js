@@ -4,7 +4,7 @@ let path = require("path");
 
 require("v8-compile-cache");
 
-let events = require("events");
+let Events = require("events");
 let { ipcRenderer } = require("electron");
 let Store = require("electron-store");
 let log = require("electron-log");
@@ -22,26 +22,25 @@ window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", messag
 let windowType = UrlUtils.locationType(location.href);
 
 UtilManager.instance.clientUtils = {
-	// eslint-disable-next-line new-cap
-	events: new events(),
+	events: new Events(),
 	settings: require("../exports/settings"),
 	setCSetting(name, value){
 		let entry = Object.values(this.settings).find(_entry => _entry.id === name);
-		// eslint-disable-next-line no-param-reassign
-		if (entry.min && entry.max) value = Math.max(entry.min, Math.min(value, entry.max));
+		let newValue = String((entry.min && entry.max) ? Math.max(entry.min, Math.min(value, entry.max)) : "");
 
-		config.set(name, value);
-		entry.val = value;
-		if (entry.set) entry.set(value);
+		console.log(entry);
+
+		config.set(name, newValue);
+		entry.val = newValue;
+		if (entry.set) entry.set(newValue);
 
 		/** @type {HTMLInputElement} */
 		let element = (document.getElementById("c_slid_" + entry.id));
-
-		if (element) element.value = value;
+		if (element) element.value = newValue;
 
 		/** @type {HTMLInputElement} */
 		element = (document.getElementById("c_slid_input_" + entry.id));
-		if (element) element.value = value;
+		if (element) element.value = newValue;
 	},
 	delayIDs: {},
 	delaySetCSetting(name, target, delay = 600){
