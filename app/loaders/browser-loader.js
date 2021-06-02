@@ -18,6 +18,17 @@ class BrowserLoader {
 	}
 
 	/**
+	 * Get the swap dir path
+	 *
+	 * @static
+	 * @return {string}
+	 * @memberof BrowserLoader
+	 */
+	static getSwapDir(){
+		return this.swapDir;
+	}
+
+	/**
 	 * Initialize the browser window
 	 *
 	 * @param {string} url

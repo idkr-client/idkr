@@ -61,14 +61,13 @@ let init = function(){
 	IpcLoader.initRpc(config);
 
 	app.once("ready", async() => {
-		await PathUtils.ensureDirs(BrowserLoader.swapDir, userscriptsDir);
+		await PathUtils.ensureDirs(BrowserLoader.getSwapDir(), userscriptsDir);
 		protocol.registerFileProtocol("idkr-swap", (request, callback) => callback(decodeURI(request.url.replace(/^idkr-swap:/, ""))));
-		app.on("second-instance", (e, _argv) => {
+		app.on("second-instance", (_, _argv) => {
 			let instanceArgv = yargs.parse(_argv);
 			console.log("Second instance: " + _argv);
 			if (!["unknown", "external"].includes(UrlUtils.locationType(String(instanceArgv["new-window"])))){
-				// @ts-ignore
-				BrowserLoader.initWindow(instanceArgv["new-window"], config);
+				BrowserLoader.initWindow(String(instanceArgv["new-window"]), config);
 			}
 		});
 
