@@ -32,9 +32,7 @@ const baseStyles = `
 	padding: 20px;
 	width: 705px;
 	font-size: 20px;
-	background-color: #fff;
-	-webkit-box-shadow: 0 9px 0 0 #a6a6a6;
-	-moz-box-shadow: 0 9px 0 0 #a6a6a6;
+	background-color: #353535;
 	box-shadow: 0 9px 0 0 #a6a6a6
 }
 
