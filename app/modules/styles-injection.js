@@ -37,6 +37,11 @@ const baseStyles = `
 	-moz-box-shadow: 0 9px 0 0 #a6a6a6;
 	box-shadow: 0 9px 0 0 #a6a6a6
 }
+
+/* Temporal workaround for "No settings found" appearing in idkr tab all the time */
+div.setHed:first-child:not(:only-child) {
+	display: none;
+}
 `;
 
 const menuTimerStyles = `
