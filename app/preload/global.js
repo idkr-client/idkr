@@ -28,8 +28,6 @@ UtilManager.instance.clientUtils = {
 		let entry = Object.values(this.settings).find(_entry => _entry.id === name);
 		let newValue = String((entry.min && entry.max) ? Math.max(entry.min, Math.min(value, entry.max)) : "");
 
-		console.log(entry);
-
 		config.set(name, newValue);
 		entry.val = newValue;
 		if (entry.set) entry.set(newValue);
