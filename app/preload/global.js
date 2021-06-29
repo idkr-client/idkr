@@ -16,6 +16,7 @@ let UtilManager = require("../modules/util-manager");
 const config = new Store();
 
 Object.assign(console, log.functions);
+localStorage.setItem("logs", true);
 
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", message, defaultValue);
 
@@ -157,10 +158,7 @@ ipcRenderer.on("rpc-stop", () => {
 
 ipcRenderer.invoke("get-app-info")
 	.then(info => {
-		let oldConsole = {};
-		Object.assign(oldConsole, console);
 		const initalize = async() => {
-			Object.assign(console, oldConsole);
 			UtilManager.instance.clientUtils.initUtil();
 			if (config.get("enableUserscripts", true)){
 				const initiator = new UserscriptInitiator(
