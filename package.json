@@ -33,7 +33,7 @@
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-private-methods": "^7.13.0",
     "@types/node": "^12.20.10",
-    "electron": "^12.0.7",
+    "electron": "^12.0.13",
     "electron-builder": "^22.10.5",
     "eslint": "^7.25.0"
   },
