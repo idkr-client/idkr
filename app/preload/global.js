@@ -93,13 +93,17 @@ function setFocusEvent(){
 			largeImageText: "idkr client"
 		};
 
-		function sendRPCGamePresence(){
+		async function sendRPCGamePresence(){
 			try {
 				let gameActivity = /** @type {object} */ (window).getGameActivity();
+				var matchInfo = await fetch(`https://matchmaker.krunker.io/game-info?game=${gameActivity.id}`).then(_ => _.json());
 
 				Object.assign(rpcActivity, {
 					state: gameActivity.map,
-					details: gameActivity.mode
+					details: gameActivity.mode,
+					partyId: gameActivity.id,
+					partySize: matchInfo[2],
+					partyMax: matchInfo[3]
 				});
 
 				if (gameActivity.time) rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1000;
