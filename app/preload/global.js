@@ -89,8 +89,8 @@ let rpcIntervalId;
 function setFocusEvent(){
 	window.addEventListener("focus", () => {
 		let rpcActivity = {
-			largeImageKey: "icn",
-			largeImageText: "Krunker - idkr client"
+			largeImageKey: "idkr-logo",
+			largeImageText: "idkr client"
 		};
 
 		async function sendRPCGamePresence(){
@@ -101,8 +101,8 @@ function setFocusEvent(){
 				Object.assign(rpcActivity, {
 					state: gameActivity.map,
 					details: gameActivity.mode,
-					smallImageKey: `icn${gameActivity.class.index}`,
-					smallImageText: gameActivity.class.name,
+					// smallImageKey: `icn${gameActivity.class.index}`,
+					// smallImageText: gameActivity.class.name,
 					partyId: gameActivity.id,
 					partySize: matchInfo[2],
 					partyMax: matchInfo[3]
@@ -188,7 +188,7 @@ window.addEventListener("unload", () => {
 	ipcRenderer.invoke("rpc-activity", {
 		state: "Idle",
 		startTimestamp: Math.floor(Date.now() / 1000),
-		largeImageKey: "icn",
-		largeImageText: "Krunker - idkr client"
+		largeImageKey: "idkr-logo",
+		largeImageText: "idkr client"
 	});
 });
