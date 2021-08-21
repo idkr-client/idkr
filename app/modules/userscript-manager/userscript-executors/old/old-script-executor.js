@@ -44,7 +44,7 @@ class OldScriptExecutor extends IScriptExecutor {
 		try {
 			this.#script = null;
 			this.#script = Function(
-				"clientUtil",
+				"_clientUtil",
 				"config",
 				`return (function(){let module = {exports: {}}; ${this.#data.toString()}; return module.exports;})();`
 			)(this.#clientUtils, this.#config);
