@@ -16,6 +16,7 @@ let UtilManager = require("../modules/util-manager");
 const config = new Store();
 
 Object.assign(console, log.functions);
+localStorage.setItem("logs", "true");
 
 window.prompt = (message, defaultValue) => ipcRenderer.sendSync("prompt", message, defaultValue);
 
@@ -26,7 +27,7 @@ UtilManager.instance.clientUtils = {
 	settings: require("../exports/settings"),
 	setCSetting(name, value){
 		let entry = Object.values(this.settings).find(_entry => _entry.id === name);
-		let newValue = String((entry.min && entry.max) ? Math.max(entry.min, Math.min(value, entry.max)) : value);
+		let newValue = entry.min && entry.max ? Math.max(entry.min, Math.min(value, entry.max)) : value;
 
 		config.set(name, newValue);
 		entry.val = newValue;
@@ -154,10 +155,10 @@ ipcRenderer.on("rpc-stop", () => {
 
 ipcRenderer.invoke("get-app-info")
 	.then(info => {
-		let oldConsole = {};
-		Object.assign(oldConsole, console);
+		// let oldConsole = {};
+		// Object.assign(oldConsole, console);
 		const initalize = async() => {
-			Object.assign(console, oldConsole);
+			// Object.assign(console, oldConsole);
 			UtilManager.instance.clientUtils.initUtil();
 			if (config.get("enableUserscripts", true)){
 				const initiator = new UserscriptInitiator(

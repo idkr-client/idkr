@@ -80,6 +80,5 @@ const menuTimerStyles = `
 `;
 
 module.exports = {
-	baseStyles,
-	menuTimerStyles
+	baseStyles
 };
