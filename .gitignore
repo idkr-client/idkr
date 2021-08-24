@@ -105,3 +105,6 @@ dist
 
 # .env
 *.env
+
+#package lock, will be generated anyway on install
+package-lock.json
