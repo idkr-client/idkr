@@ -27,7 +27,7 @@ UtilManager.instance.clientUtils = {
 	settings: require("../exports/settings"),
 	setCSetting(name, value){
 		let entry = Object.values(this.settings).find(_entry => _entry.id === name);
-		let newValue = String((entry.min && entry.max) ? Math.max(entry.min, Math.min(value, entry.max)) : value);
+		let newValue = entry.min && entry.max ? Math.max(entry.min, Math.min(value, entry.max)) : value;
 
 		config.set(name, newValue);
 		entry.val = newValue;
