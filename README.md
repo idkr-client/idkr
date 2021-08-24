@@ -8,6 +8,12 @@ This client aims for:
 - Advanced customizability (settings and userscripts)
 - Constructive to the community (open source and MIT license)
 
+this forks extra features:
+- electron version 9.4.4
+- yeeted menutimer
+  
+should be up to date with mixaz's master
+
 ## Supported Platforms
 | Platform | File Type |
 |-|-|
