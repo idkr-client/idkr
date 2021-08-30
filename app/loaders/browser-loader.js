@@ -210,12 +210,12 @@ class BrowserLoader {
 	 * Default splash window configuration
 	 *
 	 * @static
-	 * @param {string} shouldAutoupdate
+	 * @param {string} shouldAutoUpdate
 	 * @param {import("electron-store")} config
 	 * @returns {any}
 	 * @memberof BrowserLoader
 	 */
-	static initSplashWindow(shouldAutoupdate, config){
+	static initSplashWindow(shouldAutoUpdate, config){
 		let win = new BrowserWindow({
 			width: 600,
 			height: 300,
@@ -232,7 +232,7 @@ class BrowserLoader {
 
 		async function autoUpdate(){
 			return new Promise((resolve, reject) => {
-				if (shouldAutoupdate === "skip") return resolve();
+				if (shouldAutoUpdate === "skip") return resolve();
 
 				return contents.on("dom-ready", () => {
 					contents.send("message", "Initializing the auto updater...");
@@ -248,7 +248,7 @@ class BrowserLoader {
 					autoUpdater.on("update-available", info => {
 						console.log(info);
 						contents.send("message", `Update v${info.version} available`, info.releaseDate);
-						if (shouldAutoupdate !== "download") resolve();
+						if (shouldAutoUpdate !== "download") resolve();
 					});
 					autoUpdater.on("update-not-available", info => {
 						console.log(info);
@@ -264,7 +264,7 @@ class BrowserLoader {
 						autoUpdater.quitAndInstall(true, true);
 					});
 
-					autoUpdater.autoDownload = shouldAutoupdate === "download";
+					autoUpdater.autoDownload = shouldAutoUpdate === "download";
 					autoUpdater.checkForUpdates();
 				});
 			});
