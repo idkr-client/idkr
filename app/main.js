@@ -71,7 +71,7 @@ let init = function(){
 			}
 		});
 
-		BrowserLoader.initSplashWindow(String(argv.update || config.get("autoUpdate", "download")), config);
+		BrowserLoader.initSplashWindow(app.isPackaged ? String(argv.update || config.get("autoUpdate", "download")) : "skip", config);
 	});
 };
 
