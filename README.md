@@ -33,11 +33,6 @@ https://github.com/Mixaz017/idkr/wiki
 ## Features
 (W): Windows, (M): macOS, (L): Linux  
 
-- Prompt window (used when importing settings) has a "Load File" button.
-	- This button lets you select a file and load its contents directly without opening the file in an external editor and copy-pasting it.
-
-Other features that have its settings are listed below.
-
 ### Settings
 - Disable Frame Rate Limit *
 - Accelerated Canvas *
