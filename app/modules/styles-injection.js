@@ -64,7 +64,7 @@ const menuTimerStyles = `
 	top: 20px;
 	width: 221px;
 	height: 89px;
-	padding: 0;
+	padding: 20px;
 	margin:0;
 	border-radius: 0;
 	background-color: transparent;
