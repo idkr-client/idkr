@@ -3,6 +3,9 @@
 [![Discord server](https://discord.com/api/guilds/697366856914173994/widget.png)](https://discord.gg/wEZbFFX)
 
 idk, just a Krunker client  
+
+This branch is for Electron version 9.x!  
+
 This client aims for:
 - Stable behavior and performance
 - Advanced customizability (settings and userscripts)
