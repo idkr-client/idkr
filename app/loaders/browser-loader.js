@@ -174,7 +174,7 @@ class BrowserLoader {
 	}
 
 	/**
-	 * Default promt window configuration
+	 * Default prompt window configuration
 	 *
 	 * @static
 	 * @param {string} message
