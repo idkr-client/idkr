@@ -18,9 +18,9 @@ Examples of unacceptable behavior include:
 * Insulting, derogatory or political
 comments/attacks
 * Public or private harassment
-* Sharing others' private information, such as physical address or E-Mail, without
+* Sharing others' private information, such as physical address or e-mail, without
 permission.
-* Other behavior which could be considered inappropriate in a professional setting
+* Other behavior which could be considered inappropriate in a professional setting.
 
 ## Responsibilities
 
