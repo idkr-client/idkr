@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mixaz017/idkr.git"
+    "url": "git+https://github.com/idkr-client/idkr.git"
   },
   "keywords": [
     "Krunker"
   ],
-  "author": "Mixaz",
+  "author": "Mixaz, NullDev, CreepSore",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Mixaz017/idkr/issues"
+    "url": "https://github.com/idkr-client/idkr/issues"
   },
   "homepage": "https://idkr.dev",
   "devDependencies": {
