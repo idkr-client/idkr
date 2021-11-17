@@ -25,7 +25,7 @@ class Swapper {
 	}
 
 	/**
-	 * Advanced Swapper
+	 * Normal Swapper
 	 *
 	 * @private
 	 * @param {import("electron").BrowserWindow} win
