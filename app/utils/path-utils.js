@@ -18,7 +18,7 @@ class PathUtils {
 	 * @returns {Promise<boolean>}
 	 * @memberof PathUtils
 	 */ // @ts-ignore
-	static #fileExists = p => new Promise(resolve => fs.access(p, fs.constants.F_OK, err => resolve(!err)));
+	static #fileExists = p => fs.promises.access(p, fs.constants.F_OK);
 
 
 	/**
@@ -34,7 +34,7 @@ class PathUtils {
 		return new Promise((resolve, reject) => {
 			paths.forEach(async p => {
 				try {
-					if (await this.#fileExists(p)) await fs.promises.mkdir(p, { recursive: true });
+					await this.#fileExists(p).catch(async() => await fs.promises.mkdir(p, { recursive: true }));
 					return resolve();
 				}
 				catch (err){
