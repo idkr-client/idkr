@@ -18,12 +18,8 @@ class PathUtils {
 	 * @returns {Promise<boolean>}
 	 * @memberof PathUtils
 	 */ // @ts-ignore
-	static #fileExists = p => {
-		return new Promise((resolve, reject) => fs.access(p, fs.constants.F_OK, (err, result) => err
-			? reject(err)
-			: resolve(result))
-		);
-	}
+	static #fileExists = p => new Promise(resolve => fs.access(p, fs.constants.F_OK, err => resolve(!err)));
+
 
 	/**
 	 * Create neccessary directories if
