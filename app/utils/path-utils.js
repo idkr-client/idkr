@@ -22,7 +22,7 @@ class PathUtils {
 
 
 	/**
-	 * Create neccessary directories if
+	 * Create necessary directories if
 	 * they don't exist yet
 	 *
 	 * @static
