@@ -29,10 +29,7 @@ class UserscriptInitiator {
 	 */
 	constructor(config, dest, clientUtils){
 		/** @type {string} */
-		let userscriptsDirConfig = (config.get("userscriptsPath", ""));
-		this.scriptsPath = PathUtils.isValidPath(userscriptsDirConfig)
-			? userscriptsDirConfig
-			: dest;
+		this.scriptsPath = PathUtils.isValidPath(dest) ? dest : "";
 		this.clientUtils = clientUtils;
 		this.config = config;
 
