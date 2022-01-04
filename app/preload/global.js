@@ -163,7 +163,7 @@ ipcRenderer.invoke("get-app-info")
 			if (config.get("enableUserscripts", true)){
 				const initiator = new UserscriptInitiator(
 					config,
-					String(config.get("userscriptsPath", null) ?? path.join(info.documentsDir, "idkr", "scripts")),
+					String(config.get("userscriptsPath", "") || path.join(info.documentsDir, "idkr", "scripts")),
 					UtilManager.instance.clientUtils
 				);
 
