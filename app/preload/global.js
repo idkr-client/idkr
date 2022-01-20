@@ -62,7 +62,7 @@ UtilManager.instance.clientUtils = {
 			}
 			if (entry.dontInit) continue;
 
-			let savedVal = config.get(entry.id);
+			let savedVal = config.get(entry.id, null);
 
 			if (savedVal !== null) entry.val = savedVal;
 			if (entry.min && entry.max) entry.val = Math.max(entry.min, Math.min(entry.val, entry.max));
