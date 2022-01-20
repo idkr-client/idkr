@@ -120,6 +120,17 @@ module.exports = {
 			if (btn) btn.style.display = val ? "block" : "none";
 		}
 	},
+	enableMenuTimer: {
+		name: "Always show Menu-Timer",
+		id: "enableMenuTimer",
+		cat: "Interface",
+		type: "checkbox",
+		val: true,
+		needsRestart: true,
+		html(){
+			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
+		}
+	},
 	discordRPC: {
 		name: "Discord Rich Presence",
 		id: "discordRPC",
@@ -153,17 +164,6 @@ module.exports = {
 		type: "checkbox",
 		val: false,
 		needsRestart: true,
-		html(){
-			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
-		}
-	},
-	enableMenuTimer: {
-		name: "Always show Menu-Timer",
-		id: "enableMenuTimer",
-		cat: "Maintenance",
-		type: "checkbox",
-		val: true,
-		needsRestart: false,
 		html(){
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
