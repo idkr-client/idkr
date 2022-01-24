@@ -20,6 +20,7 @@ This client aims for:
 https://discord.gg/wEZbFFX
 
 ### Wiki
+List of features, keyboard shortcuts, and guides.  
 https://github.com/idkr-client/idkr/wiki
 
 ### Download
