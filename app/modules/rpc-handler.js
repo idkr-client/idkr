@@ -64,6 +64,7 @@ class RPCHandler {
 	 * @memberof RPCHandler
 	 */
 	async end(){
+		if (!this.isEnabled) return;
 		await this.rpc.clearActivity().catch(e => console.log(e));
 		return await this.rpc.destroy().catch(e => console.log(e));
 	}
