@@ -51,7 +51,10 @@ class RPCHandler {
 	async start(){
 		if (!this.isEnabled) return;
 		this.rpc.on("ready", () => console.log("Discord RPC ready"));
-		await this.rpc.login({ clientId: this.rpcClientId }).catch(console.error);
+		await this.rpc.login({ clientId: this.rpcClientId }).catch(error => {
+			console.error(error);
+			this.isEnabled = false;
+		});
 	}
 
 	/**
