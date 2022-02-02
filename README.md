@@ -29,4 +29,4 @@ https://github.com/idkr-client/idkr/wiki
 - [Windows portable](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-win.exe)
 - [macOS portable](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-mac.dmg)
 - [Linux portable (x86_64)](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-x86_64.AppImage)
-- [Linux portable (i836)](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-i386.AppImage)
+- [Linux portable (i386)](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-i386.AppImage)
