@@ -3,10 +3,6 @@
 /* 200IQ */
 
 const baseStyles = `
-#settingsTabLayout {
-	grid-template-columns: repeat(8, 1fr)
-}
-
 #settingsTabLayout>div:nth-last-child(2) {
 	display: none
 }
