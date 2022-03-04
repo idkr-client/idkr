@@ -63,7 +63,7 @@ class OldScriptExecutor extends IScriptExecutor {
 		}
 
 		return this.isValidScript();
-	}
+	};
 
 	/**
 	 * Checks if the loaded script is valid for this executor
@@ -84,9 +84,9 @@ class OldScriptExecutor extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	shouldExecute() {
-		if(!this.isValidScript()) return 1;
-		if(!this.isLocationMatching()) return 2;
-		if(!this.isPlatformMatching()) return 3;
+		if (!this.isValidScript()) return 1;
+		if (!this.isLocationMatching()) return 2;
+		if (!this.isPlatformMatching()) return 3;
 		return 0;
 	}
 
@@ -105,7 +105,7 @@ class OldScriptExecutor extends IScriptExecutor {
 	 */
 	async executeScript() {
 		let blockReason = this.shouldExecute();
-		if(blockReason > 0) {
+		if (blockReason > 0) {
 			const reasonMapping = [
 				"Script is invalid",
 				"Location is invalid",
@@ -157,7 +157,7 @@ class OldScriptExecutor extends IScriptExecutor {
 	 * @returns {boolean}
 	 * @memberof Userscript
 	 */
-	isLocationMatching(){
+	isLocationMatching() {
 		return this.#script.locations.some(location => ["all", this.#windowType].includes(location));
 	}
 
@@ -167,7 +167,7 @@ class OldScriptExecutor extends IScriptExecutor {
 	 * @returns {boolean}
 	 * @memberof Userscript
 	 */
-	isPlatformMatching(){
+	isPlatformMatching() {
 		return this.#script.platforms.some(platform => ["all", process.platform].includes(platform));
 	}
 }

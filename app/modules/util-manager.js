@@ -11,7 +11,7 @@ class UtilManager {
 	 *
 	 * @memberof UtilManager
 	 */
-	constructor(){
+	constructor() {
 		this._utilKey = `${UtilManager.randomString(10)}`;
 	}
 
@@ -21,21 +21,21 @@ class UtilManager {
 	 * @static
 	 * @memberof UtilManager
 	 */
-	static get instance(){
+	static get instance() {
 		return (this._instance = this._instance || new UtilManager());
 	}
 
 	/**
 	 * @memberof UtilManager
 	 */
-	get clientUtils(){
+	get clientUtils() {
 		return window[this._utilKey];
 	}
 
 	/**
 	 * @memberof UtilManager
 	 */
-	set clientUtils(value){
+	set clientUtils(value) {
 		Object.assign(value, {
 			key: this._utilKey
 		});
@@ -49,7 +49,7 @@ class UtilManager {
 	 * @param {string[]} validChars - array of valid chars or sequences
 	 * @returns {string} random string of specified length
 	 */
-	static randomString(length, validChars = [..."abcdefghijklmnopqrstuvwxyz1234567890"]){
+	static randomString(length, validChars = [..."abcdefghijklmnopqrstuvwxyz1234567890"]) {
 		return Array(length)
 			.fill(null)
 			.map(() => validChars[Math.floor(Math.random() * validChars.length)])

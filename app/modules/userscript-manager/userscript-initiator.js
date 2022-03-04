@@ -27,7 +27,7 @@ class UserscriptInitiator {
 	 * @param {object} clientUtils
 	 * @memberof UserscriptInitiator
 	 */
-	constructor(config, dest, clientUtils){
+	constructor(config, dest, clientUtils) {
 		/** @type {string} */
 		this.scriptsPath = PathUtils.isValidPath(dest) ? dest : "";
 		this.clientUtils = clientUtils;
@@ -41,7 +41,7 @@ class UserscriptInitiator {
 	 * Executes all loaded scripts
 	 * @returns {Promise<Boolean>[]}
 	 */
-	executeScripts(){
+	executeScripts() {
 		return this.scripts.map(script => script.executeScript());
 	}
 
@@ -53,25 +53,25 @@ class UserscriptInitiator {
 	 * @returns {Promise<void>}
 	 * @memberof UserscriptInitiator
 	 */
-	async loadScripts(windowType){
+	async loadScripts(windowType) {
 		await Promise.all(
 			(await fs.promises.readdir(this.scriptsPath)).filter(filename => path.extname(filename).toLowerCase() === ".js")
 				.map(filename => {
 					try {
 						let data = fs.readFileSync(path.join(this.scriptsPath, filename));
 						let executor10 = new ScriptExecutor10(data, this.clientUtils, windowType, this.config);
-						if(executor10.isValidScript()) {
+						if (executor10.isValidScript()) {
 							this.#addScript(executor10);
 							return executor10.preloadScript();
 						}
 
 						let executorOld = new OldScriptExecutor(data, this.clientUtils, windowType, this.config);
-						if(executorOld.isValidScript()) {
+						if (executorOld.isValidScript()) {
 							this.#addScript(executorOld);
 							return executorOld.preloadScript();
 						}
 					}
-					catch(err) {
+					catch (err) {
 						console.error(`[idkr] Failed to load script-file [${filename}]`);
 						console.error(err);
 					}
@@ -89,7 +89,7 @@ class UserscriptInitiator {
 	 */
 	#addScript = (script) => {
 		this.scripts.push(script);
-	}
+	};
 
 	/**
 	 * Removes a script from the script list
@@ -98,7 +98,7 @@ class UserscriptInitiator {
 	 */
 	#removeScript = (script) => {
 		this.scripts.splice(this.scripts.indexOf(script), 1);
-	}
+	};
 }
 
 module.exports = UserscriptInitiator;

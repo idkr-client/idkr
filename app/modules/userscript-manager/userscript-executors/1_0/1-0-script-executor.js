@@ -51,7 +51,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 			this.#script.meta = this.#script.meta || {};
 			this.#script.config = this.#script.config || {};
 
-			const {meta, config} = this.#script;
+			const { meta, config } = this.#script;
 			meta.name = meta.name || "Unnamed userscript";
 			meta.version = meta.version || "Version unknown";
 			meta.author = meta.author || "Unknown author";
@@ -71,7 +71,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 		}
 
 		return this.isValidScript();
-	}
+	};
 
 	/**
 	 * Checks if the loaded script is valid for this executor
@@ -96,9 +96,9 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	shouldExecute() {
-		if(!this.isValidScript()) return 1;
-		if(!this.isLocationMatching()) return 2;
-		if(!this.isPlatformMatching()) return 3;
+		if (!this.isValidScript()) return 1;
+		if (!this.isLocationMatching()) return 2;
+		if (!this.isPlatformMatching()) return 3;
 		return 0;
 	}
 
@@ -116,12 +116,12 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	async executeScript() {
-		if(this.isLoaded) {
+		if (this.isLoaded) {
 			await this.unloadScript();
 		}
 
 		let blockReason = this.shouldExecute();
-		if(blockReason > 0) {
+		if (blockReason > 0) {
 			const reasonMapping = [
 				"Script is invalid",
 				"Location is invalid",
@@ -144,7 +144,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @memberof Userscript
 	 */
 	async unloadScript() {
-		if(!this.isLoaded) {
+		if (!this.isLoaded) {
 			return false;
 		}
 		console.log(`[idkr] Unloading userscript: ${this.#script.meta.name} by ${this.#script.meta.author}`);
@@ -176,7 +176,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @returns {boolean}
 	 * @memberof Userscript
 	 */
-	isLocationMatching(){
+	isLocationMatching() {
 		return this.#script.config.locations.some(location => ["all", this.#windowType].includes(location));
 	}
 
@@ -186,7 +186,7 @@ class ScriptExecutor10 extends IScriptExecutor {
 	 * @returns {boolean}
 	 * @memberof Userscript
 	 */
-	isPlatformMatching(){
+	isPlatformMatching() {
 		return this.#script.config.platforms.some(platform => ["all", process.platform].includes(platform));
 	}
 }

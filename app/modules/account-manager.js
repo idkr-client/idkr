@@ -29,7 +29,7 @@ class AccountManager {
 	 *
 	 * @memberof AccountManager
 	 */
-	constructor(){
+	constructor() {
 		this.managerWin = new WindowManager("accManagerBtn");
 		this.addWin = new WindowManager("altAdd");
 
@@ -58,7 +58,7 @@ class AccountManager {
 		));
 		this.addWin.hide();
 		return this.#openPopup();
-	}
+	};
 
 	/**
 	 * Delete account from local list
@@ -73,7 +73,7 @@ class AccountManager {
 		));
 		this.managerWin.hide();
 		this.#openPopup();
-	}
+	};
 
 	/**
 	 * Simulate login
@@ -92,7 +92,7 @@ class AccountManager {
 		/** @type {inputs} */ (document.getElementById("accPass")).style.display = "none";
 		/** @type {inputs} */ (document.getElementsByClassName("accountButton")[0]).style.display = "none";
 		/** @type {inputs} */ (document.getElementsByClassName("accountButton")[1]).style.display = "none";
-	}
+	};
 
 	/**
 	 * Open popup dialog
@@ -104,7 +104,7 @@ class AccountManager {
 		this.managerWin.setContent(HTML.ALT_MENU);
 		this.managerWin.toggle();
 		this.#watcher();
-	}
+	};
 
 	/**
 	 * Watch for alt-manager button changes
@@ -121,8 +121,8 @@ class AccountManager {
 			this.addWin.show();
 			document.getElementById("addAccountButtonB").addEventListener("click", () => (
 				this.#addAccount(
-					/** @type {inputs} */ (document.getElementById("accName")).value,
-					/** @type {inputs} */ (document.getElementById("accPass")).value
+					/** @type {inputs} */(document.getElementById("accName")).value,
+					/** @type {inputs} */(document.getElementById("accPass")).value
 				)
 			));
 		});
@@ -150,7 +150,7 @@ class AccountManager {
 			let tar = e.target.previousElementSibling.innerText;
 			confirm(`Do you really want to remove the account "${tar}" from the Alt-Manager?`) && this.#deleteAccount(tar);
 		}));
-	}
+	};
 
 	/**
 	 * Initial injection of styles
@@ -158,7 +158,7 @@ class AccountManager {
 	 * @public
 	 * @memberof AccountManager
 	 */
-	injectStyles(){
+	injectStyles() {
 		document.head.appendChild(Object.assign(document.createElement("style"), { innerText: HTML.STYLE }));
 		let tar = document.getElementById("customizeButton");
 

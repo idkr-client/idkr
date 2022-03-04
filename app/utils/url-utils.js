@@ -22,10 +22,10 @@ class UrlUtils {
 			new URL(url);
 			return true;
 		}
-		catch (e){
+		catch (e) {
 			return false;
 		}
-	}
+	};
 
 	/**
 	 * Return page-type
@@ -35,10 +35,10 @@ class UrlUtils {
 	 * @returns {string}
 	 * @memberof UrlUtils
 	 */
-	static locationType(url = ""){
+	static locationType(url = "") {
 		if (!this.#isValidURL(url)) return "unknown";
 		const target = new URL(url);
-		if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)){
+		if (/^(www|comp\.)?krunker\.io$/.test(target.hostname)) {
 			if (/^\/docs\/.+\.txt$/.test(target.pathname)) return "docs";
 			switch (target.pathname) {
 				case "/": return "game";

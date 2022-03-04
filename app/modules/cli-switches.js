@@ -9,14 +9,14 @@ let yargs = require("yargs");
  * @param {import("electron").App} app
  * @param {import("electron-store")} config
  */
-let cliSwitchHandler = function(app, config){
+let cliSwitchHandler = function(app, config) {
 	const angleBackend = /** @type {string} */ (config.get("angleBackend", "default"));
 	const colorProfile = /** @type {string} */ (config.get("colorProfile", "default"));
 
 	app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
 	if (!config.get("acceleratedCanvas", true)) app.commandLine.appendSwitch("disable-accelerated-2d-canvas", "true");
-	if (config.get("disableFrameRateLimit", false)){
+	if (config.get("disableFrameRateLimit", false)) {
 		app.commandLine.appendSwitch("disable-frame-rate-limit");
 		app.commandLine.appendSwitch("disable-gpu-vsync");
 	}

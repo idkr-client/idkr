@@ -30,14 +30,14 @@ class PathUtils {
 	 * @returns {Promise<string|void>}
 	 * @memberof PathUtils
 	 */
-	static async ensureDirs(...paths){
+	static async ensureDirs(...paths) {
 		return new Promise((resolve, reject) => {
 			paths.forEach(async p => {
 				try {
 					await this.#fileExists(p).catch(async() => await fs.promises.mkdir(p, { recursive: true }));
 					return resolve();
 				}
-				catch (err){
+				catch (err) {
 					return reject(err);
 				}
 			});
@@ -52,7 +52,7 @@ class PathUtils {
 	 * @returns {boolean}
 	 * @memberof PathUtils
 	 */
-	static isValidPath(p = ""){
+	static isValidPath(p = "") {
 		return Boolean(path.parse(p).root);
 	}
 }

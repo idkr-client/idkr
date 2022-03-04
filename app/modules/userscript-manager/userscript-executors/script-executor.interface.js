@@ -10,7 +10,7 @@ class IScriptExecutor {
 	/** @returns {any} */
 	isLocationMatching() { throw new Error("Method not implemented"); }
 	/** @returns {any} */
-	isPlatformMatching() {throw new Error("Method not implemented");  }
+	isPlatformMatching() { throw new Error("Method not implemented"); }
 }
 
 module.exports = IScriptExecutor;

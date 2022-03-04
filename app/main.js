@@ -27,7 +27,7 @@ let userscriptsDirConfig = (config.get("userscriptsPath", ""));
 const userscriptsDir = PathUtils.isValidPath(userscriptsDirConfig) ? userscriptsDirConfig : path.join(app.getPath("documents"), "idkr/scripts");
 cliSwitches(app, config);
 
-if (process.platform === "win32"){
+if (process.platform === "win32") {
 	app.setUserTasks([{
 		program: process.execPath,
 		arguments: "--new-window=https://krunker.io/",
@@ -45,7 +45,7 @@ if (process.platform === "win32"){
 	}]);
 }
 
-let init = function(){
+let init = function() {
 	// Workaround for Electron 8.x
 	protocol.registerSchemesAsPrivileged([{
 		scheme: "idkr-swap",
@@ -66,7 +66,7 @@ let init = function(){
 		app.on("second-instance", (_, _argv) => {
 			let instanceArgv = yargs.parse(_argv);
 			console.log("Second instance: " + _argv);
-			if (!["unknown", "external"].includes(UrlUtils.locationType(String(instanceArgv["new-window"])))){
+			if (!["unknown", "external"].includes(UrlUtils.locationType(String(instanceArgv["new-window"])))) {
 				BrowserLoader.initWindow(String(instanceArgv["new-window"]), config);
 			}
 		});

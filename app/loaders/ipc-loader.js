@@ -49,8 +49,8 @@ class IpcLoader {
 		// @TODO: This might deadlock!!!
 		let lastSender = null;
 		ipcMain.handle("rpc-activity", async(event, activity) => {
-			if (rpcHandler.rpcEnabled()){
-				if (lastSender !== event.sender){
+			if (rpcHandler.rpcEnabled()) {
+				if (lastSender !== event.sender) {
 					if (lastSender) lastSender.send("rpc-stop");
 					lastSender = event.sender;
 					lastSender.on("destroyed", () => (lastSender = null));

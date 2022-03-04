@@ -10,7 +10,7 @@ module.exports = {
 		type: "checkbox",
 		val: true,
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
@@ -21,7 +21,7 @@ module.exports = {
 		type: "checkbox",
 		val: true,
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
 		info: "Enables the use of the GPU to perform 2d canvas rendering instead of using software rendering."
@@ -44,7 +44,7 @@ module.exports = {
 		},
 		val: "default",
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
 		info: "Choose the graphics backend for ANGLE. D3D11 is used on most Windows computers by default. Using the OpenGL driver as the graphics backend may result in higher performance, particularly on NVIDIA GPUs. It can increase battery and memory usage of video playback."
@@ -62,7 +62,7 @@ module.exports = {
 		},
 		val: "default",
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
 		info: "Forces color profile."
@@ -74,7 +74,7 @@ module.exports = {
 		type: "checkbox",
 		val: false,
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
 		info: "Run the GPU process as a thread in the browser process. Using this may help with window capture."
@@ -87,7 +87,7 @@ module.exports = {
 		val: "",
 		placeholder: "--flag=value",
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
 		info: "Additional Chromium flags."
@@ -98,7 +98,7 @@ module.exports = {
 		cat: "Interface",
 		type: "checkbox",
 		val: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
 		set: val => {
@@ -112,7 +112,7 @@ module.exports = {
 		cat: "Interface",
 		type: "checkbox",
 		val: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
 		set: val => {
@@ -127,7 +127,7 @@ module.exports = {
 		type: "checkbox",
 		val: true,
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
@@ -138,7 +138,7 @@ module.exports = {
 		type: "checkbox",
 		val: true,
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
@@ -153,7 +153,7 @@ module.exports = {
 			skip: "Skip"
 		},
 		val: "download",
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
@@ -164,7 +164,7 @@ module.exports = {
 		type: "checkbox",
 		val: false,
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
@@ -176,7 +176,7 @@ module.exports = {
 		val: "",
 		placeholder: "Userscripts Folder Path",
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
@@ -192,7 +192,7 @@ module.exports = {
 		},
 		val: "normal",
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	},
@@ -204,7 +204,7 @@ module.exports = {
 		val: "",
 		placeholder: "Resource Swapper Folder Path",
 		needsRestart: true,
-		html(){
+		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		}
 	}

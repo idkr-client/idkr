@@ -17,7 +17,7 @@ class Swapper {
 	 * @param {string} swapDir
 	 * @memberof Swapper
 	 */
-	constructor(win, swapperMode, swapDir){
+	constructor(win, swapperMode, swapDir) {
 		this.win = win;
 		this.swapperMode = swapperMode;
 		this.swapDir = swapDir;
@@ -54,10 +54,10 @@ class Swapper {
 				}
 			});
 		}
-		catch (err){
+		catch (err) {
 			console.error("Failed to swap resources in normal mode", err, prefix);
 		}
-	}
+	};
 
 	/**
 	 * Advanced Swapper
@@ -71,7 +71,7 @@ class Swapper {
 	#recursiveSwapHostname = (win, prefix = "", hostname = "") => {
 		try {
 			fs.readdirSync(path.join(this.swapDir, prefix), { withFileTypes: true }).forEach(dirent => {
-				if (dirent.isDirectory()){
+				if (dirent.isDirectory()) {
 					this.#recursiveSwapHostname(
 						win,
 						hostname ? `${prefix}/${dirent.name}` : prefix + dirent.name,
@@ -81,18 +81,18 @@ class Swapper {
 				else if (hostname) this.urls.push(`*://${prefix}/${dirent.name}`, `*://${prefix}/${dirent.name}?*`);
 			});
 		}
-		catch (err){
+		catch (err) {
 			console.error("Failed to swap resources in advanced mode", err, prefix, hostname);
 		}
-	}
+	};
 
 	/**
 	 * Initialize the Swapping process
 	 *
 	 * @memberof Swapper
 	 */
-	init(){
-		switch (this.swapperMode){
+	init() {
+		switch (this.swapperMode) {
 			case "normal": {
 				this.#recursiveSwapNormal(this.win);
 				this.urls.length && this.win.webContents.session.webRequest.onBeforeRequest({

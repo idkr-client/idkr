@@ -10,7 +10,7 @@ let PathUtils = require("../utils/path-utils");
 let Swapper = require("../modules/swapper");
 
 class BrowserLoader {
-	static load(isDebug = false, config){
+	static load(isDebug = false, config) {
 		this.DEBUG = isDebug;
 		/** @type {string} */
 		let swapDirConfig = (config.get("resourceSwapperPath", ""));
@@ -24,7 +24,7 @@ class BrowserLoader {
 	 * @return {string}
 	 * @memberof BrowserLoader
 	 */
-	static getSwapDir(){
+	static getSwapDir() {
 		return this.swapDir;
 	}
 
@@ -36,7 +36,7 @@ class BrowserLoader {
 	 * @param {object} webContents
 	 * @returns
 	 */
-	static initWindow(url, config, webContents){
+	static initWindow(url, config, webContents) {
 		let win = new BrowserWindow({
 			width: 1600,
 			height: 900,
@@ -65,7 +65,7 @@ class BrowserLoader {
 	 * @param {Boolean} [isWeb=false]
 	 * @returns {any}
 	 */
-	static setupWindow(win, config, isWeb = false){
+	static setupWindow(win, config, isWeb = false) {
 		let contents = win.webContents;
 
 		if (this.DEBUG) contents.openDevTools();
@@ -131,9 +131,9 @@ class BrowserLoader {
 		contents.on("new-window", (event, url, frameName, disposition, options) => {
 			event.preventDefault();
 			if (UrlUtils.locationType(url) === "external") shell.openExternal(url);
-			else if (UrlUtils.locationType(url) !== "unknown"){
+			else if (UrlUtils.locationType(url) !== "unknown") {
 				if (frameName === "_self") contents.loadURL(url);
-				else this.initWindow(url, config, /** @type {object} */ (options).webContents);
+				else this.initWindow(url, config, /** @type {object} */(options).webContents);
 			}
 		});
 
@@ -165,8 +165,8 @@ class BrowserLoader {
 
 		let swapper = new Swapper(
 			win,
-			/** @type {string} */ (config.get("resourceSwapperMode", "normal")),
-			/** @type {string} */ (this.swapDir)
+			/** @type {string} */(config.get("resourceSwapperMode", "normal")),
+			/** @type {string} */(this.swapDir)
 		);
 		swapper.init();
 
@@ -183,7 +183,7 @@ class BrowserLoader {
 	 * @returns {any}
 	 * @memberof BrowserLoader
 	 */
-	static initPromptWindow(message, defaultValue, config = null){
+	static initPromptWindow(message, defaultValue, config = null) {
 		let win = new BrowserWindow({
 			width: 480,
 			height: 240,
@@ -215,7 +215,7 @@ class BrowserLoader {
 	 * @returns {any}
 	 * @memberof BrowserLoader
 	 */
-	static initSplashWindow(shouldAutoUpdate, config){
+	static initSplashWindow(shouldAutoUpdate, config) {
 		let win = new BrowserWindow({
 			width: 600,
 			height: 300,
@@ -230,7 +230,7 @@ class BrowserLoader {
 		});
 		let contents = win.webContents;
 
-		async function autoUpdate(){
+		async function autoUpdate() {
 			return new Promise((resolve, reject) => {
 				if (shouldAutoUpdate === "skip") return resolve();
 
@@ -270,7 +270,7 @@ class BrowserLoader {
 			});
 		}
 
-		function launchGame(){
+		function launchGame() {
 			BrowserLoader.initWindow("https://krunker.io/", config);
 			setTimeout(() => win.destroy(), 2000);
 		}

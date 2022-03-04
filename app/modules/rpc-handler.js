@@ -15,7 +15,7 @@ class RPCHandler {
 	 * @param {boolean} isEnabled
 	 * @memberof RPCHandler
 	 */
-	constructor(rpcClientId, isEnabled){
+	constructor(rpcClientId, isEnabled) {
 		DiscordRPC.register(rpcClientId);
 		this.rpcClientId = rpcClientId;
 		this.rpc = new DiscordRPC.Client({ transport: "ipc" });
@@ -28,7 +28,7 @@ class RPCHandler {
 	 * @returns {boolean}
 	 * @memberof RPCHandler
 	 */
-	rpcEnabled(){
+	rpcEnabled() {
 		return this.isEnabled;
 	}
 
@@ -38,7 +38,7 @@ class RPCHandler {
 	 * @param {import("discord-rpc").Presence} activity
 	 * @memberof RPCHandler
 	 */
-	async update(activity){
+	async update(activity) {
 		await this.rpc.setActivity(activity).catch(console.error);
 	}
 
@@ -48,7 +48,7 @@ class RPCHandler {
 	 * @returns {Promise<void>}
 	 * @memberof RPCHandler
 	 */
-	async start(){
+	async start() {
 		if (!this.isEnabled) return;
 		this.rpc.on("ready", () => console.log("Discord RPC ready"));
 		await this.rpc.login({ clientId: this.rpcClientId }).catch(error => {
@@ -63,8 +63,8 @@ class RPCHandler {
 	 * @returns {Promise<void>}
 	 * @memberof RPCHandler
 	 */
-	async end(){
-		if (!this.isEnabled) return;
+	async end() {
+		if (!this.isEnabled) return null;
 		await this.rpc.clearActivity().catch(e => console.log(e));
 		return await this.rpc.destroy().catch(e => console.log(e));
 	}

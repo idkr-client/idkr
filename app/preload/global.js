@@ -25,7 +25,7 @@ let windowType = UrlUtils.locationType(location.href);
 UtilManager.instance.clientUtils = {
 	events: new Events(),
 	settings: require("../exports/settings"),
-	setCSetting(name, value){
+	setCSetting(name, value) {
 		let entry = Object.values(this.settings).find(_entry => _entry.id === name);
 		let newValue = entry.min && entry.max ? Math.max(entry.min, Math.min(value, entry.max)) : value;
 
@@ -42,21 +42,21 @@ UtilManager.instance.clientUtils = {
 		if (element) element.value = newValue;
 	},
 	delayIDs: {},
-	delaySetCSetting(name, target, delay = 600){
+	delaySetCSetting(name, target, delay = 600) {
 		if (this.delayIDs[name]) clearTimeout(this.delayIDs[name]);
 		this.delayIDs[name] = setTimeout(() => {
 			this.setCSetting(name, target.value);
 			delete this.delayIDs[name];
 		}, delay);
 	},
-	initUtil(){
+	initUtil() {
 		for (let [key, entry] of Object.entries(this.settings)) {
-			if (!("name" in entry && "id" in entry && "cat" in entry && "type" in entry && "val" in entry && "html" in entry)){
+			if (!("name" in entry && "id" in entry && "cat" in entry && "type" in entry && "val" in entry && "html" in entry)) {
 				console.log(`Ignored a setting entry ${entry.id ? `"${entry.id}"` : "with no ID"}, missing a required property`);
 				delete this.settings[key];
 				continue;
 			}
-			if (entry.platforms && !entry.platforms.includes(process.platform)){
+			if (entry.platforms && !entry.platforms.includes(process.platform)) {
 				delete this.settings[key];
 				continue;
 			}
@@ -71,7 +71,7 @@ UtilManager.instance.clientUtils = {
 	}
 };
 
-switch (windowType){
+switch (windowType) {
 	case "game": {
 		// @ts-ignore
 		process.dlopen = () => {
@@ -82,19 +82,19 @@ switch (windowType){
 		require("./game.js");
 		break;
 	}
-	default: () => {};
+	default: () => { };
 }
 
 let rpcIntervalId;
 
-function setFocusEvent(){
+function setFocusEvent() {
 	window.addEventListener("focus", () => {
 		let rpcActivity = {
 			largeImageKey: "idkr-logo",
 			largeImageText: "idkr client"
 		};
 
-		function sendRPCGamePresence(){
+		function sendRPCGamePresence() {
 			try {
 				let gameActivity = /** @type {object} */ (window).getGameActivity();
 
@@ -106,7 +106,7 @@ function setFocusEvent(){
 				if (gameActivity.time) rpcActivity.endTimestamp = Date.now() + gameActivity.time * 1000;
 				ipcRenderer.invoke("rpc-activity", rpcActivity);
 			}
-			catch (error){
+			catch (error) {
 				ipcRenderer.invoke("rpc-activity", Object.assign(rpcActivity, {
 					state: "Playing",
 					startTimestamp: Math.floor(Date.now() / 1000)
@@ -115,7 +115,7 @@ function setFocusEvent(){
 		}
 
 		let isIntervalSet = false;
-		switch (windowType){
+		switch (windowType) {
 			case "game": {
 				sendRPCGamePresence();
 				if (rpcIntervalId) clearInterval(rpcIntervalId);
@@ -140,7 +140,7 @@ function setFocusEvent(){
 				break;
 		}
 
-		if (!isIntervalSet){
+		if (!isIntervalSet) {
 			ipcRenderer.invoke("rpc-activity", Object.assign(rpcActivity, {
 				startTimestamp: Math.floor(performance.timeOrigin / 1000)
 			}));
@@ -160,7 +160,7 @@ ipcRenderer.invoke("get-app-info")
 		const initalize = async() => {
 			// Object.assign(console, oldConsole);
 			UtilManager.instance.clientUtils.initUtil();
-			if (config.get("enableUserscripts", true)){
+			if (config.get("enableUserscripts", true)) {
 				const initiator = new UserscriptInitiator(
 					config,
 					String(config.get("userscriptsPath", "") || path.join(info.documentsDir, "idkr", "scripts")),
