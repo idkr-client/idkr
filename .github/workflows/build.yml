@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Install g++-multilib
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt install g++-multilib
+        run: sudo apt update && sudo apt install g++-multilib
 
       - name: Checkout
         uses: actions/checkout@v2
