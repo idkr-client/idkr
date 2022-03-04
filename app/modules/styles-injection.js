@@ -33,7 +33,7 @@ const baseStyles = `
 }
 
 /* Temporal workaround for "No settings found" appearing in idkr tab all the time */
-div.setHed:first-child:not(:only-child) {
+#settHolder > .setHed:first-child:not(:only-child, [id]) {
 	display: none;
 }
 `;
