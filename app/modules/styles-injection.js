@@ -7,7 +7,7 @@ const baseStyles = `
 	grid-template-columns: repeat(8, 1fr)
 }
 
-#settingsTabLayout>div:nth-child(7) {
+#settingsTabLayout>div:nth-last-child(2) {
 	display: none
 }
 

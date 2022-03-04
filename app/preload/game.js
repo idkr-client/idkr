@@ -46,9 +46,12 @@ UtilManager.instance.clientUtils.events.on("game-load", () => {
 	let origGetSettings = settingsWindow.getSettings;
 	settingsWindow.getSettings = (...args) => origGetSettings.call(settingsWindow, ...args).replace(/^<\/div>/, "") + settingsWindow.getCSettings();
 
-	let clientTabIndex = settingsWindow.tabs.push({ name: "idkr", categories: [] });
+	let clientTabIndex = {
+		basic: settingsWindow.tabs.basic.push({ name: "idkr", categories: [] }),
+		advanced: settingsWindow.tabs.advanced.push({ name: "idkr", categories: [] })
+	};
 	settingsWindow.getCSettings = () => {
-		if (clientTabIndex !== settingsWindow.tabIndex + 1 && !settingsWindow.settingSearch) return "";
+		if (clientTabIndex[settingsWindow.settingType] !== settingsWindow.tabIndex + 1 && !settingsWindow.settingSearch) return "";
 		let tempHTML = "";
 		let previousCategory = null;
 		Object.values(UtilManager.instance.clientUtils.settings).forEach(entry => {
