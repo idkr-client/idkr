@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://github.com/idkr-client/idkr/releases/latest"><img src="https://img.shields.io/github/release/idkr-client/idkr/all.svg?colorB=97CA00?label=version"></a>
   <a href="https://github.com/idkr-client/idkr/releases"><img src="https://img.shields.io/github/downloads/idkr-client/idkr/total.svg?colorB=97CA00"></a>
-  <a href="https://discord.gg/wEZbFFX"><img src="https://img.shields.io/discord/697366856914173994?label=Chat&logoColor=discord"></a>
+  <a href="https://discord.gg/wEZbFFX"><img src="https://img.shields.io/discord/697366856914173994?label=chat&logoColor=discord"></a>
   <a href="https://github.com/idkr-client/idkr"><img src="https://img.shields.io/github/issues/idkr-client/idkr"></a>
   <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-setup-win.exe"><img src="https://img.shields.io/badge/download-windows-brightgreen"></a>
   <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-mac.dmg"><img src="https://img.shields.io/badge/download-mac-brightgreen"></a>
