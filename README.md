@@ -26,12 +26,13 @@ idk, just a krunker client.
 <img src="https://i.imgur.com/0jNkssO.png" alt="img" align="right" width="500px" height="320px"> 
 
 ### Features
-- Multi-platform support (Windows, Linux, MacOS)
+- Multi-platform support (Windows, Linux, macOS)
 - Option to disable frame rate limit
-- Option to select ANGLE backend to enchance performance
-- Userscript support
-- High stablity and performance
-- Advanced customizablity 
+- Option to select ANGLE backend to enhance performance
+- User script support
+- High stability and performance
+- Highly customizable 
 - Open source
+
 
 
