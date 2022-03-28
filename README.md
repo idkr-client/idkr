@@ -17,10 +17,10 @@
 </p>
 
 <br>
+<img src="https://i.imgur.com/0jNkssO.png" alt="img" align="right" width="670px" height="340px"> 
 
 idk, just a krunker client.
 
-<img src="https://i.imgur.com/0jNkssO.png" alt="img" align="right" width="680px" height="350px"> 
 
 ### Features
 - Multi-platform support (Windows, Linux, MacOS)
