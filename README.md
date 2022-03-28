@@ -1,32 +1,34 @@
-# idkr
-[![Discord server](https://discord.com/api/guilds/697366856914173994/widget.png)](https://discord.gg/wEZbFFX)
+<p align="center">
+  <img width="200" height="200" src="https://i.imgur.com/4304VNm.png">
+</p>
 
-idk, just a Krunker client 
+---
 
-This client aims for:
-- Stable behavior and performance
-- Advanced customizability (settings and userscripts)
-- Constructive to the community (open source; under [AGPL-3.0](https://github.com/idkr-client/idkr/blob/master/LICENSE))
+<p align="center">
+  <a href="https://github.com/idkr-client/idkr/releases/latest"><img src="https://img.shields.io/github/release/idkr-client/idkr/all.svg?colorB=97CA00?label=version"></a>
+  <a href="https://github.com/idkr-client/idkr/releases"><img src="https://img.shields.io/github/downloads/idkr-client/idkr/total.svg?colorB=97CA00"></a>
+  <a href="https://discord.gg/wEZbFFX"><img src="https://img.shields.io/discord/697366856914173994?label=Chat&logoColor=discord"></a>
+  <a href="https://github.com/idkr-client/idkr"><img src="https://img.shields.io/github/issues/idkr-client/idkr"></a>
+  <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-setup-win.exe"><img src="https://img.shields.io/badge/download-windows-brightgreen"></a>
+  <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-mac.dmg"><img src="https://img.shields.io/badge/download-mac-brightgreen"></a>
+  <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-x86_64.AppImage"><img src="https://img.shields.io/badge/download-linux-brightgreen"></a>
+	<a href="https://github.com/idkr-client/idkr/releases/latest/"><img src="https://img.shields.io/badge/download-other-brightgreen"></a>
+	
+</p>
 
-## Supported Platforms
-| Platform | File Type |
-|-|-|
-| Windows | `exe` |
-| macOS | `dmg` |
-| Linux | `AppImage` |
+<br>
 
-## Links
-### Discord Server
-https://discord.gg/wEZbFFX
+idk, just a krunker client.
 
-### Wiki
-List of features, keyboard shortcuts, and guides.  
-https://github.com/idkr-client/idkr/wiki
+<img src="https://i.imgur.com/0jNkssO.png" alt="img" align="right" width="680px" height="350px"> 
 
-### Download
-[Latest release / changelog](https://github.com/idkr-client/idkr/releases/latest)
-- [Windows installer](https://github.com/idkr-client/idkr/releases/latest/download/idkr-setup-win.exe)
-- [Windows portable](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-win.exe)
-- [macOS portable](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-mac.dmg)
-- [Linux portable (x86_64)](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-x86_64.AppImage)
-- [Linux portable (i386)](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-i386.AppImage)
+### Features
+- Multi-platform support (Windows, Linux, MacOS)
+- Option to disable frame rate limit
+- Option to select ANGLE backend to enchance performance
+- Userscript support
+- High stablity and performance
+- Advanced customizablity 
+- Open source
+
+
