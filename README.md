@@ -12,7 +12,7 @@
   <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-setup-win.exe"><img src="https://img.shields.io/badge/download-windows-brightgreen"></a>
   <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-mac.dmg"><img src="https://img.shields.io/badge/download-mac-brightgreen"></a>
   <a href="https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-x86_64.AppImage"><img src="https://img.shields.io/badge/download-linux-brightgreen"></a>
-	<a href="https://github.com/idkr-client/idkr/releases/latest/"><img src="https://img.shields.io/badge/download-other-brightgreen"></a>
+	
 	
 </p>
 
