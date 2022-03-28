@@ -23,7 +23,7 @@ idk, just a krunker client.
 
 
 
-<img src="https://i.imgur.com/0jNkssO.png" alt="img" align="right" width="600px" height="300px"> 
+<img src="https://i.imgur.com/0jNkssO.png" alt="img" align="right" width="600px" height="350px"> 
 
 ### Features
 - Multi-platform support (Windows, Linux, MacOS)
