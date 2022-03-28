@@ -22,7 +22,6 @@
 idk, just a krunker client.
 
 
-<br>
 
 <img src="https://i.imgur.com/0jNkssO.png" alt="img" align="right" width="600px" height="260px"> 
 
