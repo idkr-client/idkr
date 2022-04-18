@@ -16,7 +16,7 @@ let cliSwitchHandler = function(app, config) {
 	app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
 	if (!config.get("acceleratedCanvas", true)) app.commandLine.appendSwitch("disable-accelerated-2d-canvas", "true");
-	if (config.get("disableFrameRateLimit", false)) {
+	if (config.get("disableFrameRateLimit", true)) {
 		app.commandLine.appendSwitch("disable-frame-rate-limit");
 		app.commandLine.appendSwitch("disable-gpu-vsync");
 	}
