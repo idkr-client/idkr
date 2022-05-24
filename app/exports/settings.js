@@ -77,7 +77,7 @@ module.exports = {
 		html() {
 			return UtilManager.instance.clientUtils.genCSettingsHTML(this);
 		},
-		info: "Run the GPU process as a thread in the browser process. Using this may help with window capture."
+		info: "Run the GPU process as a thread in the browser process. Using this may help with window capture. Known to have issues with some Linux machines."
 	},
 	chromiumFlags: {
 		name: "Chromium Flags",
