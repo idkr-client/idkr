@@ -7,6 +7,7 @@ let shortcuts = require("electron-localshortcut");
 
 let UrlUtils = require("../utils/url-utils");
 let PathUtils = require("../utils/path-utils");
+let WindowUtils = require("../utils/window-utils");
 let Swapper = require("../modules/swapper");
 
 class BrowserLoader {
@@ -88,7 +89,7 @@ class BrowserLoader {
 		});
 
 		let isMac = process.platform === "darwin";
-		shortcuts.register(win, isMac ? "Command+Option+I" : "Control+Shift+I", () => contents.toggleDevTools());
+		shortcuts.register(win, isMac ? "Command+Option+I" : "Control+Shift+I", () => WindowUtils.openDevtools(win));
 		shortcuts.register(win, isMac ? "Command+Left" : "Alt+Left", () => contents.canGoBack() && contents.goBack());
 		shortcuts.register(win, isMac ? "Command+Right" : "Alt+Right", () => contents.canGoForward() && contents.goForward());
 		shortcuts.register(win, "CommandOrControl+Shift+Delete", () => {
