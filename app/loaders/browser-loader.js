@@ -89,7 +89,7 @@ class BrowserLoader {
 		});
 
 		let isMac = process.platform === "darwin";
-		shortcuts.register(win, isMac ? "Command+Option+I" : "Control+Shift+I", () => WindowUtils.openDevtools(win));
+		shortcuts.register(win, [isMac ? "Command+Option+I" : "Control+Shift+I", "F12"], () => WindowUtils.openDevtools(win));
 		shortcuts.register(win, isMac ? "Command+Left" : "Alt+Left", () => contents.canGoBack() && contents.goBack());
 		shortcuts.register(win, isMac ? "Command+Right" : "Alt+Right", () => contents.canGoForward() && contents.goForward());
 		shortcuts.register(win, "CommandOrControl+Shift+Delete", () => {
@@ -153,8 +153,8 @@ class BrowserLoader {
 			})) event.preventDefault();
 		});
 
-		shortcuts.register(win, "F5", () => contents.reload());
-		shortcuts.register(win, "Shift+F5", () => contents.reloadIgnoringCache());
+		shortcuts.register(win, ["CommandOrControl+R", "F5"], () => contents.reload());
+		shortcuts.register(win, ["CommandOrControl+Shift+R", "Shift+F5"], () => contents.reloadIgnoringCache());
 		shortcuts.register(win, "F11", () => win.setFullScreen(!win.isFullScreen()));
 		shortcuts.register(win, "CommandOrControl+L", () => clipboard.writeText(contents.getURL()));
 		shortcuts.register(win, "CommandOrControl+N", () => this.initWindow("https://krunker.io/", config));
