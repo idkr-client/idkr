@@ -9,19 +9,20 @@ let { BrowserWindow } = require("electron");
  */
 class WindowUtils {
 	/**
-	 * Attempt to open the devtools with
+	 * Attempt to toggle the devtools with
 	 * a fallback if the regular method fails.
 	 *
 	 * @static
 	 * @param {Electron.BrowserWindow} window
-	 * @param {Electron.OpenDevToolsOptions["mode"]} mode
+	 * @param {Electron.OpenDevToolsOptions} options
 	 * @memberof WindowUtils
 	 */
-	static openDevtools(window, mode = "right") {
-		window.webContents.openDevTools({ mode });
+	static openDevtools(window, options) {
+		window.webContents.openDevTools(options);
 
-		// Fallback if openDevTools fails
-		if (!window.webContents.isDevToolsOpened()) {
+		// Checking for devToolsWebContents is more reliable than WebContents.isDevToolsOpened()
+		if (!window.webContents.devToolsWebContents) {
+			// Fallback if toggleDevTools fails
 			window.webContents.closeDevTools();
 
 			const devtoolsWindow = new BrowserWindow();
