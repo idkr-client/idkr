@@ -14,7 +14,7 @@ class WindowUtils {
 	 *
 	 * @static
 	 * @param {Electron.BrowserWindow} window
-	 * @param {Electron.OpenDevToolsOptions} options
+	 * @param {Electron.OpenDevToolsOptions} [options]
 	 * @memberof WindowUtils
 	 */
 	static openDevtools(window, options) {
