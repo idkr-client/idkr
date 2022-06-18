@@ -153,8 +153,8 @@ class BrowserLoader {
 			})) event.preventDefault();
 		});
 
-		shortcuts.register(win, ["CommandOrControl+R", "F5"], () => contents.reload());
-		shortcuts.register(win, ["CommandOrControl+Shift+R", "Shift+F5"], () => contents.reloadIgnoringCache());
+		shortcuts.register(win, "F5", () => contents.reload());
+		shortcuts.register(win, "Shift+F5", () => contents.reloadIgnoringCache());
 		shortcuts.register(win, "F11", () => win.setFullScreen(!win.isFullScreen()));
 		shortcuts.register(win, "CommandOrControl+L", () => clipboard.writeText(contents.getURL()));
 		shortcuts.register(win, "CommandOrControl+N", () => this.initWindow("https://krunker.io/", config));
