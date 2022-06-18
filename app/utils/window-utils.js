@@ -17,21 +17,24 @@ class WindowUtils {
 	 * @param {Electron.OpenDevToolsOptions} [options]
 	 * @memberof WindowUtils
 	 */
-	static openDevtools(window, options) {
+	static openDevToolsWithFallback(window, options) {
+		let assumeFallback = true;
 		window.webContents.openDevTools(options);
+		window.webContents.once("devtools-opened", () => { assumeFallback = false; });
 
-		// Checking for devToolsWebContents is more reliable than WebContents.isDevToolsOpened()
-		if (!window.webContents.devToolsWebContents) {
-			// Fallback if toggleDevTools fails
-			window.webContents.closeDevTools();
+		setTimeout(() => {
+			if (assumeFallback) {
+				// Fallback if openDevTools fails
+				window.webContents.closeDevTools();
 
-			const devtoolsWindow = new BrowserWindow();
-			devtoolsWindow.setMenuBarVisibility(false);
+				const devtoolsWindow = new BrowserWindow();
+				devtoolsWindow.setMenuBarVisibility(false);
 
-			window.webContents.setDevToolsWebContents(devtoolsWindow.webContents);
-			window.webContents.openDevTools({ mode: "detach" });
-			window.once("closed", () => devtoolsWindow.destroy());
-		}
+				window.webContents.setDevToolsWebContents(devtoolsWindow.webContents);
+				window.webContents.openDevTools({ mode: "detach" });
+				window.once("closed", () => devtoolsWindow.destroy());
+			}
+		}, 500);
 	}
 }
 

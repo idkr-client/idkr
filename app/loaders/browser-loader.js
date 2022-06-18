@@ -69,7 +69,7 @@ class BrowserLoader {
 	static setupWindow(win, config, isWeb = false) {
 		let contents = win.webContents;
 
-		if (this.DEBUG) contents.openDevTools();
+		if (this.DEBUG) WindowUtils.openDevToolsWithFallback(win);
 
 		win.removeMenu();
 		win.once("ready-to-show", () => {
@@ -89,7 +89,7 @@ class BrowserLoader {
 		});
 
 		let isMac = process.platform === "darwin";
-		shortcuts.register(win, [isMac ? "Command+Option+I" : "Control+Shift+I", "F12"], () => WindowUtils.openDevtools(win));
+		shortcuts.register(win, [isMac ? "Command+Option+I" : "Control+Shift+I", "F12"], () => WindowUtils.openDevToolsWithFallback(win));
 		shortcuts.register(win, isMac ? "Command+Left" : "Alt+Left", () => contents.canGoBack() && contents.goBack());
 		shortcuts.register(win, isMac ? "Command+Right" : "Alt+Right", () => contents.canGoForward() && contents.goForward());
 		shortcuts.register(win, "CommandOrControl+Shift+Delete", () => {
