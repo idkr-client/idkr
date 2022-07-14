@@ -39,7 +39,7 @@ class Swapper {
 				else {
 					let pathname = `${prefix}/${dirent.name}`;
 					this.urls.push(
-						...(/^\/(models|sound|textures)($|\/)/.test(pathname)
+						...(/^\/(models|scares|sound|textures|videos)($|\/)/.test(pathname)
 							? [
 								`*://assets.krunker.io${pathname}`,
 								`*://assets.krunker.io${pathname}?*`
