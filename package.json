@@ -10,7 +10,7 @@
     "startd": "npm start -- --debug",
     "startd-linux": "ELECTRON_ENABLE_STACK_DUMPING=1 ELECTRON_ENABLE_LOGGING=true npm start -- --debug",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "electron-builder --publish always",
     "release": "electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
