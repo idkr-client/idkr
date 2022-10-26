@@ -21,12 +21,12 @@
   "keywords": [
     "Krunker"
   ],
-  "author": "Mixaz, NullDev, CreepSore",
+  "author": "Mixaz, NullDev, CreepSore, prljav",
   "license": "AGPL-3.0-only",
   "bugs": {
     "url": "https://github.com/idkr-client/idkr/issues"
   },
-  "homepage": "https://idkr.dev",
+  "homepage": "https://github.com/prljav/idekr",
   "devDependencies": {
     "@babel/core": "^7.13.16",
     "@babel/eslint-parser": "^7.13.14",
