@@ -105,3 +105,6 @@ dist
 
 # .env
 *.env
+
+#joe editor backup file
+*~
