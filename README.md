@@ -24,10 +24,12 @@ https://discord.gg/wEZbFFX
 List of features, keyboard shortcuts, and guides.  
 https://github.com/idkr-client/idkr/wiki
 
+### macOS DOES NOT WORK
+
 ### Download
-[Latest release / changelog](https://github.com/idkr-client/idkr/releases/latest)
-- [Windows installer](https://github.com/idkr-client/idkr/releases/latest/download/idkr-setup-win.exe)
-- [Windows portable](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-win.exe)
-- [macOS portable](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-mac-x64.dmg)
-- [Linux portable (x86_64)](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-x86_64.AppImage)
-- [Linux portable (i386)](https://github.com/idkr-client/idkr/releases/latest/download/idkr-portable-linux-i386.AppImage)
+[Latest release / changelog](https://github.com/prljav/idekr/releases/latest)
+- [Windows installer](https://github.com/prljav/idekr/releases/latest/download/idkr-setup-win.exe)
+- [Windows portable](https://github.com/prljav/idekr/releases/latest/download/idkr-portable-win.exe)
+- [macOS portable](https://github.com/prljav/idekr/releases/latest/download/idkr-portable-mac-x64.dmg)
+- [Linux portable (x86_64)](https://github.com/prljav/idekr/releases/latest/download/idkr-portable-linux-x86_64.AppImage)
+- [Linux portable (i386)](https://github.com/prljav/idekr/releases/latest/download/idkr-portable-linux-i386.AppImage)
