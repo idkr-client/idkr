@@ -46,7 +46,8 @@ class AccountManager {
 	 * @memberof AccountManager
 	 */
 	#addAccount = (name, pass) => {
-		if (name.replace(/\s/, "") === "" || pass.replace(/\s/, "") === "") return alert("Username and Password fields must not be empty.");
+		//prljav 30.10.2022 possible fix for stupid regex
+		//if (name.replace(/\s/, "") === "" || pass.replace(/\s/, "") === "") return alert("Username and Password fields must not be empty.");
 		let users = JSON.parse(localStorage.getItem("altAccounts"));
 		if (users.find(e => e.username === name)) return alert("This Username has already been added.");
 		localStorage.setItem("altAccounts", JSON.stringify(
